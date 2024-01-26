@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/card")
 @RequiredArgsConstructor
 @RestController
+@CrossOrigin("*")
 public class CardController {
 
     @Autowired
