@@ -9,7 +9,6 @@ import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
 @Getter
 public class MyCardListResponse {
     private Integer memberId;
