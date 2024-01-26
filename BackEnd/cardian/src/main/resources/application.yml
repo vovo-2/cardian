@@ -5,7 +5,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-      dialect: org.hibernate.dialect.MySQLDialect
+#      dialect: org.hibernate.dialect.MySQLDialect
+      dialect: org.hibernate.dialect.MariaDB103Dialect
       format-sql: true
     show-sql: true
     defer-datasource-initialization: true
@@ -13,8 +14,9 @@ spring:
 
   # datasource setting
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: org.mariadb.jdbc.Driver
+#    driver-class-name: org.hibernate.dialect.MySQL8InnoDBDialect
 #    url: jdbc:mysql://127.0.0.1:3306/cardian?serverTimezone=UTC
-    url: jdbc:mysql://172.17.0.7:3306/cardian?serverTimezone=UTC
+    url: jdbc:mariadb://cardiandb:3306/cardian?serverTimezone=UTC
     username: root
     password: a803
