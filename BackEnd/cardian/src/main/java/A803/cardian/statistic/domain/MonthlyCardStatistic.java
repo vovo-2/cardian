@@ -1,10 +1,14 @@
 package A803.cardian.statistic.domain;
 
+import A803.cardian.card.domain.Company;
 import A803.cardian.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -30,4 +34,7 @@ public class MonthlyCardStatistic {
 
     @Column(nullable = false)
     private int month;
+
+    @OneToMany(mappedBy = "monthlyCardStatistic")
+    private List<CategoryMonthConsume> categoryMonthConsumes=new ArrayList<>();
 }

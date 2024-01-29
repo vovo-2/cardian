@@ -1,8 +1,11 @@
 package A803.cardian.member.domain;
 
+import A803.cardian.associate.domain.Associate;
 import A803.cardian.card.domain.FavoriteCard;
 import A803.cardian.card.domain.MyCard;
 import A803.cardian.member.domain.embbeded.PhoneNumber;
+import A803.cardian.settlement.domain.Settlement;
+import A803.cardian.settlement.domain.SettlementStandard;
 import A803.cardian.statistic.domain.CategoryMonthConsume;
 import A803.cardian.statistic.domain.MonthlyCardStatistic;
 import jakarta.annotation.Nullable;
@@ -51,6 +54,12 @@ public class Member {
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<FavoriteCard> favoriteCards = new ArrayList<>();
+
+    @OneToOne(mappedBy = "member")
+    private Certificate certificate;
+
+    @OneToOne(mappedBy = "member")
+    private Settlement settlement;
     @Builder
     public Member(String name,
                   LocalDate birth,
