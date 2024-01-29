@@ -1,5 +1,6 @@
 package A803.cardian.card.domain;
 
+import A803.cardian.associate.domain.Associate;
 import A803.cardian.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -42,6 +43,7 @@ public class MyCard {
 
     @OneToMany(mappedBy = "myCard", fetch = FetchType.LAZY)
     private List<Transaction> transactions = new ArrayList<>();
+
 
     @Builder
     public MyCard(Member member,

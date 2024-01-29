@@ -3,6 +3,9 @@ package A803.cardian.card.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @AllArgsConstructor
 @Builder
 @Entity
@@ -16,4 +19,7 @@ public class Company {
 
     @Column(nullable = false)
     private String name;
+
+    @OneToMany(mappedBy = "company")
+    private List<Card> cards=new ArrayList<>();
 }
