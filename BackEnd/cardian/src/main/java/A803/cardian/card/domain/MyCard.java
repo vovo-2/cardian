@@ -3,10 +3,7 @@ package A803.cardian.card.domain;
 import A803.cardian.associate.domain.Associate;
 import A803.cardian.member.domain.Member;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -14,7 +11,8 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Setter
+@NoArgsConstructor
 public class MyCard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

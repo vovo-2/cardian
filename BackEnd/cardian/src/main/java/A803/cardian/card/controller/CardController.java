@@ -32,4 +32,92 @@ public class CardController {
         MyCardListResponse response = cardService.findMyCards(memberId);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/{mycard_id}/transaction")
+    public ResponseEntity<String> getCardsTransaction(@PathVariable("mycard_id") Integer cardId){
+        String json="{\n" +
+                "          \"mycardId\": 1,\n" +
+                "          \"month\" : 12,\n" +
+                "          \"transactionList\":[\n" +
+                "               {\n" +
+                "                    \"day\": \"String\",\n" +
+                "                    \"dayTransactionList\":[\n" +
+                "                         {\n" +
+                "                              \"transactionId\": 3,\n" +
+                "                              \"store\": \"메가커피\",\n" +
+                "                              \"date\": \"2023-12-12  08:58:00\",\n" +
+                "                              \"price\": 4000,\n" +
+                "                              \"associateImage\": \"https://imgur.com/bsSayy3\",\n" +
+                "                              \"discountAmount\": 500,\n" +
+                "                              \"benefitCode\": \"할인\"\n" +
+                "                         },\n" +
+                "  {\n" +
+                "                              \"transactionId\": 2,\n" +
+                "                              \"store\": \"배달의 민족\",\n" +
+                "                              \"date\": \"2023-12-11  16:58:00\",\n" +
+                "                              \"price\": 14000,\n" +
+                "                              \"associateImage\": \"https://imgur.com/FE9mc5c\",\n" +
+                "                              \"discountAmount\": 0,\n" +
+                "                              \"benefitCode\": \"할인\"\n" +
+                "                         },\n" +
+                "  {\n" +
+                "                              \"transactionId\": 1,\n" +
+                "                              \"store\": \"박승철헤어스튜디오\",\n" +
+                "                              \"date\": \"2023-12-08  13:58:00\",\n" +
+                "                              \"price\": 25000,\n" +
+                "                              \"associateImage\": \"https://imgur.com/YyXalCX\",\n" +
+                "                              \"discountAmount\": 0,\n" +
+                "                              \"benefitCode\": \"할인\"\n" +
+                "                         }\n" +
+                "                    ]\n" +
+                "               }\n" +
+                "          ],\n" +
+                "}";
+        return new ResponseEntity<>(json, HttpStatus.OK);
+    }
+    @GetMapping("/{mycard_id}/benefit")
+    public ResponseEntity<String> getCardsBenefit(@PathVariable("mycard_id") Integer cardId){
+        String json="{\n" +
+                "          \"mycardId\": 1,\n" +
+                "          \"month\" : 12,\n" +
+                "          \"transactionList\":[\n" +
+                "               {\n" +
+                "                    \"day\": \"String\",\n" +
+                "                    \"dayTransactionList\":[\n" +
+                "                         {\n" +
+                "                              \"transactionId\": 3,\n" +
+                "                              \"store\": \"메가커피\",\n" +
+                "                              \"date\": \"2023-12-12  08:58:00\",\n" +
+                "                              \"price\": 4000,\n" +
+                "                              \"associateImage\": \"https://imgur.com/bsSayy3\",\n" +
+                "                              \"discountAmount\": 500,\n" +
+                "                              \"benefitCode\": \"할인\"\n" +
+                "                         },\n" +
+                "  {\n" +
+                "                              \"transactionId\": 2,\n" +
+                "                              \"store\": \"배달의 민족\",\n" +
+                "                              \"date\": \"2023-12-11  16:58:00\",\n" +
+                "                              \"price\": 14000,\n" +
+                "                              \"associateImage\": \"https://imgur.com/FE9mc5c\",\n" +
+                "                              \"discountAmount\": 0,\n" +
+                "                              \"benefitCode\": \"할인\"\n" +
+                "                         },\n" +
+                "  {\n" +
+                "                              \"transactionId\": 1,\n" +
+                "                              \"store\": \"박승철헤어스튜디오\",\n" +
+                "                              \"date\": \"2023-12-08  13:58:00\",\n" +
+                "                              \"price\": 25000,\n" +
+                "                              \"associateImage\": \"https://imgur.com/YyXalCX\",\n" +
+                "                              \"discountAmount\": 0,\n" +
+                "                              \"benefitCode\": \"할인\"\n" +
+                "                         }\n" +
+                "                    ]\n" +
+                "               }\n" +
+                "          ],\n" +
+                "}";
+        return new ResponseEntity<>(json, HttpStatus.OK);
+    }
+
+
+
 }

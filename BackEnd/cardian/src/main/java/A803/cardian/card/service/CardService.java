@@ -1,7 +1,9 @@
 package A803.cardian.card.service;
 
 import A803.cardian.card.data.dto.response.MyCardListResponse;
+import A803.cardian.card.domain.MyCard;
 import A803.cardian.card.repository.CardRepository;
+import A803.cardian.card.repository.MycardRepository;
 import A803.cardian.member.domain.Member;
 import A803.cardian.member.exception.MemberErrorCode;
 import A803.cardian.member.exception.MemberException;
@@ -20,6 +22,8 @@ public class CardService {
     private final CardRepository cardRepository;
     @Autowired
     private final MemberRepository memberRepository;
+    @Autowired
+    private final MycardRepository mycardRepository;
 
     @Transactional
     //내 카드 전체 조회
@@ -32,4 +36,7 @@ public class CardService {
                         new MemberException(MemberErrorCode.NO_MEMBER));
         return MyCardListResponse.toResponse(member);
     }
+
+
+
 }

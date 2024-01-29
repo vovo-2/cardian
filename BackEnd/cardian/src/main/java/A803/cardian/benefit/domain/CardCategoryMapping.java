@@ -1,7 +1,6 @@
-package A803.cardian.benefit;
+package A803.cardian.benefit.domain;
 
 import A803.cardian.associate.domain.Associate;
-import A803.cardian.card.domain.Company;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
