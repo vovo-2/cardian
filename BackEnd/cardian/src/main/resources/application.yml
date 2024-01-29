@@ -22,5 +22,5 @@ spring:
 #    url: jdbc:mysql://127.0.0.1:3306/cardian?serverTimezone=UTC
     url: jdbc:mariadb://i10a803.p.ssafy.io:3306/cardian?serverTimezone=UTC
     username: root
-    password: A803
+    password: a803
 
