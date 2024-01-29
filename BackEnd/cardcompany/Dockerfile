@@ -2,5 +2,5 @@ FROM docker
 COPY --from=docker/buildx-bin:latest /buildx /usr/libexec/docker/cli-plugins/docker-buildx
 
 FROM openjdk:17-jdk
-ADD ./build/libs/cardian-0.0.1-SNAPSHOT.jar app.jar
+ADD ./build/libs/cardcompany-0.0.1-SNAPSHOT.jar app.jar
 ENTRYPOINT ["java", "-jar", "/app.jar"]
