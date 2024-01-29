@@ -1,25 +1,26 @@
-package A803.cardian.benefit;
+package A803.cardian.benefit.domain;
 
-import A803.cardian.card.domain.Company;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CategoryBenefit {
+public class ExceptionBenfit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "categorybenefit_id")
     private Integer id;
 
     @Column(nullable = false,length = 10)
     private String categoryCode;
+
+    @Column(nullable = false)
+    private int associateId;
+
+    @Column(nullable = false)
+    private int companyId;
 
     @Column(nullable = false)
     private int cardId;
@@ -34,8 +35,5 @@ public class CategoryBenefit {
     private String sign;
 
     @Column(nullable = false)
-    private String discountLimit;
-
-    @OneToMany(mappedBy = "categoryBenefit")
-    private List<CardCategoryMapping> cardCategoryMappings=new ArrayList<>();
+    private int discountLimit;
 }

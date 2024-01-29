@@ -1,13 +1,10 @@
 package A803.cardian.associate.domain;
 
-import A803.cardian.benefit.CardCategoryMapping;
-import A803.cardian.card.domain.Company;
-import A803.cardian.card.domain.MyCard;
+import A803.cardian.benefit.domain.CardCategoryMapping;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.ArrayList;
 import java.util.List;
