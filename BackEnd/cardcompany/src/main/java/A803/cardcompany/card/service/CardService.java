@@ -1,4 +1,4 @@
-package com.a803.cardcompany.card.service;
+package A803.cardcompany.card.service;
 
 
 import com.a803.cardcompany.card.dto.CardDto;

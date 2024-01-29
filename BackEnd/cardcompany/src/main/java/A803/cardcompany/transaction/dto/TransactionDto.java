@@ -1,4 +1,4 @@
-package com.a803.cardcompany.transaction.dto;
+package A803.cardcompany.transaction.dto;
 
 import com.a803.cardcompany.card.mapper.Card;
 import com.a803.cardcompany.transaction.mapper.Transaction;

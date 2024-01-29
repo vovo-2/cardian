@@ -1,4 +1,4 @@
-package com.a803.cardcompany.member.mapper;
+package A803.cardcompany.member.mapper;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;

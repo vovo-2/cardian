@@ -1,4 +1,4 @@
-package com.a803.cardcompany.member.mapper;
+package A803.cardcompany.member.mapper;
 
 import com.a803.cardcompany.member.dto.MemberDto;
 import jakarta.persistence.*;

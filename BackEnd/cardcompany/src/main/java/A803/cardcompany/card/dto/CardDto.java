@@ -1,4 +1,4 @@
-package com.a803.cardcompany.card.dto;
+package A803.cardcompany.card.dto;
 
 import com.a803.cardcompany.card.BenefitCode;
 import com.a803.cardcompany.card.CardType;

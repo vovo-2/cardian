@@ -1,4 +1,4 @@
-package com.a803.cardcompany.mapper;
+package A803.cardcompany.mapper;
 
 
 import java.util.List;

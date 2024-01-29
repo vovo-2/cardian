@@ -1,4 +1,4 @@
-package com.a803.cardcompany.card;
+package A803.cardcompany.card;
 
 import lombok.AccessLevel;
 import lombok.Getter;

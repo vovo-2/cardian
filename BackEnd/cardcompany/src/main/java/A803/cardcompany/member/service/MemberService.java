@@ -1,4 +1,4 @@
-package com.a803.cardcompany.member.service;
+package A803.cardcompany.member.service;
 
 import com.a803.cardcompany.member.dto.MemberDto;
 import com.a803.cardcompany.member.mapper.Member;

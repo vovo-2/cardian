@@ -1,4 +1,4 @@
-package com.a803.cardcompany.card.mapper;
+package A803.cardcompany.card.mapper;
 
 import com.a803.cardcompany.card.BenefitCode;
 import com.a803.cardcompany.card.CardType;

@@ -1,4 +1,4 @@
-package com.a803.cardcompany.member.dto;
+package A803.cardcompany.member.dto;
 
 import com.a803.cardcompany.member.mapper.Member;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;

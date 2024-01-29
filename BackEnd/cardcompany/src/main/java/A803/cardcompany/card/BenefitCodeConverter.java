@@ -1,4 +1,4 @@
-package com.a803.cardcompany.card;
+package A803.cardcompany.card;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
