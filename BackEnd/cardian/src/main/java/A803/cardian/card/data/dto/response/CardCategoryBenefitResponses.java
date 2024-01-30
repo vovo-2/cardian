@@ -8,5 +8,5 @@ public interface CardCategoryBenefitResponses {
 
     int getCategorybenefitId();
     String getSign();
-    String name();
+    String getName();
 }
