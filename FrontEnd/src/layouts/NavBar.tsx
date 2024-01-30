@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { useMatch, Link, useResolvedPath } from "react-router-dom";
+import { useMatch, Link, useResolvedPath, useLocation } from "react-router-dom";
 import {
   TbCreditCard,
   TbShoppingBagSearch,
@@ -15,7 +15,14 @@ interface LinkSetterProps {
 
 function LinkSetter({ goto, icon }: LinkSetterProps) {
   const resolvePath = useResolvedPath(goto);
-  const isActive = useMatch({ path: resolvePath.pathname, end: true });
+  const matchPath = useMatch({ path: resolvePath.pathname, end: true });
+  let isActive = matchPath ? true : false;
+
+  const now_path = useLocation().pathname;
+
+  if (goto == "/mycard") {
+    if (now_path == "/") isActive = true;
+  }
 
   return (
     <Link
@@ -35,7 +42,7 @@ export default function NavBar() {
     <div className="text-4xl fixed bottom-0 left-0 right-0 mx-auto max-w-[600px] h-[100px] ">
       <div className="relative max-w-[600px] justify-center flex h-full ">
         <LinkSetter
-          goto="/mycard"
+          goto={"/mycard"}
           icon={<TbCreditCard size={50} className="my-auto" />}
         />
         <LinkSetter
