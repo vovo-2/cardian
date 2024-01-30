@@ -1,5 +1,5 @@
 import NavBar from "../layouts/NavBar";
-import MyCardList from "../components/MyCardList";
+import MyCardList from "../components/MyCard/MyCardList";
 import TopBar from "../layouts/TopBar";
 
 export default function HomePage() {
