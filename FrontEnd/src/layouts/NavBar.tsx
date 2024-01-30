@@ -22,8 +22,8 @@ function LinkSetter({ goto, icon }: LinkSetterProps) {
       to={goto}
       className={
         isActive
-          ? "text-blue border-t-8 p-5 shadow-[inset_0_2px_4px_0_rgba(0,0,0,0.2)]"
-          : "text-gray p-5 hover:text-blue"
+          ? "text-blue border-t-8 shadow-[inset_0_2px_4px_0_rgba(0,0,0,0.2)] flex w-full h-full justify-center "
+          : "text-gray  hover:text-blue flex w-full justify-center h-full"
       }
     >
       {icon}
@@ -32,21 +32,29 @@ function LinkSetter({ goto, icon }: LinkSetterProps) {
 }
 export default function NavBar() {
   return (
-    <div className="text-4xl items-center h-[100px] flex flex-wrap fixed bottom-0 left-0 right-0 max-w-[600px] justify-between mx-auto">
-      <LinkSetter goto="/" icon={<TbCreditCard className="mx-auto" />} />
-      <LinkSetter
-        goto="/search"
-        icon={<TbShoppingBagSearch className="mx-auto" />}
-      />
-      <LinkSetter
-        goto="/analysis"
-        icon={<TbChartHistogram className="mx-auto" />}
-      />
-      <LinkSetter
-        goto="/recommendation"
-        icon={<TbThumbUp className="mx-auto" />}
-      />
-      <LinkSetter goto="/menu" icon={<TbMenu2 className="mx-auto" />} />
+    <div className="text-4xl fixed bottom-0 left-0 right-0 mx-auto max-w-[600px] h-[100px] ">
+      <div className="relative max-w-[600px] justify-center flex h-full ">
+        <LinkSetter
+          goto="/mycard"
+          icon={<TbCreditCard size={50} className="my-auto" />}
+        />
+        <LinkSetter
+          goto="/search"
+          icon={<TbShoppingBagSearch size={50} className="my-auto" />}
+        />
+        <LinkSetter
+          goto="/analysis"
+          icon={<TbChartHistogram size={50} className="my-auto" />}
+        />
+        <LinkSetter
+          goto="/recommendation"
+          icon={<TbThumbUp size={50} className="my-auto" />}
+        />
+        <LinkSetter
+          goto="/menu"
+          icon={<TbMenu2 size={50} className="my-auto" />}
+        />
+      </div>
     </div>
   );
 }
