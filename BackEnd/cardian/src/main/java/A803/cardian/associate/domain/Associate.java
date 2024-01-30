@@ -3,6 +3,7 @@ package A803.cardian.associate.domain;
 import A803.cardian.benefit.domain.CardCategoryMapping;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -29,5 +30,14 @@ public class Associate {
 
     @OneToMany(mappedBy = "associate")
     private List<CardCategoryMapping> cardCategoryMappings=new ArrayList<>();
+
+    @Builder
+    public Associate(Integer id, String name, String image, String categoryCode, List<CardCategoryMapping> cardCategoryMappings) {
+        Id = id;
+        this.name = name;
+        this.image = image;
+        this.categoryCode = categoryCode;
+        this.cardCategoryMappings = cardCategoryMappings;
+    }
 
 }
