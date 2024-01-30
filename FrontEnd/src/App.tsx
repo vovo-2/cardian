@@ -7,7 +7,11 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/mycard?" element={<MyCardPage />} />
+        <Route path="/" element={<MyCardPage />} />
+        <Route path="/mycard">
+          <Route index element={<MyCardPage />} />
+          <Route path=":card_id" element={<div> 카드 상세 정보 </div>} />
+        </Route>
         <Route path="/search" element={<div>mycard</div>} />
         <Route path="/analysis" element={<div>mycard</div>} />
         <Route path="/recommendation" element={<div>mycard</div>} />
