@@ -1,3 +1,4 @@
+import { ReactElement } from "react";
 import { useMatch, Link, useResolvedPath } from "react-router-dom";
 import {
   TbCreditCard,
@@ -7,7 +8,12 @@ import {
   TbThumbUp,
 } from "react-icons/tb";
 
-function LinkSetter({ goto, icon }) {
+interface LinkSetterProps {
+  goto: string;
+  icon: ReactElement;
+}
+
+function LinkSetter({ goto, icon }: LinkSetterProps) {
   const resolvePath = useResolvedPath(goto);
   const isActive = useMatch({ path: resolvePath.pathname, end: true });
 
@@ -27,7 +33,7 @@ function LinkSetter({ goto, icon }) {
 export default function NavBar() {
   return (
     <div className="text-4xl items-center h-[100px] flex flex-wrap fixed bottom-0 left-0 right-0 max-w-[600px] justify-between mx-auto">
-      <LinkSetter goto="/mycard" icon={<TbCreditCard className="mx-auto" />} />
+      <LinkSetter goto="/" icon={<TbCreditCard className="mx-auto" />} />
       <LinkSetter
         goto="/search"
         icon={<TbShoppingBagSearch className="mx-auto" />}
