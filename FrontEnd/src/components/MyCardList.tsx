@@ -12,19 +12,12 @@ type MyCard = {
   myCardImage: string;
 };
 
-interface MyCardList {
-  memberId: number;
-  cardList: MyCard[];
-}
-
 export default function CardList() {
   const [cardList, setCardList] = useState<MyCard[]>([]);
-  const [memberId, setMemberId] = useState<number>();
 
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_BASE_URL}/card/1`).then(({ data }) => {
       setCardList(data.cardList);
-      setMemberId(data.memberId);
     });
   }, []);
 
