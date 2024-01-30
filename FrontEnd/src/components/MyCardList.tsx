@@ -13,7 +13,7 @@ type MyCard = {
 };
 
 export default function CardList() {
-  const [cardList, setCardList] = useState<MyCard[]>([]);
+  const [cardList, setCardList] = useState<MyCard[]>();
 
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_BASE_URL}/card/1`).then(({ data }) => {
@@ -24,7 +24,7 @@ export default function CardList() {
   return (
     <div className="flex">
       <Carousel theme={CarouselTheme} slide={false}>
-        {cardList.map((card) => {
+        {cardList && cardList.map((card) => {
           return (
             <MyCard
               key={card.mycardId}
