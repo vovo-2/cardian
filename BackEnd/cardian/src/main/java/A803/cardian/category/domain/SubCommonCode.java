@@ -3,10 +3,12 @@ package A803.cardian.category.domain;
 import A803.cardian.card.domain.Company;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SubCommonCode {
@@ -30,4 +32,13 @@ public class SubCommonCode {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "main_id")
     private MainCommomCode mainCommomCode;
+    @Builder
+    public SubCommonCode(Integer id, String mainCode, String detailCode, String name, String description, MainCommomCode mainCommomCode) {
+        this.id = id;
+        this.mainCode = mainCode;
+        this.detailCode = detailCode;
+        this.name = name;
+        this.description = description;
+        this.mainCommomCode = mainCommomCode;
+    }
 }
