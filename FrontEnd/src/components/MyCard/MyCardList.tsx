@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Carousel } from "flowbite-react";
-import { CarouselTheme } from "../themes/CarouselTheme";
+import { CarouselTheme } from "../../themes/CarouselTheme";
 
 import axios from "axios";
 
