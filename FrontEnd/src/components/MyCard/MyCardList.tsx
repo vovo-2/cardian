@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
+
 import { Carousel } from "flowbite-react";
 import { CarouselTheme } from "../../themes/CarouselTheme";
-
-import axios from "axios";
-
 import MyCard from "./MyCard";
+
+import { axios } from '../../api';
 
 type MyCard = {
   mycardId: number;
@@ -16,7 +16,7 @@ export default function CardList() {
   const [cardList, setCardList] = useState<MyCard[]>([]);
 
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_BASE_URL}/card/1`).then(({ data }) => {
+    axios.get('/card/1').then(({ data }) => {
       setCardList(data.cardList);
     });
   }, []);
