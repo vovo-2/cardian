@@ -2,6 +2,7 @@ package A803.cardian.category.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,4 +19,10 @@ public class CategoryIcon {
 
     @Column(nullable = false,length = 400)
     private String iconImage;
+    @Builder
+    public CategoryIcon(Integer id, String categoryCode, String iconImage) {
+        this.id = id;
+        this.categoryCode = categoryCode;
+        this.iconImage = iconImage;
+    }
 }
