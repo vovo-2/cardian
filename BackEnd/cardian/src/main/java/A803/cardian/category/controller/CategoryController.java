@@ -27,8 +27,13 @@ public class CategoryController {
     }
 
     @GetMapping("/{category_id}/association")
-    public ResponseEntity<?> getCategories(@PathVariable("category_id") String categoryCode){
-
+    public ResponseEntity<?> getSelectCategory(@PathVariable("category_id") String categoryCode){
         return ResponseEntity.ok(associateService.findAssociation(categoryCode));
+    }
+
+    @GetMapping("/category-image")
+    public ResponseEntity<?> getCategoryImage(){
+
+        return ResponseEntity.ok(categoryService.findAllCategoryImage());
     }
 }

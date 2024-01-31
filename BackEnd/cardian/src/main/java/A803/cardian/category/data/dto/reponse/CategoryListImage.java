@@ -1,9 +1,6 @@
 package A803.cardian.category.data.dto.reponse;
 
-import A803.cardian.category.domain.CategoryIcon;
-import A803.cardian.category.domain.SubCommonCode;
 import lombok.*;
-
 
 
 @Getter
@@ -11,9 +8,9 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CategoryList {
+public class CategoryListImage {
     private String categoryCode;
     private String categoryName;
-
+    private String categoryImage;
 
 }
