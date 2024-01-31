@@ -14,8 +14,7 @@ import A803.cardian.card.data.dto.response.YearTransactionDetails;
 import A803.cardian.card.domain.*;
 
 import A803.cardian.card.repository.TransactionRepository;
-import A803.cardian.statistic.domain.AccumulateBenefit;
-import A803.cardian.statistic.domain.repository.AccumulateBenefitRepository;
+import A803.cardian.statistic.repository.AccumulateBenefitRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

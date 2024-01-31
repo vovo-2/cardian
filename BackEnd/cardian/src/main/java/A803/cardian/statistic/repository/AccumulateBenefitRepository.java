@@ -1,4 +1,4 @@
-package A803.cardian.statistic.domain.repository;
+package A803.cardian.statistic.repository;
 
 import A803.cardian.statistic.domain.AccumulateBenefit;
 import org.springframework.data.jpa.repository.JpaRepository;
