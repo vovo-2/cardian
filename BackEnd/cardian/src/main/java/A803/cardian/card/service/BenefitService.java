@@ -18,7 +18,7 @@ import A803.cardian.card.domain.Card;
 import A803.cardian.card.domain.MyCard;
 import A803.cardian.card.repository.CardRepository;
 import A803.cardian.card.repository.MyCardBenefitRepository;
-import A803.cardian.card.repository.MyCardRepository;
+import A803.cardian.card.repository.MycardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +43,7 @@ import java.util.Optional;
 public class BenefitService {
 
     @Autowired
-    private final MyCardRepository myCardRepository;
+    private final MycardRepository myCardRepository;
 
     @Autowired
     private final MyCardBenefitRepository myCardBenefitRepository;

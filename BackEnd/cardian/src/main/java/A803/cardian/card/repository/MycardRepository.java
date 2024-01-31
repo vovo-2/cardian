@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MyCardRepository extends JpaRepository<MyCard,Integer> {
+public interface MycardRepository extends JpaRepository<MyCard,Integer> {
 }
