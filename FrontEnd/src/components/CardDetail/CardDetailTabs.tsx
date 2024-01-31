@@ -1,7 +1,7 @@
 import { Tabs } from "flowbite-react";
 import { CardDetailTabsTheme } from "../../themes/CardDetailTabsTheme";
 import CardTransaction from "../CardTransaction/CardTransaction";
-import CardBenefit from "../CardBenefit/CardBenefit";
+import CardBenefitList from "../CardBenefit/CardBenefitList";
 
 export default function CardDetailTabs() {
   return (
@@ -15,7 +15,7 @@ export default function CardDetailTabs() {
         <CardTransaction />
       </Tabs.Item>
       <Tabs.Item title="혜택">
-        <CardBenefit />
+        <CardBenefitList />
       </Tabs.Item>
     </Tabs>
   );
