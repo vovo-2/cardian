@@ -39,8 +39,10 @@ public class CategoryController {
 
         return ResponseEntity.ok(categoryService.findAllCategoryImage());
     }
+
     @PostMapping("/association")
     public ResponseEntity<?> searchAssociation(@RequestBody Search search){
         return ResponseEntity.ok(associateService.searchAssociation(search));
     }
+
 }
