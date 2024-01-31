@@ -7,6 +7,7 @@ import A803.cardian.card.domain.Transaction;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -15,7 +16,7 @@ import java.time.LocalDate;
 public class DailyTransactionDetails {
     private Integer transactionId;
     private String store;
-    private LocalDate day;
+    private LocalDateTime date;
     private int price;
     private String associateImage;
     private int discountAmount;
@@ -33,7 +34,7 @@ public class DailyTransactionDetails {
         return DailyTransactionDetails.builder()
                 .transactionId(transaction.getId())
                 .store(transaction.getStore())
-                .day(transaction.getDay())
+                .date(transaction.getDate())
                 .price(transaction.getPrice())
                 .associateImage(associate.getImage())
                 .discountAmount(discountAmount)

@@ -235,26 +235,34 @@ public class TransactionService {
         TransactionDetails from(String day, List<DayTransactionDetails> dayTransactionDetails)
          */
 //        LocalDate localDate = monthDay.toLocalDate(); //원하는 달 시작일
-        LocalDate endMonth = localDate.plusMonths(1); //다음달 시작일
-        while(localDate.isBefore(endMonth)){
-            monthlyTransactionDetailsList.add(MonthlyTransactionDetails.from(localDate.getDayOfMonth(),getMyCardDayTransactions(myCardId, localDate)));
-            localDate = localDate.plusDays(1); //하루 늘려줌
+        LocalDate endMonth = localDate.minusMonths(1); //이전달 끝
+        while(localDate.isAfter(endMonth)) {
+            List<DailyTransactionDetails> dailyTransactionDetailsList = getMyCardDayTransactions(myCardId, localDate);
+
+            if (dailyTransactionDetailsList.size() == 0) {//내역 없으면 넣어주지 말기
+                localDate = localDate.minusDays(1); //하루 줄여줌
+                continue;
+            }
+
+            monthlyTransactionDetailsList.add(MonthlyTransactionDetails.from(localDate.getDayOfMonth(), dailyTransactionDetailsList));
+            localDate = localDate.minusDays(1); //하루 줄여줌
             System.out.println("localDate : " + localDate);
+
         }
 
-        return monthlyTransactionDetailsList;
+            return monthlyTransactionDetailsList;
     }
 
     //컨트롤러에서 부를 거
     //카드별 전체 사용내역 가져오기
     public EntireTransactionsByMyCardResponse getMyCardYearTransactioins(int myCardId){
         List<YearTransactionDetails> yearTransactionDetailsList = new ArrayList<>();
-        LocalDate start = MonthDay.JANUARY.toLocalDate();
+        LocalDate start = MonthDay.DECEMBER.toLocalDate();//12월 31일
 
-        LocalDate end = start.plusYears(1);
-        while(start.isBefore(end)){
+        LocalDate end = start.minusYears(1);
+        while(start.isAfter(end)){
             yearTransactionDetailsList.add(YearTransactionDetails.toResponse(myCardId, start.getMonthValue(), getMyCardMonthTransactions(myCardId, start)));
-            start = start.plusMonths(1);
+            start = start.minusMonths(1);
         }
 
         return EntireTransactionsByMyCardResponse.toResponse(myCardId, yearTransactionDetailsList);

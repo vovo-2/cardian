@@ -15,7 +15,7 @@ import java.util.List;
 public class MonthlyTransactionDetails {
 
     private int day;
-    @JsonProperty("dayTransactionList")
+
     @Builder.Default
     private List<DailyTransactionDetails> dailyTransactionDetailsList = new ArrayList<>();
 
