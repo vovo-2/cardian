@@ -8,6 +8,5 @@ import java.util.Optional;
 
 public interface ExceptionBenefitRepository extends JpaRepository<ExceptionBenefit, Integer>{
     //거래내역의 제휴사(1)와 내카드아이디로 가져온 카드의 카드아이디(2)로 예외혜택 가져오기
-    @Query("SELECT e FROM ExceptionBenefit e where e.associateId = :associateId and e.cardId = :cardId")
     Optional<ExceptionBenefit> findByAssociateIdAndCardId(int associateId, int cardId);
 }

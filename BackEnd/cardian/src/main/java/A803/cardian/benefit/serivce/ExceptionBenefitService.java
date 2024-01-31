@@ -23,7 +23,7 @@ public class ExceptionBenefitService {
     //있으면 예외혜택이 return되고 없으면 null return 됨
     public Optional<ExceptionBenefit> getExceptionBenefit(Transaction transaction){
         //1. 제휴사 아이디
-        Associate associate = associateRepository.findByStoreName(transaction.getStore())
+        Associate associate = associateRepository.findByName(transaction.getStore())
                 .orElseThrow(() ->
                         //추후 AssociateException 만들기
                         new RuntimeException());

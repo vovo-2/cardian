@@ -35,22 +35,6 @@ public class TransactionService {
     private final AccumulateBenefitRepository accumulateBenefitRepository;
     private final ExceptionBenefitService exceptionBenefitService;
 
-    //내 카드 이용내역 조회
-    public List<Transaction> getTransactionListByMyCardId(int MyCardId) {
-        return transactionRepository.findAll();
-    }
-
-    //카드별 전체 할인 금액 계산
-    public int calculateDiscountAmount(Transaction transaction, Associate associate){
-        //전체 거래내역 가져오기
-        List<Transaction> transactionList = getTransactionListByMyCardId(transaction.getMyCard().getId());
-        //거래내역을 하나씩 보며 제휴사 확인
-        for(int i = 0; i < transactionList.size(); i++){
-
-        }
-        return 0;
-    }
-
     //(예외혜택이 아니면) 카드아이디와 제휴사아이디로 카드카테고리매핑 객체를 가져와서
     //이때 없으면 이 카드로 혜택을 받을 수 없는 제휴사임.
     //카드케테고리매핑 객체에서 카테고리혜택 객체를 가져옴
@@ -58,63 +42,10 @@ public class TransactionService {
         return cardCategoryMappingRepository.findByAssociateIdAndCardId(associate.getId(), card.getId());
     }
 
-    //거래내역의 사용처 이름으로 제휴사 가져오기
-    public Optional<Associate> getAssociateFrom(Transaction transaction){
-        return associateRepository.findByStoreName(transaction.getStore());
-    }
-
-    //카드에 해당 제휴사의 예외 혜택이 있는지 확인
-    //있으면 예외혜택 id가 return되고 없으면 null return 됨
-//    public Optional<ExceptionBenefit> getExceptionBenefit(Transaction transaction){
-//        //1. 제휴사 아이디
-//        Associate associate = associateRepository.findByStoreName(transaction.getStore())
-//                .orElseThrow(() ->
-//                        //추후 AssociateException 만들기
-//                        new RuntimeException());
-//        int associateId = associate.getId();
-//
-//        //2. 내 카드아이디로 가져온 카드아이디
-//        Card card = transaction.getMyCard().getCard();
-//        int cardId = card.getId();
-//
-//        return exceptionBenefitRepository.findByAssociateIdAndCardId(associateId, cardId);
-//    }
-
-    //어떤 혜택인지
-
-    //카드카테고리매핑 가져오기
-    public Optional<CardCategoryMapping> getCardCategoryMapping(Associate associate, Card card){
-        //1. 제휴사 아이디
-        int associateId = associate.getId();
-        //2. 카드 아이디
-        int cardId = card.getId();
-
-        return cardCategoryMappingRepository.findByAssociateIdAndCardId(associateId, cardId);
-    }
-
-    //카테고리별 누적혜택금액 객체로 가져오기
-    public Optional<AccumulateBenefit> getAccumulateBenefit(Transaction transaction){
-        Card card = transaction.getMyCard().getCard();
-        int cardId = card.getId();
-
-        Associate associate = getAssociateFrom(transaction)
-                .orElseThrow(() ->
-                        //추후 AssociateException 만들기
-                        new RuntimeException());
-        String categoryCode = associate.getCategoryCode();
-
-        return accumulateBenefitRepository.getAccumulateBenefitWithCardIdAndCategoryCode(cardId, categoryCode);
-    }
-
     //할인금액 계산
     //예외혜택
     public int calculateDiscountAmountWithExceptionBenefit(Transaction transaction, ExceptionBenefit exceptionBenefit) {
         Card card = transaction.getMyCard().getCard();
-//        AccumulateBenefit accumulateBenefit = getAccumulateBenefit(transaction)
-//                .orElseThrow(() ->
-//                        //추후
-//                        new RuntimeException());
-//        int benefitAmount = accumulateBenefit.getBenefitAmount(); //현재 누적 혜택 금액
         /*
        추후에 accumulateBenefit 데이터 넣으면 수정하기
          */
@@ -226,6 +157,39 @@ public class TransactionService {
         return 0;
     }
 
+    //카드별 일별 사용 금액 계산하기
+    public int getDailyAccumulate(int myCardId, LocalDate localDate){
+        int dailyAccumulate = 0;
+        //카드, 일자로 사용내역 뽑아오기
+        List<Transaction> transactions = transactionRepository.findTransactionsByMyCardIdAndDay(myCardId, localDate);
+
+        //가져온 내역들의 사용 금액 누적합 구하기
+        for(Transaction transaction : transactions){
+            dailyAccumulate += transaction.getPrice();
+        }
+
+        return dailyAccumulate;
+    }
+
+    //카드별 월별 사용 금액 계산하기
+    public int getMonthlyAccumulate(int myCardId, LocalDate localDate){
+        int monthlyAccumulate = 0;
+
+        //당월 1일로 바꿔주기
+        if(localDate.getDayOfMonth() != 1){
+            localDate = localDate.withDayOfMonth(1);
+        }
+
+        LocalDate endMonth = localDate.plusMonths(1); //다음달 시작일
+        while(localDate.isBefore(endMonth)){
+            //해당일의 사용금액 누적합을 다 더해줌
+            monthlyAccumulate += getDailyAccumulate(myCardId, localDate);
+            localDate = localDate.plusDays(1); //하루 늘려줌
+        }
+
+        return monthlyAccumulate;
+    }
+
     //카드별 사용내역 일별로 가져오기
     public List<DailyTransactionDetails> getMyCardDayTransactions(int myCardId, LocalDate localDate){
         List<Transaction> transactions = transactionRepository.findTransactionsByMyCardIdAndDay(myCardId, localDate);
@@ -235,7 +199,7 @@ public class TransactionService {
         for(Transaction transaction : transactions){
             //associate, discountAmount(계산을 해주려면 혜택 정보 있어야 함)
             //1. 제휴사 가져오기
-            Associate associate = associateRepository.findByStoreName(transaction.getStore())
+            Associate associate = associateRepository.findByName(transaction.getStore())
                     .orElseThrow(() ->
                             new RuntimeException());
             //2. discountAmount 계산하기

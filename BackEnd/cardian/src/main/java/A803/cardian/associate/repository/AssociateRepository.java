@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AssociateRepository extends JpaRepository<Associate, Integer> {
-    @Query("SELECT a FROM Associate a WHERE a.name = :storeName")
-    Optional<Associate> findByStoreName(String storeName);
+    Optional<Associate> findByName(String name);
 
     List<Associate> findByCategoryCode(String categoryCode);
 

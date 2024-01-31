@@ -9,7 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface AccumulateBenefitRepository extends JpaRepository<AccumulateBenefit, Integer> {
-    @Query("select a from AccumulateBenefit a where a.cardId = :cardId and a.categoryCode = :categoryCode")
-    Optional<AccumulateBenefit> getAccumulateBenefitWithCardIdAndCategoryCode(int cardId, String categoryCode);
+    Optional<AccumulateBenefit> findAccumulateBenefitByCardIdAndCategoryCode(int cardId, String categoryCode);
 }
 
