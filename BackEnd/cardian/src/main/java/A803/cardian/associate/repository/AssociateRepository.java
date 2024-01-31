@@ -14,4 +14,6 @@ public interface AssociateRepository extends JpaRepository<Associate, Integer> {
 
     List<Associate> findByNameContaining(String search);
 
+    Optional<Associate> findById(Integer id);
+
 }
