@@ -1,5 +1,7 @@
 package A803.cardian.category.controller;
 
+import A803.cardian.associate.data.dto.response.AssociationList;
+import A803.cardian.associate.data.dto.response.Search;
 import A803.cardian.associate.service.AssociateService;
 import A803.cardian.category.data.dto.reponse.CategoryList;
 import A803.cardian.category.service.CategoryService;
@@ -28,6 +30,7 @@ public class CategoryController {
 
     @GetMapping("/{category_id}/association")
     public ResponseEntity<?> getSelectCategory(@PathVariable("category_id") String categoryCode){
+
         return ResponseEntity.ok(associateService.findAssociation(categoryCode));
     }
 
@@ -36,4 +39,10 @@ public class CategoryController {
 
         return ResponseEntity.ok(categoryService.findAllCategoryImage());
     }
+
+    @PostMapping("/association")
+    public ResponseEntity<?> searchAssociation(@RequestBody Search search){
+        return ResponseEntity.ok(associateService.searchAssociation(search));
+    }
+
 }

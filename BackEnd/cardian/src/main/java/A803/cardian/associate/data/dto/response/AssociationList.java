@@ -21,4 +21,8 @@ public class AssociationList {
                 .associationImage(associate.getImage())
                 .build();
     }
+
+
+
+
 }
