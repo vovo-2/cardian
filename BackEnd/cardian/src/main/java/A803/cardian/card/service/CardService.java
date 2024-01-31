@@ -29,7 +29,7 @@ import java.util.Optional;
 public class CardService {
     private final CardRepository cardRepository;
     private final MemberRepository memberRepository;
-    private final MyCardRepository mycardRepository;
+    private final MyCardRepository myCardRepository;
     private final MyCardBenefitRepository myCardBenefitRepository;
     private final AccumulateBenefitRepository accumulateBenefitRepository;
     private final TransactionService transactionService;
@@ -55,7 +55,7 @@ public class CardService {
 
     //accumulateBenefit이랑 accumulate 계산해서 넣어주기
     public MyCardInfoResponse getMyCardInfo(int myCardId) {
-        MyCard myCard = mycardRepository.findById(myCardId)
+        MyCard myCard = myCardRepository.findById(myCardId)
                 .orElseThrow(() ->
                         new RuntimeException());
 
