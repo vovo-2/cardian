@@ -4,7 +4,7 @@ import { axios } from "../../api";
 
 import { Accordion } from "flowbite-react";
 
-import BenefitList from "./BenefitList";
+import BenefitList from "./BenefitList.tsx";
 
 type Benefit = {
   name: string;

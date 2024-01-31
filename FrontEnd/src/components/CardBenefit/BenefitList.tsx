@@ -1,4 +1,4 @@
-import BenefitItem from "./BenefitItem";
+import BenefitItem from "./BenefitItem.tsx";
 export default function BenefitList() {
   return (
     <div className="overflow-x-auto border-blue border-2 rounded-xl ">
