@@ -5,6 +5,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -25,11 +27,11 @@ public class Transaction {
 
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date day;
+    private LocalDate day;
 
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date date;
+    private LocalDateTime date;
 
     @Column(nullable = false)
     private String store;

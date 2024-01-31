@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ExceptionBenfit {
+public class ExceptionBenefit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

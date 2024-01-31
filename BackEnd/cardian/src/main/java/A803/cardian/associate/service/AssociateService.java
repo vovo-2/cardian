@@ -3,9 +3,7 @@ package A803.cardian.associate.service;
 
 import A803.cardian.associate.data.dto.response.AssociationList;
 import A803.cardian.associate.domain.Associate;
-import A803.cardian.associate.repository.AssoiciateRepository;
-import A803.cardian.category.data.dto.reponse.CategoryList;
-import A803.cardian.category.domain.SubCommonCode;
+import A803.cardian.associate.repository.AssociateRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,9 +14,9 @@ import java.util.List;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class AssociateService {
-    private final AssoiciateRepository assoiciateRepository;
+    private final AssociateRepository associateRepository;
     public List<AssociationList> findAssociation(String categoryCode){
-        List<Associate> associates= assoiciateRepository.findByCategoryCode(categoryCode);
+        List<Associate> associates= associateRepository.findByCategoryCode(categoryCode);
         List<AssociationList> associationLists= new ArrayList<>();
         for(Associate associate : associates){
             AssociationList associationList=AssociationList.builder()

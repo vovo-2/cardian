@@ -33,7 +33,7 @@ public class CategoryBenefit {
     private String sign;
 
     @Column(nullable = false)
-    private String discountLimit;
+    private int discountLimit;
 
     @OneToMany(mappedBy = "categoryBenefit")
     private List<CardCategoryMapping> cardCategoryMappings=new ArrayList<>();
