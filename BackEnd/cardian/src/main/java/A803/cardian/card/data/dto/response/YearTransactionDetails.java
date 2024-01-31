@@ -10,10 +10,8 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class YearTransactionDetails {
-//    @JsonProperty("month")
     private int month;
 
-//    @JsonProperty("transactionList")
     private List<MonthlyTransactionDetails> monthlyTransactionDetailsList;
 
     private YearTransactionDetails(int myCardId, int month, List<MonthlyTransactionDetails> monthlyTransactionDetailsList){

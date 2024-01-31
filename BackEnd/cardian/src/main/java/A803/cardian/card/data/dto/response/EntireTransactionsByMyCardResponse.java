@@ -9,10 +9,8 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class EntireTransactionsByMyCardResponse {
-//    @JsonProperty("myCardId")
     private int myCardId;
 
-//    @JsonProperty("TransactionDetailsList")
     private List<YearTransactionDetails> yearTransactionDetailsList;
 
     private EntireTransactionsByMyCardResponse(int myCardId, List<YearTransactionDetails> yearTransactionDetailsList){
