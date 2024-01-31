@@ -1,11 +1,10 @@
-import { Accordion } from "flowbite-react";
-
-import CategoryBenefit from "./CategoryBenefit";
-import BenefitList from "./BenefitList";
-
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { axios } from "../../api";
-import { useEffect, useState } from "react";
+
+import { Accordion } from "flowbite-react";
+
+import BenefitList from "./BenefitList";
 
 type Benefit = {
   name: string;
