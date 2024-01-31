@@ -8,7 +8,7 @@ import A803.cardian.card.domain.Card;
 import A803.cardian.card.domain.MyCard;
 import A803.cardian.card.repository.CardRepository;
 import A803.cardian.card.repository.MyCardBenefitRepository;
-import A803.cardian.card.repository.MycardRepository;
+import A803.cardian.card.repository.MyCardRepository;
 import A803.cardian.member.domain.Member;
 import A803.cardian.member.exception.MemberErrorCode;
 import A803.cardian.member.exception.MemberException;
@@ -16,7 +16,6 @@ import A803.cardian.member.repository.MemberRepository;
 import A803.cardian.statistic.domain.AccumulateBenefit;
 import A803.cardian.statistic.domain.repository.AccumulateBenefitRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +29,7 @@ import java.util.Optional;
 public class CardService {
     private final CardRepository cardRepository;
     private final MemberRepository memberRepository;
-    private final MycardRepository mycardRepository;
+    private final MyCardRepository mycardRepository;
     private final MyCardBenefitRepository myCardBenefitRepository;
     private final AccumulateBenefitRepository accumulateBenefitRepository;
     private final TransactionService transactionService;

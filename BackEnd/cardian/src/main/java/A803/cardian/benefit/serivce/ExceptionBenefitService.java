@@ -35,4 +35,17 @@ public class ExceptionBenefitService {
 
         return exceptionBenefitRepository.findByAssociateIdAndCardId(associateId, cardId);
     }
+
+
+    /*
+     * 작성자 : 정여민
+     * 작성 일시 : 2024.01.31
+     * 업데이트 : 2024.01.31
+     */
+    // 카드에 해당 제휴사의 예외 혜택이 있는지 확인 ->
+    // 있으면 예외혜택이 return되고 없으면 null return 됨
+    public Optional<ExceptionBenefit> getExceptionBenefit(Integer cardid, Integer companyId, String categoryCode){
+
+        return exceptionBenefitRepository.findByCardIdAndCompanyIdAndCategoryCode(cardid, companyId, categoryCode);
+    }
 }
