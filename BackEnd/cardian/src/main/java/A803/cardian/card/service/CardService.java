@@ -8,7 +8,7 @@ import A803.cardian.card.domain.Card;
 import A803.cardian.card.domain.MyCard;
 import A803.cardian.card.repository.CardRepository;
 import A803.cardian.card.repository.MyCardBenefitRepository;
-import A803.cardian.card.repository.MyCardRepository;
+import A803.cardian.card.repository.MycardRepository;
 import A803.cardian.member.domain.Member;
 import A803.cardian.member.exception.MemberErrorCode;
 import A803.cardian.member.exception.MemberException;
@@ -29,7 +29,7 @@ import java.util.Optional;
 public class CardService {
     private final CardRepository cardRepository;
     private final MemberRepository memberRepository;
-    private final MyCardRepository myCardRepository;
+    private final MycardRepository myCardRepository;
     private final MyCardBenefitRepository myCardBenefitRepository;
     private final AccumulateBenefitRepository accumulateBenefitRepository;
     private final TransactionService transactionService;
