@@ -1,10 +1,8 @@
 package A803.cardian.card.controller;
 
-import A803.cardian.card.data.dto.response.CardCategoryBenefitResponses;
-import A803.cardian.card.data.dto.response.EntireTransactionsByMyCardResponse;
-import A803.cardian.card.data.dto.response.MyCardInfoResponse;
-import A803.cardian.card.data.dto.response.MyCardListResponse;
+import A803.cardian.card.data.dto.response.*;
 import A803.cardian.card.repository.CardRepository;
+import A803.cardian.card.service.BenefitService;
 import A803.cardian.card.service.CardService;
 import A803.cardian.card.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,6 +28,7 @@ public class CardController {
 
     private final CardService cardService;
     private final TransactionService transactionService;
+    private final BenefitService benefitService;
 
 //    @ApiResponse({
 //            @ApiResponse(responseCode = "200", description = "내 카드 조회 성공"),
@@ -42,6 +41,13 @@ public class CardController {
         return ResponseEntity.ok(response);
     }
 
+
+    /*
+     *   작성자 : 정여민
+     *   작성일시 : 2024.01.28
+     *   내용 : 내 카드 혜택 조회
+     *
+     * */
     @Operation(summary = "내 카드 혜택 조회", description = "내 카드에서 혜택 탭을 선택하면 해당 카드의 혜택 리스트를 불러오는 API입니다.")
     @GetMapping("/{mycard_id}/benefit")
     public ResponseEntity<Map<String, List<CardCategoryBenefitResponses>>> getMeCardBenefit(@PathVariable("mycard_id") Integer mycardId){
@@ -65,6 +71,21 @@ public class CardController {
     @GetMapping("/{mycard_id}/detail")
     public ResponseEntity<MyCardInfoResponse> getMyCardInfo(@PathVariable("mycard_id") int myCardId) {
         return ResponseEntity.ok(cardService.getMyCardInfo(myCardId));
+    }
+
+    /*
+     *   작성자 : 정여민
+     *   작성일시 : 2024.01.31
+     *   내용 : 내 카드 혜택 > 키테고리별 상세 혜택 조회
+     *
+     *
+     */
+    @Operation(summary = "내 카드 카테고리별 제휴사&혜택 조회", description = "내 카드의 카테고리별 제휴사를 불러오는 API입니다.")
+    @GetMapping("/{mycard_id}/{category_code}/store")
+    public ResponseEntity<CardBenefitCategoryResponse> getBenefitStoresOfCard(@PathVariable("mycard_id") int myCardId, @PathVariable("category_code") String categoryCode){
+
+        return ResponseEntity.ok(benefitService.getMyCardBenefitStoresOfCategory(myCardId, categoryCode));
+
     }
 
 }
