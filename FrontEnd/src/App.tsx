@@ -4,7 +4,7 @@ import NavBar from "./layouts/NavBar";
 import MyCardPage from "./pages/MyCardPage";
 import CardDetailPage from "./pages/CardDetailPage";
 import "./App.css";
-import Search from "./pages/Search";
+import SearchPage from "./pages/SearchPage";
 
 function App() {
   return (
@@ -15,7 +15,7 @@ function App() {
           <Route index element={<MyCardPage />} />
           <Route path=":card_id" element={<CardDetailPage />} />
         </Route>
-        <Route path="/search" element={<Search />} />
+        <Route path="/search" element={<SearchPage />} />
         <Route path="/analysis" element={<div>mycard</div>} />
         <Route path="/recommendation" element={<div>mycard</div>} />
         <Route path="/menu" element={<div>mycard</div>} />
