@@ -24,14 +24,13 @@ export default function CardBenefitList() {
 
   useEffect(() => {
     const url = `/card/${params.card_id}/benefit`;
-    console.log(url);
     axios.get(url).then(({ data }) => {
       setCategoryBenefitInfoList(data.benefitList);
     });
   }, []);
 
   return (
-    <div className="overflow-auto scrollbar-hide h-[300px] ">
+    <div className="overflow-y-auto scrollbar-hide  ">
       <Accordion className="border-none " collapseAll>
         {CategoryBenefitInfoList &&
           CategoryBenefitInfoList.map((b) => (
