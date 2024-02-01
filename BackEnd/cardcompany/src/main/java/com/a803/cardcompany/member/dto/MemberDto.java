@@ -13,7 +13,7 @@ import lombok.*;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class MemberDto {
 
-    private Integer id;
+    private Integer memberId;
     private String name;
 
     // Dto -> Entity

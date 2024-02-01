@@ -35,7 +35,7 @@ public class Member {
     // Entity to Dto
     public MemberDto toDto(){
         return MemberDto.builder()
-                .id(id)
+                .memberId(id)
                 .name(name)
                 .build();
     }
