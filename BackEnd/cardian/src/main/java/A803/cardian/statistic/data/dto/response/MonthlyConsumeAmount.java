@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import java.util.AbstractCollection;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 @Getter
 public class MonthlyConsumeAmount {
     private int january;
@@ -24,6 +23,8 @@ public class MonthlyConsumeAmount {
     private int november;
     private int december;
 
+
+    @Builder
     public static MonthlyConsumeAmount from(int january, int february, int march, int april, int may,
                                  int june, int july, int august, int september,
                                  int october,int november,int december){
