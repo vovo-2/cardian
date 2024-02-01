@@ -1,13 +1,9 @@
 package A803.cardian.statistic.data.dto.response;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-import java.util.AbstractCollection;
+import lombok.*;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Builder
 @Getter
 public class MonthlyConsumeAmount {

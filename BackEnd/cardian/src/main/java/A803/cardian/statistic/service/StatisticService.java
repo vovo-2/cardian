@@ -20,17 +20,22 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class StatisticService {
-    private MycardRepository mycardRepository;
-    private TransactionService transactionService;
+    private final MycardRepository mycardRepository;
+    private final TransactionService transactionService;
 
     //전체 카드 월별 소비금액
     public int getMonthlyConsume(int memberId, LocalDate localDate){
         int monthlyConsume = 0;
         List<MyCard> myCardList = mycardRepository.findMyCardsByMemberId(memberId);
+        //당월 1일로 바꿔주기
+        if(localDate.getDayOfMonth() != 1){
+            localDate = localDate.withDayOfMonth(1);
+        }
         for(MyCard myCard : myCardList){
             int myCardId = myCard.getId();
             monthlyConsume += transactionService.getMonthlyAccumulate(myCardId, localDate);
         }
+        System.out.println("월별 소비 금액 : " + localDate + " " +monthlyConsume);
         return monthlyConsume;
     }
 
@@ -38,15 +43,18 @@ public class StatisticService {
     public int getYearConsume(int memberId){
         int yearConsume = 0;
         LocalDate localDate = MonthDay.JANUARY.toLocalDate();
-        while(localDate.getMonthValue() < 13) {
+        LocalDate endDate = localDate.plusYears(1);
+        while(localDate.isBefore(endDate)) {
             yearConsume += getMonthlyConsume(memberId, localDate); //월별 소비금액 더해주기
-            localDate = localDate.plusMonths(1);
+            System.out.println(" 현재 더해진 월 :  " + localDate);
+            endDate = endDate.plusMonths(1);
         }
+        System.out.println("총합 : " + yearConsume);
         return yearConsume;
     }
 
     //올해 총 소비 금액 + 월별 소비금액
-    public YearConsumeWithMonthlyConsumeResponse getMonthlyConsumeAmount(int memberId){
+    public YearConsumeWithMonthlyConsumeResponse getYearConsumeAmountWithMontlhlyConsume(int memberId){
         int yearConsume = 0;
 
         int january = getMonthlyConsume(memberId, MonthDay.JANUARY.toLocalDate());

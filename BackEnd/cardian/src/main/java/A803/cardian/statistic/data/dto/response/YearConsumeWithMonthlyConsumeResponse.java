@@ -1,5 +1,11 @@
 package A803.cardian.statistic.data.dto.response;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class YearConsumeWithMonthlyConsumeResponse {
     private int memberId;
     private YearConsumeAmount yearConsumeAmount;
