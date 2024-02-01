@@ -14,7 +14,7 @@ interface Category {
   categoryName: string;
 }
 
-export default function BrandList({categoryCode, categoryName}: Category) {
+export default function BrandCategoryList({categoryCode, categoryName}: Category) {
   const [associationList, setAssociationList] = useState<Brand[]>();
 
   useEffect(() => {
