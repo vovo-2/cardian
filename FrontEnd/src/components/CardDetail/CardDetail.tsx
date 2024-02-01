@@ -23,7 +23,6 @@ export default function CardDetail() {
 
   useEffect(() => {
     axios.get(`/card/${cardId}/detail`).then(({ data }) => {
-      console.log(data);
       setMyCardInfoDetails(data.myCardInfoDetails);
     });
   }, [cardId]);
