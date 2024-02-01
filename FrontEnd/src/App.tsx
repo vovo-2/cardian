@@ -16,9 +16,9 @@ function App() {
           <Route path=":card_id" element={<CardDetailPage />} />
         </Route>
         <Route path="/search" element={<SearchPage />} />
-        <Route path="/analysis" element={<div>mycard</div>} />
-        <Route path="/recommendation" element={<div>mycard</div>} />
-        <Route path="/menu" element={<div>mycard</div>} />
+        <Route path="/analysis" element={<div>analysis</div>} />
+        <Route path="/recommendation" element={<div>recommendation</div>} />
+        <Route path="/menu" element={<div>menu</div>} />
       </Routes>
       <NavBar />
     </>
