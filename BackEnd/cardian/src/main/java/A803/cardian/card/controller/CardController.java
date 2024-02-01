@@ -50,15 +50,8 @@ public class CardController {
      * */
     @Operation(summary = "내 카드 혜택 조회", description = "내 카드에서 혜택 탭을 선택하면 해당 카드의 혜택 리스트를 불러오는 API입니다.")
     @GetMapping("/{mycard_id}/benefit")
-    public ResponseEntity<Map<String, List<CardCategoryBenefitResponses>>> getMeCardBenefit(@PathVariable("mycard_id") Integer mycardId){
-        List<CardCategoryBenefitResponses> benefitList = new ArrayList<>();
-        benefitList = cardService.findMyCardBenefit(mycardId);
-        if(benefitList.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // ErrorResponse를 JSON으로 변환
-        }
-        Map<String, List<CardCategoryBenefitResponses>> BenefitMap = new HashMap<>();
-        BenefitMap.put("benefitList", benefitList);
-        return ResponseEntity.status(HttpStatus.OK).body(BenefitMap);
+    public ResponseEntity<Map<String, List<CardCategoryBenefitResponse>>> getMeCardBenefit(@PathVariable("mycard_id") Integer mycardId){
+        return ResponseEntity.status(HttpStatus.OK).body(benefitService.findMyCardBenefit(mycardId));
     }
 
     @Operation(summary = "내 카드 거래내역 조회", description = "카드 이용내역을 불러오는 API입니다.")

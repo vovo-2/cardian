@@ -13,21 +13,23 @@ import A803.cardian.benefit.repository.ExceptionBenefitRepository;
 import A803.cardian.benefit.serivce.CategoryBenefitService;
 import A803.cardian.benefit.serivce.ExceptionBenefitService;
 import A803.cardian.card.data.dto.response.CardBenefitCategoryResponse;
+import A803.cardian.card.data.dto.response.CardCategoryBenefitResponse;
 import A803.cardian.card.data.dto.response.CardCategoryBenefitResponses;
 import A803.cardian.card.domain.Card;
 import A803.cardian.card.domain.MyCard;
 import A803.cardian.card.repository.CardRepository;
 import A803.cardian.card.repository.MyCardBenefitRepository;
 import A803.cardian.card.repository.MycardRepository;
+import A803.cardian.category.repository.CategoryIconRepository;
+import A803.cardian.category.repository.SubCommonRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /*
  *   작성자 : 정여민
@@ -63,17 +65,97 @@ public class BenefitService {
     @Autowired
     private final CardCategoryMappingRepository cardCategoryMappingRepository;
 
+    @Autowired
+    private final CategoryIconRepository categoryIconRepository;
+
+    @Autowired
+    private final SubCommonRepository subCommonRepository;
+
     private final ExceptionBenefitService exceptionBenefitService;
     private final CategoryBenefitService categoryBenefitService;
 
 
-    // 내 카드의 혜택 조회 - 카드의 혜택을 List로 반환
-    // 작성자 : 정여민
-    // 작성일시 : 2024.01.30
+    // 내 카드 혜택 조회 -
+    /*
+    *   작성자 : 정여민
+    *   작성 일시 : 2024.02.01
+    *   업데이트 : 2024.02.01
+    * */
+    // 내 카드 아이디 -> 카드 조회 -> 카드 아이디
+    //-> 카테고리 혜택 리스트 받아오기 (카테고리 코드, 할인 크기, 기호, 카테고리 혜택 아이디)
+    //-> 카테고리 코드로 카테고리 아이콘 이미지 조회하기
     @Transactional
-    public List<CardCategoryBenefitResponses> findMyCardBenefit(Integer cardId){
-        List<CardCategoryBenefitResponses> myCardBenefitList = myCardBenefitRepository.findProjectBenefitCodeByCardId(cardId);
-        return myCardBenefitList;
+    public Map<String, List<CardCategoryBenefitResponse>> findMyCardBenefit(Integer myCardId){
+        // 1. 내 카드 아이디 -> 카드 조회
+        Optional<MyCard> myCard = myCardRepository.findById(myCardId);
+
+        Integer cardId = null;
+
+        // 결과 저장해둘 리스트
+        List<CardCategoryBenefitResponse> myCardBenefitList = new ArrayList<>();
+
+        // 내 카드 정보가 없으면
+        if(myCard.isEmpty()) {
+
+            myCardBenefitList.add(null);
+        }
+        // 내 카드 정보가 있으면
+        else{
+            // 2. 카드 조회해서 카드 아이디 가져와서
+            cardId = myCard.get().getCard().getId();
+
+            // 카테고리 혜택 리스트 받아오기
+            List<CategoryBenefit> categoryBenefit = categoryBenefitRepository.findCategoryBenefitsByCardId(cardId);
+
+
+            // 카테고리 혜택이 존재하지 않으면
+            if(categoryBenefit.isEmpty()){
+                myCardBenefitList.add(null);
+            }
+            // 카테고리 혜택이 존재하면
+            else{
+                // 리스트를 돌면서 혜택 (카테고리 코드, 할인 크기, 기호, 카테고리 혜택 아이디) 넣어주기
+                for (CategoryBenefit benefit : categoryBenefit) {
+                    // -> 카테고리 코드로 카테고리 아이콘 이미지 조회하기
+                    Optional<String> categoryIcon = categoryIconRepository.findIconImageByCategoryCode(benefit.getCategoryCode());
+
+                    // 카테고리 이미지가 업으면
+                    if(categoryIcon.isEmpty()){
+                        myCardBenefitList.add(null);
+                    }else{
+
+                        // sub common code 가서 이름 가져오기
+                        Optional<String> storeName = subCommonRepository.findByDetailCode(benefit.getCategoryCode());
+
+                        String name = "";
+                        if(storeName.isEmpty()){
+
+                        }else{
+                            name = storeName.get();
+                        }
+
+                        myCardBenefitList.add(CardCategoryBenefitResponse.builder()
+                                .categoryCode(benefit.getCategoryCode())
+                                .iconImage(categoryIcon.get())
+                                .discountAmount(benefit.getDiscountAmount())
+                                .sign(benefit.getSign())
+                                .categorybenefitId(benefit.getId())
+                                .name(name)
+                                .build());
+
+                    }
+                }
+            }
+
+
+
+        }
+
+        // 최종 형식
+        Map<String, List<CardCategoryBenefitResponse>> BenefitMap = new HashMap<>();
+        BenefitMap.put("benefitList", myCardBenefitList);
+
+        return BenefitMap;
     }
 
     /*

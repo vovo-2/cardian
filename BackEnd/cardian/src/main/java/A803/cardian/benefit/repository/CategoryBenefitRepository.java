@@ -3,6 +3,8 @@ package A803.cardian.benefit.repository;
 import A803.cardian.benefit.domain.CategoryBenefit;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import javax.swing.text.html.Option;
+import java.util.List;
 import java.util.Optional;
 
 public interface CategoryBenefitRepository extends JpaRepository<CategoryBenefit, Integer> {
@@ -18,5 +20,6 @@ public interface CategoryBenefitRepository extends JpaRepository<CategoryBenefit
      */
     Optional<CategoryBenefit> findCategoryBenefitByCardIdAndCategoryCode(Integer cardId, String categoryCode);
 
+    List<CategoryBenefit> findCategoryBenefitsByCardId(Integer cardId);
 
 }
