@@ -39,7 +39,7 @@ export default function BrandSearch() {
 
   return (
     <div>
-      <BrandKeywordBar makeKeywordResult={onSetKeywordResult} updateKeyword={onSetKeyword} />
+      <BrandKeywordBar makeKeywordResult={onSetKeywordResult} updateKeyword={onSetKeyword} keywordResult={keywordResult}/>
       <BrandCategoryBar makeCategoryResult={onSetCategoryResult} updateCategory={onSetCategoryCode} />
       {
         keywordResult

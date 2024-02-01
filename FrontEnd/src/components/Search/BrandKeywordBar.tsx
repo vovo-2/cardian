@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
 
 interface BrandKeywordProps {
   updateKeyword: (keyword: string) => void;
   makeKeywordResult: () => void;
+  keywordResult: boolean;
 }
 
 export default function BrandKeywordBar(props: BrandKeywordProps) {
@@ -24,6 +25,13 @@ export default function BrandKeywordBar(props: BrandKeywordProps) {
   const searchSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
+
+  useEffect(() => {
+    if (!props.keywordResult) {
+        setClick(false);
+        setKeyword("");
+    }
+  }, [props.keywordResult])
 
   return (
     <div>
@@ -59,8 +67,12 @@ export default function BrandKeywordBar(props: BrandKeywordProps) {
             className="h-full my-auto mr-1"
             type="submit"
             onClick={() => {
-              updateKeyword(keyword);
-              makeKeywordResult();
+              if (keyword.length == 0) {
+                alert("검색어를 입력하세요.");
+              } else {
+                updateKeyword(keyword);
+                makeKeywordResult();
+              }
             }}
           >
             <FaSearch size="20" />
