@@ -1,3 +1,15 @@
-export default function CardTransactionItemLogo() {
-  return <div className="rounded-full w-12 h-12 bg-darkgray" />;
+interface CardTransactionItemLogoProps {
+  associateImage: string;
+}
+
+export default function CardTransactionItemLogo({
+  associateImage,
+}: CardTransactionItemLogoProps) {
+  return (
+    <img
+      src={associateImage}
+      alt="로고 이미지"
+      className="rounded-xl w-12 h-12 object-contain"
+    />
+  );
 }
