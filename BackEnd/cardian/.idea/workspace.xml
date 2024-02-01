@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="57a506ac-d205-4bae-8cff-d09fc9c2449b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/A803/cardian/statistic/service/StatisticService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/A803/cardian/statistic/service/StatisticService.java" afterDir="false" />
-    </list>
+    <list default="true" id="57a506ac-d205-4bae-8cff-d09fc9c2449b" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -87,7 +85,7 @@
       <option name="presentableId" value="Default" />
       <updated>1706752463195</updated>
       <workItem from="1706752464330" duration="340000" />
-      <workItem from="1706752813112" duration="4671000" />
+      <workItem from="1706752813112" duration="5055000" />
     </task>
     <servers />
   </component>
