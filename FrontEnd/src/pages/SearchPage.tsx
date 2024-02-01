@@ -1,11 +1,9 @@
-import BrandSearchBar from "../components/Search/BrandSearchBar";
-import BrandCategorySearch from "../components/Search/BrandCategorySearch";
+import BrandSearch from "../components/Search/BrandSearch";
 
 export default function Search() {
   return (
     <div>
-      <BrandSearchBar />
-      <BrandCategorySearch />
+      <BrandSearch />
     </div>
   );
 }
