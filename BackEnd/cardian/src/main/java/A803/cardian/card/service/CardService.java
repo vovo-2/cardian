@@ -48,10 +48,10 @@ public class CardService {
     // 내 카드의 혜택 조회 - 카드의 혜택을 List로 반환
     // 작성자 : 정여민
     // 작성일시 : 2024.01.30
-    public List<CardCategoryBenefitResponses> findMyCardBenefit(Integer cardId){
-        List<CardCategoryBenefitResponses> myCardBenefitList = myCardBenefitRepository.findProjectBenefitCodeByCardId(cardId);
-        return myCardBenefitList;
-    }
+//    public List<CardCategoryBenefitResponses> findMyCardBenefit(Integer cardId){
+//        List<CardCategoryBenefitResponses> myCardBenefitList = myCardBenefitRepository.findProjectBenefitCodeByCardId(cardId);
+//        return myCardBenefitList;
+//    }
 
     //accumulateBenefit이랑 accumulate 계산해서 넣어주기
     public MyCardInfoResponse getMyCardInfo(int myCardId) {

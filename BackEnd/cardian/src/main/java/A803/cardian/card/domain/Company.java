@@ -21,5 +21,5 @@ public class Company {
     private String name;
 
     @OneToMany(mappedBy = "company")
-    private List<Card> cards=new ArrayList<>();
+    private List<Card> cards =new ArrayList<>();
 }

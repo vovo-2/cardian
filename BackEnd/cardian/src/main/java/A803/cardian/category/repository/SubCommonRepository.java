@@ -11,4 +11,5 @@ public interface SubCommonRepository extends JpaRepository<SubCommonCode,Integer
     Optional<String> findByDetailCode(String detailCode);
 
 
+
 }
