@@ -1,4 +1,6 @@
 import tw from "tailwind-styled-components";
+import { BENEFIT_CODE } from "../../constants/benefitCode";
+import { CARD_TYPE } from "../../constants/cardType";
 
 type BadgeProps = {
   type?: string; // 신용, 체크
@@ -32,8 +34,24 @@ const BenefitBadge = tw.span`
 `;
 
 export default function Badge({ type, benefitCode }: BadgeProps) {
-  return (<>
-    {type && <TypeBadge>{type}</TypeBadge>}
-    {benefitCode && <BenefitBadge>{benefitCode}</BenefitBadge>}
-  </>);
+  const getCardType = (type: string) => {
+    const result = CARD_TYPE[type as keyof typeof CARD_TYPE];
+
+    return result;
+  };
+
+  const getBenefitType = (benefitCode: string) => {
+    const result = BENEFIT_CODE[benefitCode as keyof typeof BENEFIT_CODE];
+
+    return result;
+  };
+
+  return (
+    <>
+      {type && <TypeBadge>{getCardType(type)}</TypeBadge>}
+      {benefitCode && (
+        <BenefitBadge>{getBenefitType(benefitCode)}</BenefitBadge>
+      )}
+    </>
+  );
 }
