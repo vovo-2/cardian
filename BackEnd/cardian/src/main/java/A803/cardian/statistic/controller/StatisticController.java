@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class StatisticController {
     private StatisticService statisticService;
 
-    @Operation(summary = "내 카드 거래내역 조회", description = "카드 이용내역을 불러오는 API입니다.")
-    @GetMapping("/{mycard_id}/transaction")
-    
+//    @Operation(summary = "내 카드 거래내역 조회", description = "카드 이용내역을 불러오는 API입니다.")
+//    @GetMapping("/{mycard_id}/transaction")
+//
 }
