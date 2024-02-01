@@ -5,6 +5,8 @@ interface BrandKeywordProps {
   updateKeyword: (keyword: string) => void;
   makeKeywordResult: () => void;
   keywordResult: boolean;
+  isClick: boolean;
+  setClick: (state: boolean) => void;
 }
 
 export default function BrandKeywordBar(props: BrandKeywordProps) {
@@ -26,12 +28,13 @@ export default function BrandKeywordBar(props: BrandKeywordProps) {
     e.preventDefault();
   };
 
+  // keywordResult가 true에서 false로 바뀔 때마다 실행되는 함수 만들기
   useEffect(() => {
-    if (!props.keywordResult) {
-        setClick(false);
-        setKeyword("");
+    if (!props.isClick && isClick) {
+      setClick(false);
+      setKeyword("");
     }
-  }, [props.keywordResult])
+  }, [props.isClick, isClick])
 
   return (
     <div>
@@ -44,6 +47,7 @@ export default function BrandKeywordBar(props: BrandKeywordProps) {
             className="h-full my-auto mr-1"
             onClick={() => {
               setClick(true);
+              props.setClick(true);
             }}
           >
             <FaSearch size="20" />

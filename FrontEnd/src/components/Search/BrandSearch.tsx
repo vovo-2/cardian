@@ -37,10 +37,15 @@ export default function BrandSearch() {
     setCategoryName(categoryName);
   }
 
+  const [isClick, setClick] = useState(false);
+  function onSetClick(state: boolean) {
+    setClick(state);
+  }
+
   return (
     <div>
-      <BrandKeywordBar makeKeywordResult={onSetKeywordResult} updateKeyword={onSetKeyword} keywordResult={keywordResult}/>
-      <BrandCategoryBar makeCategoryResult={onSetCategoryResult} updateCategory={onSetCategoryCode} />
+      <BrandKeywordBar updateKeyword={onSetKeyword} makeKeywordResult={onSetKeywordResult} keywordResult={keywordResult} isClick={isClick} setClick={setClick} />
+      <BrandCategoryBar makeCategoryResult={onSetCategoryResult} updateCategory={onSetCategoryCode} closeKeywordBar={onSetClick} />
       {
         keywordResult
         ? <BrandKeywordList keyword={keyword} />

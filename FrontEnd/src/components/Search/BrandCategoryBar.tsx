@@ -12,17 +12,10 @@ type Category = {
 interface BrandCategoryProps {
   updateCategory: ({ categoryCode, categoryName }: Category) => void
   makeCategoryResult: () => void
+  closeKeywordBar: (state: boolean) => void
 }
 
 export default function BrandCategory(props: BrandCategoryProps) {
-
-  function updateCategory({categoryCode, categoryName}: Category) {
-    props.updateCategory({categoryCode, categoryName});
-  }
-
-  function makeCategoryResult() {
-    props.makeCategoryResult();
-  }
 
   const [categoryList, setCategoryList] = useState<Category[]>();
 
@@ -42,7 +35,7 @@ export default function BrandCategory(props: BrandCategoryProps) {
               <Dropdown.Item
                 href="#"
                 key={category.categoryCode}
-                onClick={() => {updateCategory(category); makeCategoryResult();}}
+                onClick={() => {props.closeKeywordBar(false); props.updateCategory(category); props.makeCategoryResult();}}
               >{category.categoryName}</Dropdown.Item>
             );
           })}
