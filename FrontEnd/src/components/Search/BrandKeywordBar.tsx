@@ -73,6 +73,8 @@ export default function BrandKeywordBar(props: BrandKeywordProps) {
             onClick={() => {
               if (keyword.length == 0) {
                 alert("검색어를 입력하세요.");
+              } else if (keyword.trim() === "") {
+                alert("검색어를 입력하세요.");
               } else {
                 updateKeyword(keyword);
                 makeKeywordResult();
