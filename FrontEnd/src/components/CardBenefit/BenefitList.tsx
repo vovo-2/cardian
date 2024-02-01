@@ -20,7 +20,6 @@ export default function BenefitList({ myCardId, categoryCode }: InputInfo) {
   const [benefitList, setBenefitList] = useState<BenefitInfo[]>([]);
   useEffect(() => {
     const url = `/card/${myCardId}/${categoryCode}/store`;
-    console.log(url);
 
     axios.get(url).then(({ data }) => {
       setExceptionBenefit(data.exceptionBenefitStore);
