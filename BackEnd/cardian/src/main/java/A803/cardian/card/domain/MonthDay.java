@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter;
 @RequiredArgsConstructor
 public enum MonthDay {
     JANUARY("2023-01-31"),
-    FEBRUARY("2023-02-29"),
+    FEBRUARY("2023-02-28"),
     MARCH("2023-03-31"),
     APRIL("2023-04-30"),
     MAY("2023-05-31"),
