@@ -4,7 +4,131 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fd912ea4-1b7d-4d74-85e8-317706bbae36" name="Changes" comment="" />
+    <list default="true" id="57a506ac-d205-4bae-8cff-d09fc9c2449b" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../../.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../.idea/S10P12A803.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../.idea/gradle.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/8.5/checksums/checksums.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/8.5/dependencies-accessors/dependencies-accessors.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/8.5/dependencies-accessors/gc.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/8.5/executionHistory/executionHistory.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/8.5/executionHistory/executionHistory.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/8.5/fileHashes/fileHashes.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/8.5/fileHashes/fileHashes.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/8.5/gc.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/CardianApplication.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/associate/data/dto/response/AssociationList$AssociationListBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/associate/data/dto/response/AssociationList.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/associate/data/dto/response/AssociationSearch$AssociationSearchBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/associate/data/dto/response/AssociationSearch.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/associate/data/dto/response/Search.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/associate/domain/Associate$AssociateBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/associate/domain/Associate.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/associate/repository/AssociateRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/associate/service/AssociateService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/benefit/data/dto/BenefitStore$BenefitStoreBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/benefit/data/dto/BenefitStore.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/benefit/domain/CardCategoryMapping.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/benefit/domain/CategoryBenefit.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/benefit/domain/ExceptionBenefit.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/benefit/repository/CardCategoryMappingRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/benefit/repository/CategoryBenefitRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/benefit/repository/ExceptionBenefitRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/benefit/serivce/CardCategoryMappingService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/benefit/serivce/CategoryBenefitService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/benefit/serivce/ExceptionBenefitService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/controller/CardController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/data/dto/response/CardBenefitCategoryResponse.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/data/dto/response/CardCategoryBenefitResponses.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/data/dto/response/DailyTransactionDetails$DailyTransactionDetailsBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/data/dto/response/DailyTransactionDetails.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/data/dto/response/EntireTransactionsByMyCardResponse.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/data/dto/response/MonthlyTransactionDetails$MonthlyTransactionDetailsBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/data/dto/response/MonthlyTransactionDetails.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/data/dto/response/MyCardBenefitListResponse$MyCardBenefitListResponseBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/data/dto/response/MyCardBenefitListResponse.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/data/dto/response/MyCardDetails$MyCardDetailsBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/data/dto/response/MyCardDetails.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/data/dto/response/MyCardInfoDetails$MyCardInfoDetailsBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/data/dto/response/MyCardInfoDetails.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/data/dto/response/MyCardInfoResponse.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/data/dto/response/MyCardListResponse.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/data/dto/response/YearTransactionDetails.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/domain/BenefitCode.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/domain/BenefitCodeConverter.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/domain/Card$CardBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/domain/Card.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/domain/Company$CompanyBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/domain/Company.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/domain/FavoriteCard.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/domain/MonthDay.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/domain/MyCard$MyCardBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/domain/MyCard.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/domain/Transaction.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/domain/Type.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/domain/TypeConverter.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/repository/CardRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/repository/CompanyRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/repository/MyCardBenefitRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/repository/MycardRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/repository/TransactionRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/service/BenefitService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/service/CardService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/card/service/TransactionService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/category/controller/CategoryController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/category/data/dto/reponse/CategoryList$CategoryListBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/category/data/dto/reponse/CategoryList.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/category/data/dto/reponse/CategoryListImage$CategoryListImageBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/category/data/dto/reponse/CategoryListImage.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/category/domain/CategoryIcon$CategoryIconBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/category/domain/CategoryIcon.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/category/domain/MainCommomCode.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/category/domain/SubCommonCode$SubCommonCodeBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/category/domain/SubCommonCode.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/category/repository/CategoryIconRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/category/repository/SubCommonRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/category/service/CategoryService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/global/exception/ErrorCode.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/global/exception/GlobalException.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/goal/domain/Goal$GoalBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/goal/domain/Goal.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/member/controller/memberController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/member/domain/Certificate.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/member/domain/Gender.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/member/domain/Member$MemberBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/member/domain/Member.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/member/domain/embbeded/PhoneNumber.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/member/exception/MemberErrorCode.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/member/exception/MemberException.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/member/repository/MemberRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/settlement/controller/SettlementController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/settlement/data/dto/response/MySalary$MySalaryBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/settlement/data/dto/response/MySalary.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/settlement/domain/Settlement.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/settlement/domain/SettlementStandard.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/settlement/repository/SettlementRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/settlement/service/SettlementService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/statistic/domain/AccumulateBenefit.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/statistic/domain/CategoryMonthConsume.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/statistic/domain/MonthlyCardStatistic.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/statistic/service/StatisticService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/statistic/controller/StatisticController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/statistic/data/dto/response/MonthlyConsumeAmount$MonthlyConsumeAmountBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/statistic/data/dto/response/MonthlyConsumeAmount$MonthlyConsumeAmountBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/A803/cardian/statistic/data/dto/response/MonthlyConsumeAmount.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/A803/cardian/card/domain/Company.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/A803/cardian/card/domain/Company.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/A803/cardian/goal/domain/Goal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/A803/cardian/goal/domain/Goal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/A803/cardian/statistic/controller/StatisticController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/A803/cardian/statistic/data/dto/response/MonthlyConsumeAmount.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/A803/cardian/statistic/service/StatisticService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/A803/cardian/statistic/service/StatisticService.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -18,20 +142,12 @@
   <component name="ExternalProjectsManager">
     <system id="GRADLE">
       <state>
-        <task path="$PROJECT_DIR$">
-          <activation />
-        </task>
         <projects_view>
           <tree_state>
             <expand>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="cardian" type="f1a62948:ProjectNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="cardian" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
               </path>
             </expand>
             <select />
@@ -43,56 +159,57 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
-  <component name="GitSEFilterConfiguration">
-    <file-type-list>
-      <filtered-out-file-type name="LOCAL_BRANCH" />
-      <filtered-out-file-type name="REMOTE_BRANCH" />
-      <filtered-out-file-type name="TAG" />
-      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
-    </file-type-list>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectId" id="2bkXmUzIXf9AIvFFiW1eWE9lvmJ" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="2bkI53dt72ZWpBnVrF09xwerqYA" />
   <component name="ProjectViewState">
-    <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.gradle" />
-  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Gradle.Build cardian.executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Spring Boot.CardianApplication.executor": "Run",
+    "git-widget-placeholder": "Merging feature/card/benefit/category+fix",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.keymap",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
   <component name="RunManager">
-    <configuration name="CardianApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+    <configuration name="CardianApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="cardian.main" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="A803.cardian.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
       <option name="SPRING_BOOT_MAIN_CLASS" value="A803.cardian.CardianApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Spring Boot.CardianApplication" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="fd912ea4-1b7d-4d74-85e8-317706bbae36" name="Changes" comment="" />
-      <created>1706760211268</created>
+      <changelist id="57a506ac-d205-4bae-8cff-d09fc9c2449b" name="Changes" comment="" />
+      <created>1706752463195</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1706760211268</updated>
-      <workItem from="1706760212824" duration="441000" />
-      <workItem from="1706760666116" duration="1035000" />
+      <updated>1706752463195</updated>
+      <workItem from="1706752464330" duration="340000" />
+      <workItem from="1706752813112" duration="5521000" />
     </task>
     <servers />
   </component>
