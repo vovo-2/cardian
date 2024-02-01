@@ -14,7 +14,7 @@ import A803.cardian.member.exception.MemberErrorCode;
 import A803.cardian.member.exception.MemberException;
 import A803.cardian.member.repository.MemberRepository;
 import A803.cardian.statistic.domain.AccumulateBenefit;
-import A803.cardian.statistic.domain.repository.AccumulateBenefitRepository;
+import A803.cardian.statistic.repository.AccumulateBenefitRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
