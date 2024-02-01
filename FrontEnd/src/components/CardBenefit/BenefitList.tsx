@@ -1,11 +1,57 @@
 import BenefitItem from "./BenefitItem.tsx";
-export default function BenefitList() {
+
+import { axios } from "../../api";
+import { useState, useEffect } from "react";
+
+type BenefitInfo = {
+  storeName: string;
+  discountAmount: number;
+  sign: string;
+};
+
+type InputInfo = {
+  key: number;
+  myCardId: number;
+  categoryCode: string;
+};
+export default function BenefitList({ myCardId, categoryCode }: InputInfo) {
+  const [exceptionBenefit, setExceptionBenefit] = useState<BenefitInfo>();
+
+  const [benefitList, setBenefitList] = useState<BenefitInfo[]>([]);
+  useEffect(() => {
+    const url = `/card/${myCardId}/${categoryCode}/store`;
+    console.log(url);
+
+    axios.get(url).then(({ data }) => {
+      setExceptionBenefit(data.exceptionBenefitStore);
+      setBenefitList(data.storeList);
+    });
+  }, []);
+
   return (
-    <div className="overflow-x-auto border-blue border-2 rounded-xl ">
-      <BenefitItem />
-      <BenefitItem />
-      <BenefitItem />
-      <BenefitItem />
+    <div className="overflow-x-auto rounded-xl  border-2 border-whiteblue ">
+      {exceptionBenefit?.storeName && (
+        <BenefitItem
+          key={-1}
+          storeName={exceptionBenefit.storeName}
+          discountAmount={exceptionBenefit.discountAmount}
+          sign={exceptionBenefit.sign}
+          isException={true}
+        />
+      )}
+
+      {benefitList &&
+        benefitList.map((item, idx) => {
+          return (
+            <BenefitItem
+              key={idx}
+              storeName={item.storeName}
+              discountAmount={item.discountAmount}
+              sign={item.sign}
+              isException={false}
+            />
+          );
+        })}
     </div>
   );
 }

@@ -6,30 +6,35 @@ import { Accordion } from "flowbite-react";
 
 import BenefitList from "./BenefitList.tsx";
 
-type Benefit = {
+type CategoryBenefitInfo = {
   name: string;
   sign: string;
   discountAmount: number;
   cardId: number;
   iconImage: string;
   categorybenefitId: number;
+  categoryCode: string;
 };
 export default function CardBenefitList() {
   const params = useParams();
-  const [benefitList, setBenefitList] = useState<Benefit[]>([]);
+  const myCardId = Number(params.card_id);
+  const [CategoryBenefitInfoList, setCategoryBenefitInfoList] = useState<
+    CategoryBenefitInfo[]
+  >([]);
 
   useEffect(() => {
     const url = `/card/${params.card_id}/benefit`;
+    console.log(url);
     axios.get(url).then(({ data }) => {
-      setBenefitList(data.benefitList);
+      setCategoryBenefitInfoList(data.benefitList);
     });
   }, []);
 
   return (
     <div className="overflow-auto scrollbar-hide h-[300px] ">
       <Accordion className="border-none " collapseAll>
-        {benefitList &&
-          benefitList.map((b) => (
+        {CategoryBenefitInfoList &&
+          CategoryBenefitInfoList.map((b) => (
             <Accordion.Panel key={b.categorybenefitId}>
               <Accordion.Title className="bg-whiteblue w-full rounded-2xl border-none mt-2">
                 <div className="flex w-full">
@@ -42,7 +47,11 @@ export default function CardBenefitList() {
                 </div>
               </Accordion.Title>
               <Accordion.Content className="border-none m-0 px-1">
-                <BenefitList />
+                <BenefitList
+                  key={b.categorybenefitId}
+                  myCardId={myCardId}
+                  categoryCode={b.categoryCode}
+                />
               </Accordion.Content>
             </Accordion.Panel>
           ))}
