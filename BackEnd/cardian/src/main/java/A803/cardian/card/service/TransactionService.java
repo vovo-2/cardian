@@ -234,12 +234,14 @@ public class TransactionService {
         TransactionDetails from(String day, List<DayTransactionDetails> dayTransactionDetails)
          */
 //        LocalDate localDate = monthDay.toLocalDate(); //원하는 달 시작일
-        LocalDate endMonth = localDate.minusMonths(1); //이전달 끝
+        LocalDate endMonth = localDate.minusDays(localDate.getDayOfMonth()); //이전달 끝
+
         while(localDate.isAfter(endMonth)) {
             List<DailyTransactionDetails> dailyTransactionDetailsList = getMyCardDayTransactions(myCardId, localDate);
 
             if (dailyTransactionDetailsList.size() == 0) {//내역 없으면 넣어주지 말기
                 localDate = localDate.minusDays(1); //하루 줄여줌
+                System.out.println("localDate : " + localDate);
                 continue;
             }
 
