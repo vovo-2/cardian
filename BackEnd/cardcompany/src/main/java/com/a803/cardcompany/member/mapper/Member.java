@@ -1,8 +1,12 @@
 package com.a803.cardcompany.member.mapper;
 
+import com.a803.cardcompany.card.mapper.Card;
 import com.a803.cardcompany.member.dto.MemberDto;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /*
 *   작성자 : 정여민
@@ -26,6 +30,9 @@ public class Member {
 
     @Column(nullable = false, length = 20)
     private String name;
+
+//    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+//    private List<Card> Cards = new ArrayList<>();
 
     @Builder
     public Member(String name){

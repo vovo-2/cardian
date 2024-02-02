@@ -4,10 +4,13 @@ import com.a803.cardcompany.card.BenefitCode;
 import com.a803.cardcompany.card.CardType;
 import com.a803.cardcompany.card.dto.CardDto;
 import com.a803.cardcompany.member.mapper.Member;
+import com.a803.cardcompany.transaction.mapper.Transaction;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /*
 * 작성자 : 정여민
@@ -65,6 +68,9 @@ public class Card {
     // 혜택 코드
     @Enumerated(EnumType.STRING)
     private BenefitCode benefitCode;
+
+//    @OneToMany(mappedBy = "card", fetch = FetchType.LAZY)
+//    private List<Transaction> transactions = new ArrayList<>();
 
     @Builder
     public Card(Integer id, Member member, String cardCompany, CardType type, String name, String number,

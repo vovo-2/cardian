@@ -30,6 +30,7 @@ public class Transaction {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "card_id")
     private Card card;
 
     // 거래 번호

@@ -43,6 +43,8 @@ public class TransactionDto {
     private boolean discount;
 
 
+
+
     // dto -> Entity
     public Transaction toEntity(){
         return Transaction.builder()

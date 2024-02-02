@@ -4,25 +4,11 @@ import com.a803.cardcompany.card.BenefitCode;
 import com.a803.cardcompany.card.CardType;
 import com.a803.cardcompany.card.mapper.Card;
 import com.a803.cardcompany.member.mapper.Member;
-import com.a803.cardcompany.transaction.mapper.Transaction;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import lombok.*;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Data
-@Builder
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class CardDto {
+public class TransactionListDto {
+
 
     private Integer id;
 
