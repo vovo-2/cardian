@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface SettlementRepository extends JpaRepository<Settlement,Integer> {
     @Query("SELECT s.salary FROM Settlement s WHERE s.member.id = :memberId")
-    Optional<Integer> findByMember_Id(String memberId);
+    Optional<Integer> findByMember_Id(Integer memberId);
 
     @Modifying(clearAutomatically = true)
     @Transactional
