@@ -1,6 +1,7 @@
 package A803.cardian.settlement.controller;
 
 import A803.cardian.goal.service.GoalService;
+import A803.cardian.settlement.data.dto.response.SalaryUpdate;
 import A803.cardian.settlement.service.SettlementService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -25,9 +26,9 @@ public class SettlementController {
     }
 
     @PutMapping("/salary")
-    public void updateSalary(@RequestParam(value = "member_id") Integer member_id, @RequestParam Integer salary){
+    public void updateSalary(@RequestBody SalaryUpdate salaryUpdate){
 
-        settlementService.updateSalary(member_id,salary);
+        settlementService.updateSalary(salaryUpdate.getMember_id(),salaryUpdate.getSalary());
     }
 
     @GetMapping("/achievement-standard")
