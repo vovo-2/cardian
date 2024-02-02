@@ -5,6 +5,7 @@ import MyCardPage from "./pages/MyCardPage";
 import CardDetailPage from "./pages/CardDetailPage";
 import "./App.css";
 import SearchPage from "./pages/SearchPage";
+import AnalysisPage from "./pages/AnalysisPage";
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
           <Route path=":card_id" element={<CardDetailPage />} />
         </Route>
         <Route path="/search" element={<SearchPage />} />
-        <Route path="/analysis" element={<div>analysis</div>} />
+        <Route path="/analysis" element={<AnalysisPage />} />
         <Route path="/recommendation" element={<div>recommendation</div>} />
         <Route path="/menu" element={<div>menu</div>} />
 
