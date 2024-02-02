@@ -42,9 +42,9 @@ public class SettlementController {
         return ResponseEntity.ok(settlementService.settlementNotAchieve(memberId));
     }
 
-//    @GetMapping("/achievement-standard")
-//    public ResponseEntity<?> getAchieve(@RequestParam Integer myCardId){
-//
-//        return ResponseEntity.ok(goalService.getAchieve(myCardId));
-//    }
+    @GetMapping("/achievement")
+    public ResponseEntity<?> getAchieveSettlement(@RequestParam Integer memberId){
+
+        return ResponseEntity.ok(settlementService.settlementAchieve(memberId));
+    }
 }
