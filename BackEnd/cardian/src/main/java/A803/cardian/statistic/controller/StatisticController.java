@@ -1,5 +1,6 @@
 package A803.cardian.statistic.controller;
 
+import A803.cardian.statistic.data.dto.response.EntireCardTransactionsResponse;
 import A803.cardian.statistic.data.dto.response.YearConsumeWithMonthlyConsumeResponse;
 import A803.cardian.statistic.service.StatisticService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,5 +21,11 @@ public class StatisticController {
     @GetMapping("/{member_id}")
     public ResponseEntity<YearConsumeWithMonthlyConsumeResponse> getMyYearConsume(@PathVariable("member_id")int memberId){
         return ResponseEntity.ok(statisticService.getYearConsumeAmountWithMontlhlyConsume(memberId));
+    }
+
+    @Operation(summary = "전체 카드의 올해 월별,일별 사용 내역 조회", description = "전체 카드의 올해 사용내역을 월별, 일별로 불러오는 API입니다.")
+    @GetMapping("/{member_id}/EntireCardTransaction")
+    public ResponseEntity<EntireCardTransactionsResponse> getMyEntireCardTransactions(@PathVariable("member_id")int memberId){
+        return ResponseEntity.ok(statisticService.getEntireCardTransactionsResponse(memberId));
     }
 }
