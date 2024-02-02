@@ -1,6 +1,6 @@
 import tw from "tailwind-styled-components";
-import { BENEFIT_CODE } from "../../constants/benefitCode";
-import { CARD_TYPE } from "../../constants/cardType";
+
+import { CARD_TYPE, BENEFIT_CODE } from "../../constants/cardInfo";
 
 type BadgeProps = {
   type?: string; // 신용, 체크
