@@ -1,12 +1,14 @@
 package A803.cardian.statistic.service;
 
+import A803.cardian.associate.domain.Associate;
+import A803.cardian.associate.repository.AssociateRepository;
 import A803.cardian.card.domain.MonthDay;
 import A803.cardian.card.domain.MyCard;
+import A803.cardian.card.domain.Transaction;
 import A803.cardian.card.repository.MycardRepository;
+import A803.cardian.card.repository.TransactionRepository;
 import A803.cardian.card.service.TransactionService;
-import A803.cardian.statistic.data.dto.response.MonthlyConsumeAmount;
-import A803.cardian.statistic.data.dto.response.YearConsumeAmount;
-import A803.cardian.statistic.data.dto.response.YearConsumeWithMonthlyConsumeResponse;
+import A803.cardian.statistic.data.dto.response.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,12 +16,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
 @Service
 public class StatisticService {
     private final MycardRepository mycardRepository;
+    private final TransactionRepository transactionRepository;
+    private final AssociateRepository associateRepository;
     private final TransactionService transactionService;
 
     //전체 카드 월별 소비금액
@@ -54,8 +59,6 @@ public class StatisticService {
 
     //올해 총 소비 금액 + 월별 소비금액
     public YearConsumeWithMonthlyConsumeResponse getYearConsumeAmountWithMontlhlyConsume(int memberId){
-        int yearConsume = 0;
-
         int january = getMonthlyConsume(memberId, MonthDay.JANUARY.toLocalDate());
         int february = getMonthlyConsume(memberId, MonthDay.FEBRUARY.toLocalDate());
         int march = getMonthlyConsume(memberId, MonthDay.MARCH.toLocalDate());
@@ -69,11 +72,71 @@ public class StatisticService {
         int november = getMonthlyConsume(memberId, MonthDay.NOVEMBER.toLocalDate());
         int december = getMonthlyConsume(memberId, MonthDay.DECEMBER.toLocalDate());
         //올해 총 소비 금액
-        yearConsume = january + february + march + april + may + june + july + august + september + october + november + december;
+        int yearConsume = january + february + march + april + may + june + july + august + september + october + november + december;
 
         YearConsumeAmount yearConsumeAmount = YearConsumeAmount.from(yearConsume, MonthlyConsumeAmount.from(january, february, march, april, may, june, july, august, september, october, november, december));
 
         return YearConsumeWithMonthlyConsumeResponse.toResponse(memberId, yearConsumeAmount);
+    }
+
+
+    //내 카드 전레 사용내역을 일자별로 가져오기
+    public List<DailyTransactionDetails> getDailyTransactionDetails(int memberId, LocalDate localDate) {
+        List<DailyTransactionDetails> dailyTransactionDetailsList = new ArrayList<>();
+        //내 카드 리스트 가져오기
+        List<MyCard> myCardList = mycardRepository.findMyCardsByMemberId(memberId);
+
+        for(MyCard myCard : myCardList){
+            List<Transaction> transactionList = transactionRepository.findTransactionsByMyCardIdAndDay(myCard.getId(), localDate);
+
+            for(Transaction transaction : transactionList){
+                //associate 필요
+                Associate associate = associateRepository.findByName(transaction.getStore())
+                        .orElseThrow(() ->
+                                new RuntimeException());
+                dailyTransactionDetailsList.add(DailyTransactionDetails.from(transaction, associate));
+            }
+        }
+
+        return dailyTransactionDetailsList;
+    }
+
+    //내 카드 전체 월별 소비 내역 조회 - 해당월만 조회
+    public List<DailyTransactionDetailsWithDay> getDailyTransactionDetailsWithDay(int memberId, LocalDate localDate){
+        List<DailyTransactionDetailsWithDay> dailyTransactionDetailsWithDayList = new ArrayList<>();
+
+//        LocalDate startDate = localDate.withDayOfMonth(1); //1일부터 조회
+//        LocalDate endDate = startDate.plusMonths(1);//다음달 1일
+        LocalDate startDate = localDate;
+        LocalDate endDate = localDate.plusMonths(1);
+        while(startDate.isBefore(endDate)){
+            List<DailyTransactionDetails> dailyTransactionDetailsList = getDailyTransactionDetails(memberId, startDate);
+            if(dailyTransactionDetailsList.size() == 0){ //내역 없으면 continue
+                startDate = startDate.plusDays(1);
+                continue;
+            }
+            //해당일의 사용내역 리스트
+            dailyTransactionDetailsWithDayList.add(DailyTransactionDetailsWithDay.from(startDate.getDayOfMonth(), dailyTransactionDetailsList));
+            startDate = startDate.plusDays(1);
+            System.out.println("일별 사용 내역 : " + startDate);
+        }
+        return dailyTransactionDetailsWithDayList;
+    }
+
+    //전체 월별 소비 내역 조회 - 전체 가져오기
+    public EntireCardTransactionsResponse getEntireCardTransactionsResponse(int memberId){
+        List<MonthlyTransactionDetailsWithMonth> monthlyTransactionDetailsWithMonthList = new ArrayList<>();
+
+        LocalDate startDate = MonthDay.JANUARY.toLocalDate(); //1월부터 (01-31)
+        startDate = startDate.withDayOfMonth(1); //1일로 바꿔주기
+        LocalDate endDate = startDate.plusYears(1);
+        while(startDate.isBefore(endDate)){
+            //해당 월 사용내역 넣어주기
+            monthlyTransactionDetailsWithMonthList.add(MonthlyTransactionDetailsWithMonth.from(startDate.getMonthValue(), getDailyTransactionDetailsWithDay(memberId, startDate)));
+            startDate = startDate.plusMonths(1); //다음달로 바꾸어주기
+            System.out.println(startDate + " 의 사용 내역");
+        }
+        return EntireCardTransactionsResponse.toResponse(memberId, monthlyTransactionDetailsWithMonthList);
     }
 
 }
