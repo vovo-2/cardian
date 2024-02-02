@@ -139,4 +139,8 @@ public class StatisticService {
         return EntireCardTransactionsResponse.toResponse(memberId, monthlyTransactionDetailsWithMonthList);
     }
 
+    //카테고리별 월 총 소비 금액 계산
+    public int getCategoryMonthlyConsume(String categoryCode, LocalDate localDate){
+        return 0;
+    }
 }
