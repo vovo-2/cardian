@@ -19,6 +19,9 @@ function App() {
         <Route path="/analysis" element={<div>analysis</div>} />
         <Route path="/recommendation" element={<div>recommendation</div>} />
         <Route path="/menu" element={<div>menu</div>} />
+
+        {/* 404 처리 */}
+        <Route path="/*" element={<div>404 Error</div>} />
       </Routes>
       <NavBar />
     </>
