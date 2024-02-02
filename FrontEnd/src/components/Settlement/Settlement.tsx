@@ -14,7 +14,7 @@ const mySettlement: number = 1234567; // 넘어오는 값
 
 const isAchieved: boolean = false;
 
-export default function SettlementPage() {
+export default function Settlement() {
 
   return (
     <div>
