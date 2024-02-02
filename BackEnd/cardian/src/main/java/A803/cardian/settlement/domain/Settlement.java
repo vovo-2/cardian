@@ -2,13 +2,13 @@ package A803.cardian.settlement.domain;
 
 import A803.cardian.member.domain.Member;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class Settlement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

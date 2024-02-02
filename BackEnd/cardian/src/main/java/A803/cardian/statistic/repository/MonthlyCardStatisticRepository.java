@@ -1,0 +1,13 @@
+package A803.cardian.statistic.repository;
+
+import A803.cardian.statistic.domain.MonthlyCardStatistic;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
+
+public interface MonthlyCardStatisticRepository extends JpaRepository<MonthlyCardStatistic,Integer> {
+    @Query("SELECT s FROM MonthlyCardStatistic s WHERE s.member.id = :memberId")
+    List<MonthlyCardStatistic> findByMember_Id(Integer memberId);
+
+}
