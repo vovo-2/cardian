@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { axios } from "../../api";
+import { formatPrice } from "../../utils/formatUtils";
 import Badge from "../ui/Badge";
 import ProgressBar from "../ui/ProgressBar";
 
@@ -26,14 +27,6 @@ export default function CardDetail() {
       setMyCardInfoDetails(data.myCardInfoDetails);
     });
   }, [cardId]);
-
-  const getPrice = (price: number) => {
-    const priceFormatter = new Intl.NumberFormat("ko-KR");
-
-    const result = `${priceFormatter.format(price)}원`;
-
-    return result;
-  };
 
   if (!myCardInfoDetails) {
     return <div>카드 정보 없음</div>;
@@ -87,11 +80,11 @@ export default function CardDetail() {
           <div className="flex justify-between mb-1">
             {/* 현재까지의 실적 금액 */}
             <span className="text-base font-bold text-darkgray">
-              {getPrice(accumulate)}
+              {formatPrice(accumulate)}
             </span>
             {/* 실적 총 금액 */}
             <span className="text-base font-medium text-darkgray">
-              {getPrice(goal)}
+              {formatPrice(goal)}
             </span>
           </div>
         </div>
@@ -99,7 +92,7 @@ export default function CardDetail() {
         <div className="flex flex-row-reverse">
           <span>
             총{" "}
-            <span className="text-blue text-sm">{getPrice(totalBenefit)}</span>{" "}
+            <span className="text-blue text-sm">{formatPrice(totalBenefit)}</span>{" "}
             혜택 받으셨어요.
           </span>
         </div>
