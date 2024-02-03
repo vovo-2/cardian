@@ -4,7 +4,7 @@ import { Accordion } from "flowbite-react";
 import { AccordionTheme } from "../../themes/AccordionTheme";
 
 import { axios } from "../../api";
-import EntireCardTransactionStore from "./../../store/EntireCardTransactionStore";
+import EntireMonthlyCardTransactionStore from "../../store/EntireMonthlyCardTransactionStore";
 import CardTransactionMonthlyList from "../CardTransaction/CardTransactionMonthlyList";
 import { useEffect } from "react";
 import {
@@ -18,7 +18,7 @@ export default function YearTransactionList() {
     entireMonthlyTransactionList,
     setMemberId,
     setEntireMonthlyTransactionList,
-  } = EntireCardTransactionStore();
+  } = EntireMonthlyCardTransactionStore();
 
   const member_id = 1;
   const url = `/statistic/${member_id}/EntireCardTransaction`;
