@@ -6,8 +6,7 @@ import A803.cardian.associate.data.dto.response.AssociationSearch;
 import A803.cardian.associate.data.dto.response.Search;
 import A803.cardian.associate.domain.Associate;
 import A803.cardian.associate.repository.AssociateRepository;
-import A803.cardian.category.repository.SubCommonRepository;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import A803.cardian.category.repository.SubCommonCodeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,9 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AssociateService {
     private final AssociateRepository associateRepository;
-    private final SubCommonRepository subCommonRepository;
-
-
+    private final SubCommonCodeRepository subCommonCodeRepository;
 
     public List<AssociationList> findAssociation(String categoryCode){
         List<AssociationList> associationList= new ArrayList<>();
@@ -44,7 +41,7 @@ public class AssociateService {
         List<AssociationSearch> associationSearchList= new ArrayList<>();
         for(Associate associate : associates){
             String cateCode=associate.getCategoryCode();
-            String cateName= subCommonRepository.findByDetailCode(cateCode).orElse(null);
+            String cateName= subCommonCodeRepository.findByDetailCode(cateCode).orElse(null);
             AssociationSearch list=AssociationSearch.builder()
                     .associationId(associate.getId())
                     .associationName(associate.getName())
