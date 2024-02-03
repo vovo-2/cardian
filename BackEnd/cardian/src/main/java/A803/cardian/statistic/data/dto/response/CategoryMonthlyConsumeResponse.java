@@ -9,15 +9,15 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class CategoryMonthlyConsumeResponse {
-    private String category;
-    private List<CategoryMonthlyConsumeWithMonth> categoryMonthlyConsumeWithMonthList;
+    private int memberId;
+    private List<CategoryMonthlyConsumeWithMonthlyEntireConsume> categoryMonthlyConsumeWithMonthlyEntireConsumeList;
 
-    private CategoryMonthlyConsumeResponse(String category, List<CategoryMonthlyConsumeWithMonth> categoryMonthlyConsumeWithMonthList){
-        this.category =category;
-        this.categoryMonthlyConsumeWithMonthList = categoryMonthlyConsumeWithMonthList;
+    private CategoryMonthlyConsumeResponse(int memberId, List<CategoryMonthlyConsumeWithMonthlyEntireConsume> categoryMonthlyConsumeWithMonthlyEntireConsumeList){
+        this.memberId = memberId;
+        this.categoryMonthlyConsumeWithMonthlyEntireConsumeList = categoryMonthlyConsumeWithMonthlyEntireConsumeList;
     }
 
-    public static CategoryMonthlyConsumeResponse toResponse(String category, List<CategoryMonthlyConsumeWithMonth> categoryMonthlyConsumeWithMonthList){
-        return new CategoryMonthlyConsumeResponse(category, categoryMonthlyConsumeWithMonthList);
+    public static CategoryMonthlyConsumeResponse toResponse(int month, List<CategoryMonthlyConsumeWithMonthlyEntireConsume> categoryMonthlyConsumeWithMonthlyEntireConsumeList){
+        return new CategoryMonthlyConsumeResponse(month, categoryMonthlyConsumeWithMonthlyEntireConsumeList);
     }
 }

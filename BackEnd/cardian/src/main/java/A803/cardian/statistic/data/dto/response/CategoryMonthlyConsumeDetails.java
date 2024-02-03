@@ -2,18 +2,18 @@ package A803.cardian.statistic.data.dto.response;
 
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 @Getter
-public class CategoryMonthlyConsume {
-    private int monthlyEntireConsume;
+public class CategoryMonthlyConsumeDetails {
     private int monthlyEntireConsumePerCategory;
-    private int percentOfEntire;
+    private BigDecimal percentOfEntire;
 
-    public CategoryMonthlyConsume from(int monthlyEntireConsume, int monthlyEntireConsumePerCategory, int percentOfEntire){
-        return CategoryMonthlyConsume.builder()
-                .monthlyEntireConsume(monthlyEntireConsume)
+    public static CategoryMonthlyConsumeDetails from(int monthlyEntireConsumePerCategory, BigDecimal percentOfEntire){
+        return CategoryMonthlyConsumeDetails.builder()
                 .monthlyEntireConsumePerCategory(monthlyEntireConsumePerCategory)
                 .percentOfEntire(percentOfEntire)
                 .build();

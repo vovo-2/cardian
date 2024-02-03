@@ -14,18 +14,16 @@ import A803.cardian.benefit.serivce.CategoryBenefitService;
 import A803.cardian.benefit.serivce.ExceptionBenefitService;
 import A803.cardian.card.data.dto.response.CardBenefitCategoryResponse;
 import A803.cardian.card.data.dto.response.CardCategoryBenefitResponse;
-import A803.cardian.card.data.dto.response.CardCategoryBenefitResponses;
 import A803.cardian.card.domain.Card;
 import A803.cardian.card.domain.MyCard;
 import A803.cardian.card.repository.CardRepository;
 import A803.cardian.card.repository.MyCardBenefitRepository;
 import A803.cardian.card.repository.MycardRepository;
 import A803.cardian.category.repository.CategoryIconRepository;
-import A803.cardian.category.repository.SubCommonRepository;
+import A803.cardian.category.repository.SubCommonCodeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,33 +42,15 @@ import java.util.*;
 @Slf4j
 public class BenefitService {
 
-    @Autowired
     private final MycardRepository myCardRepository;
-
-    @Autowired
     private final MyCardBenefitRepository myCardBenefitRepository;
-
-    @Autowired
     private final CardRepository cardRepository;
-
-    @Autowired
     private final ExceptionBenefitRepository exceptionBenefitRepository;
-
-    @Autowired
     private final AssociateRepository associateRepository;
-
-    @Autowired
     private final CategoryBenefitRepository categoryBenefitRepository;
-
-    @Autowired
     private final CardCategoryMappingRepository cardCategoryMappingRepository;
-
-    @Autowired
     private final CategoryIconRepository categoryIconRepository;
-
-    @Autowired
-    private final SubCommonRepository subCommonRepository;
-
+    private final SubCommonCodeRepository subCommonCodeRepository;
     private final ExceptionBenefitService exceptionBenefitService;
     private final CategoryBenefitService categoryBenefitService;
 
@@ -125,7 +105,7 @@ public class BenefitService {
                     }else{
 
                         // sub common code 가서 이름 가져오기
-                        Optional<String> storeName = subCommonRepository.findByDetailCode(benefit.getCategoryCode());
+                        Optional<String> storeName = subCommonCodeRepository.findByDetailCode(benefit.getCategoryCode());
 
                         String name = "";
                         if(storeName.isEmpty()){

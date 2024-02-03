@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
-public interface SubCommonRepository extends JpaRepository<SubCommonCode,Integer> {
+public interface SubCommonCodeRepository extends JpaRepository<SubCommonCode,Integer> {
     @Query("SELECT s.name FROM SubCommonCode s WHERE s.detailCode = :detailCode")
     Optional<String> findByDetailCode(String detailCode);
 
