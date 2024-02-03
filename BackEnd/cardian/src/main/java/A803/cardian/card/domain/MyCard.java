@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,14 +32,15 @@ public class MyCard {
     private Card card;
 
     @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date updateDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime updateDate;
 
     @Column(nullable = false)
     private String number;
 
     @Column(nullable = false)
-    private Date expireDate;
+    @Temporal(TemporalType.DATE)
+    private LocalDate expireDate;
 
     @OneToMany(mappedBy = "myCard", fetch = FetchType.LAZY)
     private List<Transaction> transactions = new ArrayList<>();
@@ -46,9 +49,9 @@ public class MyCard {
     @Builder
     public MyCard(Member member,
                   Card card,
-                  Date updateDate,
+                  LocalDateTime updateDate,
                   String number,
-                  Date expireDate){
+                  LocalDate expireDate){
         this.member = member;
         this.card = card;
         this.updateDate = updateDate;
