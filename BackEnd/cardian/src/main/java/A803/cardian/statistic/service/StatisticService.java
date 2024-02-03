@@ -168,9 +168,8 @@ public class StatisticService {
         return percentage.setScale(2, RoundingMode.HALF_UP);
     }
 
-    //카테고리별 소비 상세 정보 (월 총 소비 금액 + 전체에서의 비율)
+    //카테고리별 소비 소비 정보 (월 총 소비 금액 + 전체에서의 비율)
     public CategoryMonthlyConsumeDetails getCategoryMonthlyConsumeDetails(int memberId, LocalDate localDate, int monthlyConsume, String categoryCode) {
-        System.out.println(localDate.getMonthValue() + "월 소비내역 분석" + monthlyConsume);
         //당월 카테고리 전체 소비 금액
         int categoryMonthlyConsume = 0;
 
@@ -203,7 +202,7 @@ public class StatisticService {
         return CategoryMonthlyConsumeDetails.from(categoryMonthlyConsume, percentageCategoryConsumeInEntireMonthlyConsume);
     }
 
-    //카테고리별 소비 상세 정보 + 카테고리명
+    //카테고리별 소비 소비 정보 + 카테고리명
     public List<CategoryMonthlyConsumeDetailsWithCategorycode> getCategoryMonthlyConsumeDetailsWithCategorycode(int memberId, LocalDate localDate, int monthlyConsume){
         List<CategoryMonthlyConsumeDetailsWithCategorycode> categoryMonthlyConsumeDetailsWithCategorycodeList = new ArrayList<>();
 
@@ -217,7 +216,7 @@ public class StatisticService {
         return categoryMonthlyConsumeDetailsWithCategorycodeList;
     }
 
-    //월별 카테고리별 상세 정보 가져오기
+    //월별 카테고리별 소비 정보 가져오기
     public List<CategoryMonthlyConsumeWithMonthlyEntireConsume> getCategoryMonthlyConsumeWithMonthlyEntireConsume(int memberId){
         List<CategoryMonthlyConsumeWithMonthlyEntireConsume> categoryMonthlyConsumeWithMonthlyEntireConsumeList = new ArrayList<>();
 
@@ -235,5 +234,83 @@ public class StatisticService {
 
     public CategoryMonthlyConsumeResponse getCategoryMonthlyConsumeResponse(int memberId){
         return CategoryMonthlyConsumeResponse.toResponse(memberId, getCategoryMonthlyConsumeWithMonthlyEntireConsume(memberId));
+    }
+
+    //카테고리 일별 소비내역
+    public List<CategoryTransactionDetails> getCategoryTransactionDetails(int memberId, LocalDate localDate, String categoryCode){
+        List<CategoryTransactionDetails> categoryTransactionDetailsList = new ArrayList<>();
+
+        List<MyCard> myCardList = mycardRepository.findMyCardsByMemberId(memberId);
+        for(MyCard myCard : myCardList){
+            //해당 일자 소비 내역 가져오기
+            List<Transaction> transactionList = transactionRepository.findTransactionsByMyCardIdAndDay(myCard.getId(), localDate);
+            for(Transaction transaction : transactionList){
+                Associate associate = associateRepository.findByName(transaction.getStore())
+                        .orElseThrow(() ->
+                                new RuntimeException());
+                //카테고리 확인
+                if(associate.getCategoryCode().equals(categoryCode)){
+                    categoryTransactionDetailsList.add(CategoryTransactionDetails.from(transaction, associate));
+                }
+            }
+        }
+        return categoryTransactionDetailsList;
+    }
+
+    //카테고리 일별 소비내역
+    public List<CategoryDailyTransaction> getCategoryDailyTransaction(int memberId, LocalDate localDate, String categoryCode){
+        List<CategoryDailyTransaction> categoryDailyTransactionList = new ArrayList<>();
+
+        LocalDate startDate = localDate;
+        LocalDate endDate = startDate.plusMonths(1);
+        while(startDate.isBefore(endDate)){
+            List<CategoryTransactionDetails> categoryTransactionDetailsList = getCategoryTransactionDetails(memberId, startDate, categoryCode);
+            if(categoryTransactionDetailsList.size() == 0){
+                startDate = startDate.plusDays(1);
+                continue;
+            }
+            categoryDailyTransactionList.add(CategoryDailyTransaction.from(startDate.getDayOfMonth(), categoryTransactionDetailsList));
+            startDate = startDate.plusDays(1);
+        }
+        return categoryDailyTransactionList;
+    }
+
+    //카테고리 월별 소비내역
+    public List<CategoryMonthlyTransaction> getCategoryMonthlyTransaction(int memberId, String categoryCode) {
+        List<CategoryMonthlyTransaction> categoryMonthlyTransactionList = new ArrayList<>();
+
+        LocalDate startDate = MonthDay.JANUARY.toLocalDate();
+        startDate.withDayOfMonth(1);
+        LocalDate endDate = startDate.plusYears(1);
+        while(startDate.isBefore(endDate)){
+            List<CategoryDailyTransaction> categoryDailyTransactionList = getCategoryDailyTransaction(memberId, startDate, categoryCode);
+            if(categoryDailyTransactionList.size() == 0){
+                startDate = startDate.plusMonths(1);
+                continue;
+            }
+            categoryMonthlyTransactionList.add(CategoryMonthlyTransaction.from(startDate.getMonthValue(), categoryDailyTransactionList));
+            startDate = startDate.plusMonths(1);
+        }
+        return categoryMonthlyTransactionList;
+    }
+
+    //카테고리 사용내역
+    public List<CategoryEntireTransaction> getCategoryEntireTransaction(int memberId){
+        List<CategoryEntireTransaction> categoryEntireTransactionList = new ArrayList<>();
+
+        List<SubCommonCode> subCommonCodeList = subCommonCodeRepository.findAll();
+        for(SubCommonCode subCommonCode : subCommonCodeList){
+            String categorycode = subCommonCode.getDetailCode();
+            List<CategoryMonthlyTransaction> categoryMonthlyTransactionList = getCategoryMonthlyTransaction(memberId, categorycode);
+            if(categoryMonthlyTransactionList.size() == 0){
+                continue;
+            }
+            categoryEntireTransactionList.add(CategoryEntireTransaction.from(categorycode, categoryMonthlyTransactionList));
+        }
+        return categoryEntireTransactionList;
+    }
+
+    public CategoryTransactionResponse getCategoryTransactionResponse(int memberId){
+        return CategoryTransactionResponse.toResponse(memberId, getCategoryEntireTransaction(memberId));
     }
 }
