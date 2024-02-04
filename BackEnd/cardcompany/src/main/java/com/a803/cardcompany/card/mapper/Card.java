@@ -100,6 +100,9 @@ public class Card {
                 .image(image)
                 .type(type)
                 .number(number)
+                .expireDate(expireDate)
+                .annualFee(annualFee)
+                .benefitCode(benefitCode)
                 .build();
     }
 
