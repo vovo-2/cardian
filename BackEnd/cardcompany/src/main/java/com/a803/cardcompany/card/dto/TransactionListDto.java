@@ -5,6 +5,7 @@ import com.a803.cardcompany.card.CardType;
 import com.a803.cardcompany.card.mapper.Card;
 import com.a803.cardcompany.member.mapper.Member;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class TransactionListDto {
@@ -32,7 +33,7 @@ public class TransactionListDto {
     private int goal;
 
     // 만료일자
-    private LocalDateTime expireDate;
+    private LocalDate expireDate;
 
     // 연회비
     private int annualFee;
