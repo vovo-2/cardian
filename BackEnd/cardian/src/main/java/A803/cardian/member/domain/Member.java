@@ -49,7 +49,7 @@ public class Member {
 
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime updateDate;
+    private LocalDateTime updateDate = LocalDateTime.now();;
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<MonthlyCardStatistic> monthlyCardStatistics = new ArrayList<>();
