@@ -1,4 +1,68 @@
 package A803.cardian.member.controller;
 
+import A803.cardian.member.data.request.MemberRequestDto;
+import A803.cardian.member.domain.Member;
+import A803.cardian.member.service.MemberService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+import java.text.ParseException;
+
+/*
+ *  작성자 : 정여민
+ *  작성일시 : 2024.02.05
+ *  내용 : 멤버 컨트롤러 - 로그인 기능
+ */
+
+@Tag(name = "멤버 컨트롤러", description = "멤버 관련 정보")
+@RequestMapping("/user")
+@RequiredArgsConstructor
+@RestController
+@CrossOrigin("*")
 public class memberController {
+
+    private final MemberService memberService;
+
+
+    @PostMapping
+    public ResponseEntity<?> register(HttpServletRequest request, HttpServletResponse response, @RequestBody  MemberRequestDto memberRequestDto) throws ParseException {
+        // registerMember 로직을 memberService를 통해 호출하도록 수정
+        Member newMember = memberService.registerMember(memberRequestDto);
+        // 로그인 정보
+        // 세션 쿠키
+        createCookie(request, response, "memberId", String.valueOf(newMember.getId()), "session");
+            return ResponseEntity.ok("로그인 성공!");
+    }
+
+
+
+    /*
+    *   작성자 : 정여민
+    *   작성일시 : 2024.02.05
+    *   내용 : 쿠키 생성하는 메서드
+    */
+    private void createCookie(HttpServletRequest request, HttpServletResponse response, String key, String value, String type) {
+        // 세션 생성
+        // 여기서는 간단하게 username을 세션에 저장
+
+        HttpSession session = request.getSession();
+        session.setAttribute(key, value);
+
+        // 쿠키 생성
+        Cookie cookie = new Cookie(key, value);
+        // 일반 쿠키면 유효시간 설정, 세션이면 유효시간 X
+        if(type.equals("cookie")) {
+            cookie.setMaxAge(20*20*60); // 쿠키 유효기간 설정 (초 단위)
+        }
+        response.addCookie(cookie);
+
+    }
+
 }
