@@ -6,9 +6,17 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/*
+*   업데이트 : 2024.02.04
+*   내용 : updateDate를 MyCard가 아닌, Member로 변경
+* 
+* */
 @Entity
 @Getter
 @Setter
@@ -28,16 +36,14 @@ public class MyCard {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "card_id")
     private Card card;
-
-    @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date updateDate;
+    
 
     @Column(nullable = false)
     private String number;
 
     @Column(nullable = false)
-    private Date expireDate;
+    @Temporal(TemporalType.DATE)
+    private LocalDate expireDate;
 
     @OneToMany(mappedBy = "myCard", fetch = FetchType.LAZY)
     private List<Transaction> transactions = new ArrayList<>();
@@ -46,12 +52,11 @@ public class MyCard {
     @Builder
     public MyCard(Member member,
                   Card card,
-                  Date updateDate,
+                  LocalDateTime updateDate,
                   String number,
-                  Date expireDate){
+                  LocalDate expireDate){
         this.member = member;
         this.card = card;
-        this.updateDate = updateDate;
         this.number = number;
         this.expireDate = expireDate;
     }

@@ -1,14 +1,13 @@
 package A803.cardian.card.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+@ToString
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -44,5 +43,18 @@ public class Transaction {
 
     @Column(nullable = false, columnDefinition = "tinyint(1)")
     private boolean discount;
+
+    @Builder
+    public Transaction(MyCard myCard, int number, LocalDate day, LocalDateTime date, String store,
+                       int price, boolean status, boolean discount){
+        this.myCard = myCard;
+        this.number = number;
+        this.day = day;
+        this.date = date;
+        this.store = store;
+        this.price = price;
+        this.status = status;
+        this.discount = discount;
+    }
 
 }

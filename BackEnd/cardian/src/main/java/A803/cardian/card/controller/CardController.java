@@ -5,6 +5,7 @@ import A803.cardian.card.repository.CardRepository;
 import A803.cardian.card.service.BenefitService;
 import A803.cardian.card.service.CardService;
 import A803.cardian.card.service.TransactionService;
+import A803.cardian.card.service.UpdateService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,6 +30,7 @@ public class CardController {
     private final CardService cardService;
     private final TransactionService transactionService;
     private final BenefitService benefitService;
+    private final UpdateService updateService;
 
 //    @ApiResponse({
 //            @ApiResponse(responseCode = "200", description = "내 카드 조회 성공"),
@@ -38,6 +40,7 @@ public class CardController {
     @GetMapping("/{member_id}")
     public ResponseEntity<MyCardListResponse> getMyCards(@PathVariable("member_id") Integer memberId){
         MyCardListResponse response = cardService.findMyCards(memberId);
+//        updateService.updateTransactions(memberId);   // 테스트용 
         return ResponseEntity.ok(response);
     }
 
