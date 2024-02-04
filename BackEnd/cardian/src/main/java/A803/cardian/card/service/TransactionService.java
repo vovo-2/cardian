@@ -65,7 +65,7 @@ public class TransactionService {
                 /*
                 할인일 때의 혜택 계산 로직 구현하기
                  */
-                return getDiscountAmountUsingSignWithDiscount();
+                return getDiscountAmountUsingSignWithDiscount(price, discountLine, discountAmount, exceptionBenefit.getSign());
             }
             //적립, 캐시백일 때
             else {
@@ -118,7 +118,7 @@ public class TransactionService {
                 /*
                 할인일 때의 혜택 계산 로직 구현하기
                  */
-                return getDiscountAmountUsingSignWithDiscount();
+                return getDiscountAmountUsingSignWithDiscount(price, discountLine, discountAmount, categoryBenefit.getSign());
             }
             //적립, 캐시백일 때
             else {
@@ -152,8 +152,41 @@ public class TransactionService {
     }
 
     //할인혜택 계산하기 (할인)
-    public int getDiscountAmountUsingSignWithDiscount(){
-        return 0;
+    public int getDiscountAmountUsingSignWithDiscount(int price, int discountLine, int discountAmount, String sign){
+        //결제금액이 이미 할인기준을 충족했다면..
+        //절대금액 할인일 때
+        if(sign.equals("+")){
+            //예상원가
+            int originPrice = price + discountAmount;
+            //예상 원가가 할인 기준을 충족하면
+            if(originPrice >= discountLine){
+                return discountAmount;
+            }
+            //충족 못 하면
+            else{
+                return 0;
+            }
+        }
+        //비율금액 할인일 때
+        else{
+            //예상원가
+            double originPrice = ((double) price / (100 - discountAmount)) * 100;
+            //예상원가 올림처리
+            double ceilOriginPrice = Math.ceil(originPrice);
+            //올림처리한 예상원가가 할인기준보다 높으면
+            if(ceilOriginPrice > (double) discountLine){
+                //할인액 계산 (예상원가 - 결제금액)
+                double discount = originPrice - price;
+                //할인액 내림처리
+                discount = Math.floor(discount);
+
+                return (int)discount;
+            }
+            //할인기준 충족 못 하면
+            else{
+                return 0;
+            }
+        }
     }
 
     //카드별 일별 사용 금액 계산하기
