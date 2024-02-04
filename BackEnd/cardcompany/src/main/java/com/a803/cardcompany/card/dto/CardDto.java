@@ -12,6 +12,7 @@ import jakarta.persistence.Enumerated;
 import lombok.*;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class CardDto {
     private int goal;
 
     // 만료일자
-    private LocalDateTime expireDate;
+    private LocalDate expireDate;
 
     // 연회비
     private int annualFee;

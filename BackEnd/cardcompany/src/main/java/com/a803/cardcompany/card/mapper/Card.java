@@ -8,6 +8,7 @@ import com.a803.cardcompany.transaction.mapper.Transaction;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +60,8 @@ public class Card {
 
     // 만료일자
     @Column(name = "expiredate", nullable = false)
-    private LocalDateTime expireDate;
+    @Temporal(TemporalType.DATE)
+    private LocalDate expireDate;
 
     // 연회비
     @Column(name = "annualfee")
@@ -74,7 +76,7 @@ public class Card {
 
     @Builder
     public Card(Integer id, Member member, String cardCompany, CardType type, String name, String number,
-                String image, int goal, LocalDateTime expireDate, int annualFee, BenefitCode benefitCode){
+                String image, int goal, LocalDate expireDate, int annualFee, BenefitCode benefitCode){
         this.id = id;
         this.member = member;
         this.cardCompany = cardCompany;
