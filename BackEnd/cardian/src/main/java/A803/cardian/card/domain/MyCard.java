@@ -17,6 +17,7 @@ import java.util.List;
 *   내용 : updateDate를 MyCard가 아닌, Member로 변경
 * 
 * */
+@ToString
 @Entity
 @Getter
 @Setter
@@ -52,7 +53,6 @@ public class MyCard {
     @Builder
     public MyCard(Member member,
                   Card card,
-                  LocalDateTime updateDate,
                   String number,
                   LocalDate expireDate){
         this.member = member;

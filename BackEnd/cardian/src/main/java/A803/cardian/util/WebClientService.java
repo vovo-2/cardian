@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /*
@@ -46,6 +48,34 @@ public class WebClientService {
         log.info(response.toString());
 
         return response;
+    }
+
+    public List<Map> getJSONArray(String baseUrl, String path){
+
+        // buffer 설정 max로 변경
+        ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder()
+                .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(-1)) // to unlimited memory size
+                .build();
+
+        // webClient 기본 설정
+        WebClient webClient = WebClient.builder()
+                .baseUrl(baseUrl)
+                .exchangeStrategies(exchangeStrategies)
+                .build();
+        // api 요청
+        List<Map> response = webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path(path)
+                        .build())
+                .retrieve()
+                .bodyToFlux(Map.class)
+                .collectList()
+                .block();
+
+        // 결과 확인
+        log.info(response.toString());
+
+        return  response;
     }
 
 

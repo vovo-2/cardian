@@ -19,6 +19,7 @@ import A803.cardian.card.repository.TransactionRepository;
 import A803.cardian.member.domain.Member;
 import A803.cardian.member.repository.MemberRepository;
 import A803.cardian.util.WebClientService;
+import io.swagger.v3.core.util.Json;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.json.JSONParser;
@@ -116,12 +117,12 @@ public class UpdateService {
             System.out.println("carddbID = " + carddbID);
             Card card = cardRepository.findCardByCardDatabaseId(carddbID);
 
-            MyCard myCard = mycardRepository.findByCard_Id(card.getId());
+            Optional<MyCard> myCard = mycardRepository.findByCard_Id(card.getId());
 
 
 
             Transaction newTransaction = Transaction.builder()
-                    .myCard(myCard)
+                    .myCard(myCard.get())
                     .number(transaction.getInt("number"))
                     .day(LocalDate.parse(transaction.getString("day")))
                     .date(LocalDateTime.parse(transaction.getString("date")))
@@ -138,8 +139,7 @@ public class UpdateService {
             transactionRepository.save(newTransaction);
         }
 
-        // 거래 내역 최종 갱신일 업데이트
-        memberRepository.updateMemberUpdateDate(memberId, LocalDateTime.now());
+        updateMemberUpdateDate(memberId);
 
 
         return true;
@@ -170,7 +170,74 @@ public class UpdateService {
         return updateDate;
     }
 
+    /*
+    *   작성자 : 정여민
+    *   작성일시 : 2024.02.04
+    *   업데이트 : 2024.02.04
+    *   내용 : Member의 updateDate 업데이트
+    * */
+    public void updateMemberUpdateDate(Integer memberId){
+        // 거래 내역 최종 갱신일 업데이트
+        memberRepository.updateMemberUpdateDate(memberId, LocalDateTime.now());
+    }
+    
+
+    /*
+    *   작성자 : 정여민
+    *   작성일시 : 2024.02.04
+    *   업데이트 : 2024.02.04
+    *   내용 : 카드와 마이카드 업데이트
+    * */
+    public void updateMyCard(Integer memberId){
+
+        // 카드사에서 해당 유저의 카드 리스트 받아오기
+        String baseUrl = "http://i10a803.p.ssafy.io:8082";
+        String path = "/card/".concat(String.valueOf(memberId));
+
+        List<Map> result = webClientService.getJSONArray(baseUrl, path);
+
+        System.out.println("cardList = " + result);
+
+        JSONArray cardList = new JSONArray(result);
+
+        System.out.println("cardList = " + cardList.get(0));
+
+        // 멤버
+        Optional<Member> member = memberRepository.findById(memberId);
+        if(member.isEmpty()){
+            return;
+        }
+
+        // 받아온 카드 리스트 만큼 돌면서
+        for (Object o : cardList) {
 
 
+            // 카드사 카드 아이디로 카드 테이블의 카드 아이디 가져오기
+            JSONObject cardInfo = (JSONObject) o;
+            Card card = cardRepository.findCardByCardDatabaseId(cardInfo.getInt("id"));
 
+            Optional<MyCard> isExistMyCard = mycardRepository.findByCard_Id(card.getId());
+
+            // 기존에 없는 카드 정보면
+            if(isExistMyCard.isEmpty()){
+                // 유저의 카드 정보 저장
+
+                MyCard mycard =
+                        MyCard.builder()
+                                .card(card)
+                                .expireDate(LocalDate.parse(cardInfo.getString("expireDate")))
+                                .number(cardInfo.getString("number"))
+                                .member(member.get())
+                                .build();
+
+                mycardRepository.save(mycard);
+                System.out.println("mycard = " + mycard);
+            }
+            // 이미 있는 카드면 넘어가기
+            else{
+                log.info("이미 있는 카드입니다. 추가하지 않습니다.");
+                continue;
+            }
+        }
+    }
 }
