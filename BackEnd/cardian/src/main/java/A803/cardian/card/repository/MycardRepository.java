@@ -9,4 +9,8 @@ import java.util.List;
 @Repository
 public interface MycardRepository extends JpaRepository<MyCard, Integer> {
     List<MyCard> findMyCardsByMemberId(int member_id);
+
+    // 카드아이디로 내카드 찾기
+    MyCard findByCard_Id(Integer cardId);
+
 }

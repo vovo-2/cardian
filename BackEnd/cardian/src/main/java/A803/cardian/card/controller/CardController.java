@@ -40,7 +40,7 @@ public class CardController {
     @GetMapping("/{member_id}")
     public ResponseEntity<MyCardListResponse> getMyCards(@PathVariable("member_id") Integer memberId){
         MyCardListResponse response = cardService.findMyCards(memberId);
-        updateService.updateCard(memberId);
+//        updateService.updateTransactions(memberId);   // 테스트용 
         return ResponseEntity.ok(response);
     }
 

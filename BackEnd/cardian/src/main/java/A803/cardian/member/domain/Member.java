@@ -14,6 +14,7 @@ import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +47,10 @@ public class Member {
     @Column(nullable = false, length = 11)
     private PhoneNumber phoneNumber;
 
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime updateDate;
+
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<MonthlyCardStatistic> monthlyCardStatistics = new ArrayList<>();
 
@@ -65,12 +70,14 @@ public class Member {
                   LocalDate birth,
                   Gender gender,
                   int age,
-                  PhoneNumber phoneNumber
+                  PhoneNumber phoneNumber,
+                  LocalDateTime updateDate
                   ){
         this.name = name;
         this.birth = birth;
         this.gender = gender;
         this.age = age;
         this.phoneNumber = phoneNumber;
+        this.updateDate = updateDate;
     }
 }
