@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { CardTransactionMonthlyListProps } from "../interface/CardTransactionInterface";
+import { CardTransactionMonthlyListProps } from "../types/type.d";
 
 interface EntireCardTransaction {
   memberId: number;

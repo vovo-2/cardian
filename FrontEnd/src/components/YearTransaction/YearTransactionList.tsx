@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import {
   CardTransactionMonthlyListProps,
   MonthlyTransactionDetails,
-} from "../../interface/CardTransactionInterface";
+} from "../../types/type.d";
 
 export default function YearTransactionList() {
   const { monthlyConsumeAmount } = YearTransactionStore();
@@ -24,29 +24,31 @@ export default function YearTransactionList() {
   const url = `/statistic/${member_id}/EntireCardTransaction`;
 
   useEffect(() => {
-    axios.get(url).then((data) => {
+    axios.get(url).then(({ data }) => {
       setMemberId(member_id);
 
-      const arr: CardTransactionMonthlyListProps[] = [];
-      data.data.monthlyTransactionDetailsWithMonthList.map(
-        (item: {
-          month: number;
-          dailyTransactionDetailsWithDayList: MonthlyTransactionDetails[];
-        }) => {
-          const reTypeObj: CardTransactionMonthlyListProps = {
-            month: item.month,
-            monthlyTransactionDetailsList:
-              item.dailyTransactionDetailsWithDayList,
-          };
+      // setEntireMonthlyTransactionList(data.yearTransactionDetailsList);
 
-          arr.push(reTypeObj);
-        }
-      );
+      // const arr: CardTransactionMonthlyListProps[] = [];
+      // data.data.monthlyTransactionDetailsWithMonthList.map(
+      //   (item: {
+      //     month: number;
+      //     dailyTransactionDetailsWithDayList: MonthlyTransactionDetails[];
+      //   }) => {
+      //     const reTypeObj: CardTransactionMonthlyListProps = {
+      //       month: item.month,
+      //       monthlyTransactionDetailsList:
+      //         item.dailyTransactionDetailsWithDayList,
+      //     };
 
-      setEntireMonthlyTransactionList(arr);
+      //     arr.push(reTypeObj);
+      //   }
+      // );
+
+      // setEntireMonthlyTransactionList(arr);
     });
   }, []);
-  console.log(entireMonthlyTransactionList);
+
   return (
     <div className="overflow-y-auto scrollbar-hide  ">
       <Accordion theme={AccordionTheme}>
@@ -61,7 +63,7 @@ export default function YearTransactionList() {
               </Accordion.Title>
               <Accordion.Content className="border-none m-0 px-1">
                 {/* month, monthlyTransactionDetailsList */}
-                {entireMonthlyTransactionList[idx].monthlyTransactionDetailsList
+                {/* {entireMonthlyTransactionList[idx].monthlyTransactionDetailsList
                   .length > 0 && (
                   <CardTransactionMonthlyList
                     key={entireMonthlyTransactionList[idx].month}
@@ -71,7 +73,7 @@ export default function YearTransactionList() {
                         .monthlyTransactionDetailsList
                     }
                   />
-                )}
+                )} */}
               </Accordion.Content>
             </Accordion.Panel>
           ))}
