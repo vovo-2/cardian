@@ -78,5 +78,11 @@ public class CardService {
 
         return MyCardInfoResponse.toResponse(myCard, MyCardInfoDetails.from(myCard, accumulateBenefitAmount, totalaccumulate));
     }
+    public int getCardId(Integer myCardId){
+        Optional<MyCard> myCard = myCardRepository.findById(myCardId);
+        Optional<Card> card = cardRepository.findById(myCard.get().getCard().getId());
+        Integer cardId=card.get().getId();
+        return cardId;
+    }
 
 }
