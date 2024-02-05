@@ -1,7 +1,6 @@
-package A803.cardian.statistic.data.dto.response;
+package A803.cardian.statistic.data.dto.response.category;
 
 import lombok.AccessLevel;
-import lombok.Generated;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

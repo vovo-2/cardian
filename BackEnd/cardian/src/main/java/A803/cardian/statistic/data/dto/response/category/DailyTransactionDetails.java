@@ -1,24 +1,23 @@
-package A803.cardian.statistic.data.dto.response;
+package A803.cardian.statistic.data.dto.response.category;
 
 import A803.cardian.associate.domain.Associate;
 import A803.cardian.card.domain.Transaction;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 @Getter
-public class CategoryTransactionDetails {
+public class DailyTransactionDetails {
     private String store; //associate 필요
     private String associateImage;
     private LocalDateTime date;
     private int price;
 
-    public static CategoryTransactionDetails from(Transaction transaction, Associate associate){
-        return CategoryTransactionDetails.builder()
+    public static DailyTransactionDetails from(Transaction transaction, Associate associate){
+        return DailyTransactionDetails.builder()
                 .store(associate.getName())
                 .associateImage(associate.getImage())
                 .date(transaction.getDate())
