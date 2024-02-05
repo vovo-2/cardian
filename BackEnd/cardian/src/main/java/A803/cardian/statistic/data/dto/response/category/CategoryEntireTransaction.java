@@ -1,4 +1,4 @@
-package A803.cardian.statistic.data.dto.response;
+package A803.cardian.statistic.data.dto.response.category;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -9,11 +9,11 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class CategoryEntireTransaction {
-    private String categoryCode;
+    private String categoryName;
     private List<CategoryMonthlyTransaction> categoryMonthlyTransactionList;
 
-    private CategoryEntireTransaction(String categoryCode, List<CategoryMonthlyTransaction> categoryMonthlyTransactionList){
-        this.categoryCode = categoryCode;
+    private CategoryEntireTransaction(String categoryName, List<CategoryMonthlyTransaction> categoryMonthlyTransactionList){
+        this.categoryName = categoryName;
         this.categoryMonthlyTransactionList = categoryMonthlyTransactionList;
     }
 

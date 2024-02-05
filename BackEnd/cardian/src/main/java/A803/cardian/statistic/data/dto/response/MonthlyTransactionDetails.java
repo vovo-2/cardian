@@ -8,16 +8,16 @@ import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class DailyTransactionDetailsWithDay {
+public class MonthlyTransactionDetails {
     private int day;
     private List<DailyTransactionDetails> dailyTransactionDetailsList;
 
-    private DailyTransactionDetailsWithDay(int day, List<DailyTransactionDetails> dailyTransactionDetailsList){
+    private MonthlyTransactionDetails(int day, List<DailyTransactionDetails> dailyTransactionDetailsList){
         this.day = day;
         this.dailyTransactionDetailsList = dailyTransactionDetailsList;
     }
 
-    public static DailyTransactionDetailsWithDay from(int day, List<DailyTransactionDetails> dailyTransactionDetailsList){
-        return new DailyTransactionDetailsWithDay(day, dailyTransactionDetailsList);
+    public static MonthlyTransactionDetails from(int day, List<DailyTransactionDetails> dailyTransactionDetailsList){
+        return new MonthlyTransactionDetails(day, dailyTransactionDetailsList);
     }
 }

@@ -1,5 +1,6 @@
 package A803.cardian.statistic.data.dto.response;
 
+import A803.cardian.statistic.data.dto.response.category.YearTransactionDetails;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,15 +11,15 @@ import java.util.List;
 @Getter
 public class EntireCardTransactionsResponse {
     private int memberId;
-    private List<MonthlyTransactionDetailsWithMonth> monthlyTransactionDetailsWithMonthList;
+    private List<YearTransactionDetails> yearTransactionDetailsList;
 
-    private EntireCardTransactionsResponse(int memberId, List<MonthlyTransactionDetailsWithMonth> monthlyTransactionDetailsWithMonthList){
+    private EntireCardTransactionsResponse(int memberId, List<YearTransactionDetails> yearTransactionDetailsList){
         this.memberId = memberId;
-        this.monthlyTransactionDetailsWithMonthList = monthlyTransactionDetailsWithMonthList;
+        this.yearTransactionDetailsList = yearTransactionDetailsList;
     }
 
-    public static EntireCardTransactionsResponse toResponse(int memberId, List<MonthlyTransactionDetailsWithMonth> monthlyTransactionDetailsWithMonthList){
-        return new EntireCardTransactionsResponse(memberId, monthlyTransactionDetailsWithMonthList);
+    public static EntireCardTransactionsResponse toResponse(int memberId, List<YearTransactionDetails> yearTransactionDetailsList){
+        return new EntireCardTransactionsResponse(memberId, yearTransactionDetailsList);
     }
 
 }
