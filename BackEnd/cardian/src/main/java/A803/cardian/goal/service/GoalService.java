@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
@@ -35,5 +37,13 @@ public class GoalService {
                 .build();
 
         return goalAchieve;
+    }
+
+    public boolean getCardGoalAchieve(Integer myCardId){
+        Optional<Boolean> tf = goalRepository.findByMyCard_Id(myCardId);
+
+
+
+        return tf.get().booleanValue();
     }
 }
