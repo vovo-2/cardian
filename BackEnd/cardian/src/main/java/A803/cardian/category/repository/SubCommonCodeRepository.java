@@ -10,6 +10,6 @@ public interface SubCommonCodeRepository extends JpaRepository<SubCommonCode,Int
     @Query("SELECT s.name FROM SubCommonCode s WHERE s.detailCode = :detailCode")
     Optional<String> findByDetailCode(String detailCode);
 
-
+    Optional<SubCommonCode> findByName(String categoryName);
 
 }

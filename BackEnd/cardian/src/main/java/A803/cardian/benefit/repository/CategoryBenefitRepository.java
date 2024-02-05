@@ -22,4 +22,6 @@ public interface CategoryBenefitRepository extends JpaRepository<CategoryBenefit
 
     List<CategoryBenefit> findCategoryBenefitsByCardId(Integer cardId);
 
+    List<CategoryBenefit> findCategoryBenefitsByCardIdAndCategoryCode(int cardId, String categoryCode);
+
 }

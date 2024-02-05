@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface GoalRepository extends JpaRepository<Goal,Integer> {
     @Query("SELECT g.achieve FROM Goal g WHERE g.myCard.id = :myCardId")
     Optional<Boolean> findByMyCard_Id(Integer myCardId);
+
+    Goal findByMyCardId(int myCardId);
 }

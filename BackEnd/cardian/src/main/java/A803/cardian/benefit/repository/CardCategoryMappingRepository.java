@@ -13,6 +13,6 @@ public interface CardCategoryMappingRepository extends JpaRepository<CardCategor
     //카드아이디와 제휴사아이디로 카드카테고리매핑 객체 반환
    Optional<CardCategoryMapping> findByAssociateIdAndCardId(int associateId, int cardId);
    List<CardCategoryMapping> findCardCategoryMappingsByCardIdAndCategoryCodeAndCategoryBenefit_Id(Integer cadId, String categoryCode, Integer categoryBenefitId);
-
+   List<CardCategoryMapping> findCardCategoryMappingsByCategoryBenefitId(int categoryBenefitId);
 
 }
