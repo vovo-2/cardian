@@ -10,8 +10,7 @@ import { axios } from "../api";
 export default function LoginPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [name, setName] = useState("");
-  const [residentRegistrationNumber, setResidentRegistrationNumber] =
-    useState("");
+  const [residentRegistrationNumber, setResidentRegistrationNumber] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
 
   const prevStep = () => {
@@ -27,6 +26,9 @@ export default function LoginPage() {
             residentRegistrationNumber,
             phoneNumber,
           },
+          {
+            withCredentials: true,
+          }
         )
         .then((res) => {
           console.log(res);
@@ -52,9 +54,7 @@ export default function LoginPage() {
         return (
           <LoginStep1
             onNameChange={handleNameChange}
-            onResidentRegistrationNumberChange={
-              handleResidentRegistrationNumberChange
-            }
+            onResidentRegistrationNumberChange={handleResidentRegistrationNumberChange}
           />
         );
       case 2:
