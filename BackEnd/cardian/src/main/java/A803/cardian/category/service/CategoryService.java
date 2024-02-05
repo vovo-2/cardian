@@ -14,6 +14,7 @@ import A803.cardian.category.data.dto.reponse.CategoryListImage;
 import A803.cardian.category.domain.SubCommonCode;
 import A803.cardian.category.repository.CategoryIconRepository;
 import A803.cardian.category.repository.SubCommonCodeRepository;
+import A803.cardian.goal.service.GoalService;
 import A803.cardian.statistic.domain.AccumulateBenefit;
 import A803.cardian.statistic.repository.AccumulateBenefitRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -35,6 +34,7 @@ public class CategoryService {
     private final BenefitService benefitService;
     private final CategoryBenefitRepository categoryBenefitRepository;
     private final AccumulateBenefitRepository accumulateBenefitRepository;
+    private final GoalService goalService;
     public List<CategoryList> findAllCategory(){
         List<SubCommonCode> cate= subCommonCodeRepository.findAll();
         List<CategoryList> cateList= new ArrayList<>();
@@ -77,7 +77,7 @@ public class CategoryService {
             MyCardInfoResponse info = cardService.getMyCardInfo(c.getMycardId());
             Integer cardId= cardService.getCardId(c.getMycardId());
             Optional<AccumulateBenefit> accumulateBenefit = accumulateBenefitRepository.findAccumulateBenefitByCardIdAndCategoryCode(c.getMycardId(), categoryCode);
-
+            boolean tf= goalService.getCardGoalAchieve(c.getMycardId());
             int accumulateBenefitAmount =0;
             if(accumulateBenefit.isPresent()){
                 accumulateBenefitAmount = accumulateBenefit.get().getBenefitAmount();
@@ -98,7 +98,10 @@ public class CategoryService {
                     discountSign=benefits.getExceptionBenefitStore().getSign();
 
                 }
-
+                boolean benefitRemain=false;
+                if(categoryBenefit.get().getDiscountLimit()-accumulateBenefitAmount>0){
+                    benefitRemain=true;
+                }
                 CategoryCardRecommend card=CategoryCardRecommend.builder()
                         .myCardId(info.getMyCardId())
                         .cardImage(info.getMyCardInfoDetails().getCardImage())
@@ -110,8 +113,10 @@ public class CategoryService {
                         .benefitCode(info.getMyCardInfoDetails().getBenefitCode())
                         .benefitLimitation(categoryBenefit.get().getDiscountLimit())
                         .currentBenefit(accumulateBenefitAmount)
+                        .benefitRemain(benefitRemain)
                         .discountAmount(discountAmount)
                         .discountSign(discountSign)
+                        .goalAchieve(tf)
                         .build();
                 if(discountSign.equals("%")){
                     percentCardList.add(card);
@@ -121,13 +126,15 @@ public class CategoryService {
             }
 
         }
+
+        Collections.sort(percentCardList);
+        Collections.sort(plusCardList);
         list.add(percentCardList);
         list.add(plusCardList);
 
-
-
         return list;
     }
+
 
 
 }

@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CategoryCardRecommend {
+public class CategoryCardRecommend implements Comparable<CategoryCardRecommend>{
     private int myCardId;
     private String cardImage;
     private String cardCompany;
@@ -21,6 +21,28 @@ public class CategoryCardRecommend {
     private BenefitCode benefitCode;
     private int benefitLimitation;
     private int currentBenefit;
+    private boolean benefitRemain;
     private int discountAmount;
     private String discountSign;
+    private boolean goalAchieve;
+
+    @Override
+    public int compareTo(CategoryCardRecommend otherCard) {
+        if (this.goalAchieve && otherCard.goalAchieve) {
+            if (this.benefitRemain && otherCard.benefitRemain) {
+                return Integer.compare(otherCard.discountAmount, this.discountAmount);
+            } else if (this.benefitRemain) {
+                return -1;
+            } else if (otherCard.benefitRemain) {
+                return 1;
+            }
+        } else if (this.goalAchieve) {
+            return -1;
+        } else if (otherCard.goalAchieve) {
+            return 1;
+        }
+
+        // goalAchieve가 false인 경우 discountAmount로 정렬
+        return Integer.compare(otherCard.discountAmount, this.discountAmount);
+    }
 }
