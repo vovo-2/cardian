@@ -21,9 +21,10 @@ import java.text.ParseException;
  *  내용 : 멤버 컨트롤러 - 로그인 기능
  */
 
+
 @Tag(name = "멤버 컨트롤러", description = "멤버 관련 정보")
-@RequestMapping("/user")
 @RequiredArgsConstructor
+@RequestMapping("/user")
 @RestController
 @CrossOrigin("*")
 public class memberController {
@@ -31,23 +32,37 @@ public class memberController {
     private final MemberService memberService;
 
 
-    @PostMapping
-    public ResponseEntity<?> register(HttpServletRequest request, HttpServletResponse response, @RequestBody  MemberRequestDto memberRequestDto) throws ParseException {
+    @PostMapping("/login")
+    public ResponseEntity<?> login(HttpServletRequest request, HttpServletResponse response, @RequestBody MemberRequestDto memberRequestDto) throws ParseException {
+
+        System.out.println("memberRequestDto = " + memberRequestDto.getName());
+
         // registerMember 로직을 memberService를 통해 호출하도록 수정
-        Member newMember = memberService.registerMember(memberRequestDto);
-        // 로그인 정보
-        // 세션 쿠키
-        createCookie(request, response, "memberId", String.valueOf(newMember.getId()), "session");
+        Member member = memberService.loginMember(memberRequestDto);
+
+        // 로그인 성공
+        if(member != null){
+            // 로그인 정보
+            // 세션 쿠키
+            createCookie(request, response, "memberId", String.valueOf(member.getId()), "session");
             return ResponseEntity.ok("로그인 성공!");
+        }
+        return ResponseEntity.ok("로그인 실패!");
+        
+    }
+
+    @GetMapping
+    public void sample(){
+        System.out.println("GET은 잘 동작합!");
     }
 
 
 
     /*
-    *   작성자 : 정여민
-    *   작성일시 : 2024.02.05
-    *   내용 : 쿠키 생성하는 메서드
-    */
+     *   작성자 : 정여민
+     *   작성일시 : 2024.02.05
+     *   내용 : 쿠키 생성하는 메서드
+     */
     private void createCookie(HttpServletRequest request, HttpServletResponse response, String key, String value, String type) {
         // 세션 생성
         // 여기서는 간단하게 username을 세션에 저장

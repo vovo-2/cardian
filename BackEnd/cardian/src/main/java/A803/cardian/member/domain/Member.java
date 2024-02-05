@@ -27,6 +27,7 @@ public class Member {
     @Column(name = "member_id")
     private Integer id;
 
+    // 카드사의 멤버 아이디
     @Column(nullable = false)
     private Integer cardMemberId;
 
@@ -71,7 +72,8 @@ public class Member {
                   Gender gender,
                   int age,
                   PhoneNumber phoneNumber,
-                  LocalDateTime updateDate
+                  LocalDateTime updateDate,
+                  int cardMemberId
                   ){
         this.name = name;
         this.birth = birth;
@@ -79,5 +81,6 @@ public class Member {
         this.age = age;
         this.phoneNumber = phoneNumber;
         this.updateDate = updateDate;
+        this.cardMemberId = cardMemberId;
     }
 }

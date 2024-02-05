@@ -41,9 +41,69 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final UpdateService updateService;
 
-    // 유저 추가
+    // 새로운 유저 추가
+//    @Transactional
+//    public Member registerMember(MemberRequestDto memberRequestDto, Integer memberId) throws ParseException {
+//
+//        String name = memberRequestDto.getName();
+//        String residentRegistrationNumber = memberRequestDto.getResidentRegistrationNumber();
+//        String phoneNumber = memberRequestDto.getPhoneNumber();
+//
+//
+//        // 이미 등록된 유저인지 판별
+//        Optional<Member> member = memberRepository.findMemberByPhoneNumberAndName(PhoneNumber.from(phoneNumber), name);
+//
+//        // 이미 등록된 유저면 로그인
+//        if(member.isPresent()){
+//
+//            return member.get();
+//
+//        }
+//        // 새로운 유저면 회원가입
+//        else{
+//            String birthDateStr = residentRegistrationNumber.substring(0, 6);
+//            String genderDigitStr = residentRegistrationNumber.substring(7, 8);
+//
+//            // 성별 정보 가져오기
+//            Gender gender = getGenderFromFirstDigit(genderDigitStr);
+//
+//            // 생년월일 문자열을 날짜로 변환
+//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
+//            LocalDate birthDate = LocalDate.parse(birthDateStr, formatter);
+//
+//            Member newMember = Member.builder()
+//                    .name(name)
+//                    .phoneNumber(PhoneNumber.from(phoneNumber))
+//                    .updateDate(LocalDateTime.parse("0000-01-01T00:00:00"))
+//                    .birth(birthDate)
+//                    .gender(gender)
+//                    .age(calculateAge(birthDate))
+//                    .cardMemberId(memberId)
+//                    .build();
+//
+//            memberRepository.save(newMember);
+//
+//            memberRepository.flush();
+//
+//            Optional<Member> member1 = memberRepository.findMemberByPhoneNumberAndName(PhoneNumber.from(phoneNumber), name);
+//
+//            if(member1.isPresent()){
+//                Integer member1Id = member1.get().getId();
+//                System.out.println("member1Id = " + member1Id);
+//                updateService.updateTransactions(member1Id);
+//                updateService.updateMyCard(member1Id);
+//                updateService.updateMemberUpdateDate(member1Id);
+//            }else{
+//                log.info("조회된 사용자가 없습니다.");
+//            }
+//
+//            return member1.get();
+//        }
+//
+//    }
+
     @Transactional
-    public Member registerMember(MemberRequestDto memberRequestDto) throws ParseException {
+    public Member loginMember(MemberRequestDto memberRequestDto) throws ParseException {
 
         String name = memberRequestDto.getName();
         String residentRegistrationNumber = memberRequestDto.getResidentRegistrationNumber();
@@ -55,48 +115,10 @@ public class MemberService {
 
         // 이미 등록된 유저면 로그인
         if(member.isPresent()){
-
             return member.get();
-
         }
-        // 새로운 유저면 회원가입
-        else{
-            String birthDateStr = residentRegistrationNumber.substring(0, 6);
-            String genderDigitStr = residentRegistrationNumber.substring(7, 8);
-
-            // 성별 정보 가져오기
-            Gender gender = getGenderFromFirstDigit(genderDigitStr);
-
-            // 생년월일 문자열을 날짜로 변환
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
-            LocalDate birthDate = LocalDate.parse(birthDateStr, formatter);
-
-            Member newMember = Member.builder()
-                    .name(name)
-                    .phoneNumber(PhoneNumber.from(phoneNumber))
-                    .updateDate(LocalDateTime.MIN)
-                    .birth(birthDate)
-                    .gender(gender)
-                    .age(calculateAge(birthDate))
-                    .build();
-
-            memberRepository.save(newMember);
-
-            memberRepository.flush();
-
-            Optional<Member> member1 = memberRepository.findMemberByPhoneNumberAndName(PhoneNumber.from(phoneNumber), name);
-
-            if(member1.isPresent()){
-                Integer memberId = member1.get().getId();
-                updateService.updateTransactions(memberId);
-                updateService.updateMyCard(memberId);
-                updateService.updateMemberUpdateDate(memberId);
-            }else{
-                log.info("조회된 사용자가 없습니다.");
-            }
-
-            return newMember;
-        }
+        // 등록되지 않은 유저면 null 반환
+        return null;
 
     }
 
