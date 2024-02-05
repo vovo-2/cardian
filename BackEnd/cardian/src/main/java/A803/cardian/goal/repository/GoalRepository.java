@@ -1,5 +1,6 @@
 package A803.cardian.goal.repository;
 
+import A803.cardian.goal.data.dto.response.GoalAchieve;
 import A803.cardian.goal.domain.Goal;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
