@@ -26,7 +26,7 @@ import java.text.ParseException;
 @RequiredArgsConstructor
 @RequestMapping("/user")
 @RestController
-@CrossOrigin("*")
+@CrossOrigin("http://i10a803.p.ssafy.io")
 public class memberController {
 
     private final MemberService memberService;
@@ -76,6 +76,7 @@ public class memberController {
         if(type.equals("cookie")) {
             cookie.setMaxAge(20*20*60); // 쿠키 유효기간 설정 (초 단위)
         }
+
         response.addCookie(cookie);
 
     }
