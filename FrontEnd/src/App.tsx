@@ -5,11 +5,13 @@ import MyCardPage from "./pages/MyCardPage";
 import CardDetailPage from "./pages/CardDetailPage";
 import "./App.css";
 import SearchPage from "./pages/SearchPage";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
   return (
     <>
       <Routes>
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<MyCardPage />} />
         <Route path="/mycard">
           <Route index element={<MyCardPage />} />

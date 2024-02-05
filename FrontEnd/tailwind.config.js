@@ -15,6 +15,12 @@ export default {
         gray: "#999999",
         darkgray: "#666666",
       },
+      screens: {
+        mobile: "280px",
+        tablet: "640px",
+        laptop: "1024px",
+        desktop: "1280px",
+      },
     },
   },
   plugins: [require("tailwind-scrollbar-hide"), require("flowbite/plugin")],
