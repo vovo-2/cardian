@@ -163,7 +163,7 @@ public class BenefitService {
             storeList.add(new BenefitStore("", 0, "" ));
             return CardBenefitCategoryResponse.toResponse(exceptionBenefitStore, storeList);
         }else{
-// 2. 카드 조회 -> 카드사 아이디
+        // 2. 카드 조회 -> 카드사 아이디
             Optional<Card> card = cardRepository.findById(myCard.get().getCard().getId());
 
             if(card.isEmpty()){
