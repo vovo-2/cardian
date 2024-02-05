@@ -26,7 +26,7 @@ import java.text.ParseException;
 @RequiredArgsConstructor
 @RequestMapping("/user")
 @RestController
-@CrossOrigin(origins = {"http://i10a803.p.ssafy.io", "http://localhost:5173"}, allowCredentials = "true")
+//@CrossOrigin(origins = {"http://i10a803.p.ssafy.io", "http://localhost:5173"}, allowCredentials = "true")
 public class memberController {
 
     private final MemberService memberService;
