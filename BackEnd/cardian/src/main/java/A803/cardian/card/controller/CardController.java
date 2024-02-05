@@ -24,7 +24,6 @@ import java.util.Map;
 @RequestMapping("/card")
 @RequiredArgsConstructor
 @RestController
-@CrossOrigin("*")
 public class CardController {
 
     private final CardService cardService;

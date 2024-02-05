@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/statistic")
 @RequiredArgsConstructor
 @RestController
-@CrossOrigin("*")
 public class StatisticController {
     private final StatisticService statisticService;
 

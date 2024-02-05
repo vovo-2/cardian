@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/search")
 @RequiredArgsConstructor
 @RestController
-@CrossOrigin("*")
 public class CategoryController {
     @Autowired
     private final CategoryService categoryService;

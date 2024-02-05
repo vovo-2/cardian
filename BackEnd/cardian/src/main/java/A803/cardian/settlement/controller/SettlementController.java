@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/settlement")
 @RequiredArgsConstructor
 @RestController
-@CrossOrigin("*")
 public class SettlementController {
     @Autowired
     private final  SettlementService settlementService;
