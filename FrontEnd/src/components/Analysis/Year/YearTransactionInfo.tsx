@@ -1,16 +1,10 @@
-import React from "react";
-
-import { axios } from "../../api";
+import { axios } from "../../../api";
 import { useState, useEffect } from "react";
-import YearTransactionStore from "../../store/YearTransactionStore";
+import YearTransactionStore from "../../../store/YearTransactionStore";
 
 export default function YearTransactionInfo() {
-  const {
-    monthlyConsumeAmount,
-    yearConsumeAmount,
-    setYearConsumeAmount,
-    setMonthlyConsumeAmount,
-  } = YearTransactionStore();
+  const { yearConsumeAmount, setYearConsumeAmount, setMonthlyConsumeAmount } =
+    YearTransactionStore();
 
   const [year, setYear] = useState<number>(0);
 

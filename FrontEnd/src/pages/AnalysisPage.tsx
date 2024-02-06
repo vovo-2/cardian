@@ -1,7 +1,3 @@
-import YearGraph from "../components/YearTransaction/YearGraph";
-import YearTransactionInfo from "../components/YearTransaction/YearTransactionInfo";
-import YearTransactionList from "../components/YearTransaction/YearTransactionList";
-
 import ACategoryInfo from "../components/Analysis/Category/ACategoryInfo";
 import ACategoryGraph from "../components/Analysis/Category/ACategoryGraph";
 import ACategoryTransactionList from "../components/Analysis/Category/ACategoryTransactionList";
