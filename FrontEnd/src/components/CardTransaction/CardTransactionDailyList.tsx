@@ -1,3 +1,4 @@
+import { formatDate } from "../../utils/formatUtils";
 import CardTransactionDailyListItem from "./CardTransactionDailyListItem";
 
 type DayTransaction = {
@@ -21,22 +22,16 @@ export default function CardTransactionDailyList({
   day,
   dailyTransactionDetailsList,
 }: CardTransactionDailyListProps) {
-  const getDate = (month: number, day: number) => {
-    const result = `${month}월 ${day}일`;
-
-    return result;
-  };
-
   return (
     <>
       {dailyTransactionDetailsList.length > 0 && (
         <div className="mb-8">
           <div className="text-xs text-darkgray mb-3">
-            {getDate(month, day)}
+            {formatDate(month, day)}
           </div>
           {dailyTransactionDetailsList.map((transaction) => (
             <CardTransactionDailyListItem
-              key={transaction.transactionId}
+              key={transaction.transactionId || transaction.date}
               transaction={transaction}
             />
           ))}
