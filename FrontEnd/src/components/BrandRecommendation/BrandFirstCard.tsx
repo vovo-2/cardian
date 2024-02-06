@@ -58,7 +58,7 @@ export default function BrandFirstCard({
           <div>
             <div className="flex flex-row justify-between">
               <span className="text-sm">이번 달 실적</span>
-              <span className="text-sm text-gray">{thisMonthAchieve ? "충족" : consume+"원"}</span>
+              <span className="text-sm text-gray">{thisMonthAchieve ? "충족" : consume.toLocaleString()+" / "+goal.toLocaleString()+"원"}</span>
             </div>
             <div>
               <ProgressBar value={consume} total={goal} />
@@ -66,8 +66,8 @@ export default function BrandFirstCard({
           </div>
           <div>
             <div className="flex flex-row justify-between">
-              <span className="text-sm">혜택 상한</span>
-              <span className="text-sm text-gray">{benefitRemain ? "0원" : currentBenefit+"원"}</span>
+              <span className="text-sm">혜택</span>
+              <span className="text-sm text-gray">{benefitRemain ? currentBenefit.toLocaleString()+" / "+benefitLimitation.toLocaleString()+"원" : "0원"}</span>
             </div>
             <div>
               <ProgressBar value={currentBenefit} total={benefitLimitation} />
