@@ -7,7 +7,8 @@ import "./App.css";
 import SearchPage from "./pages/SearchPage";
 import CardRecommendPage from "./pages/CardRecommendPage";
 import BrandRecommendationPage from "./pages/BrandRecommendationPage";
-import AnalysisPage from "./pages/AnalysisPage";
+// import AnalysisPage from "./pages/AnalysisPage";
+import Settlement from "./components/Settlement/Settlement";
 
 function App() {
   return (
@@ -20,7 +21,7 @@ function App() {
         </Route>
         <Route path="/search" element={<SearchPage />} />
         <Route path="/recommendation" element={<CardRecommendPage />} />
-        <Route path="/analysis" element={<AnalysisPage />} />
+        <Route path="/analysis" element={<Settlement />} />
         <Route path="/menu" element={<div>menu</div>} />
         <Route path="/brand/:associationId" element={<BrandRecommendationPage />} />
 

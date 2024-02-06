@@ -28,12 +28,10 @@ export default function Settlement() {
     setCreditCard(consume);
   }
 
+  const memberId = 1;
+
   useEffect(() => {
-    axios.get("/settlement/achievement-standard", {
-      params: {
-        memberId: 1
-      }
-    }).then(({ data }) => {
+    axios.get(`/settlement/${memberId}/achievement-standard`).then(({ data }) => {
       setAchieved(data.achieve);
     }).finally(() => {
       setLoading(false);

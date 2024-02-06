@@ -41,9 +41,11 @@ export default function MyIncome({ userName, salary, onSetSalary }: IncomeProps)
     }
   };
 
+  const memberId = 1;
+
   const handleSubmit = () => {
     axios
-      .put("/settlement/salary", { member_id: 1, salary: inputSalary }, { withCredentials: true })
+      .put(`/settlement/${memberId}/${inputSalary}`, { withCredentials: true })
       .then(() => {
         setSalary(inputSalary);
       });

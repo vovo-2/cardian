@@ -23,8 +23,10 @@ export default function Achieved({ userName, salary, onSetCheckCard, onSetCredit
     onSetCreditCard(consume);
   }
 
+  const memberId = 1;
+
   useEffect(() => {
-    axios.get("/settlement/achievement", {
+    axios.get(`/settlement/${memberId}/achievement`, {
       params: {
         memberId: 1
       }

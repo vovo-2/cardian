@@ -23,12 +23,10 @@ export default function NotAchieved({userName, salary, onSetCheckCard, onSetCred
     onSetCreditCard(consume);
   }
 
+  const memberId = 1;
+
   useEffect(() => {
-    axios.get("/settlement/not-achievement", {
-      params: {
-        memberId: 1
-      }
-    }).then(({ data }) => {
+    axios.get(`/settlement/${memberId}/not-achievement`).then(({ data }) => {
       setAccumulate(data.annualConsume);
       setGoal(data.settlementStandard);
       setCheckCard(data.annualCheckConsume);
