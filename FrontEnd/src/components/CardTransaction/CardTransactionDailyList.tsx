@@ -31,7 +31,7 @@ export default function CardTransactionDailyList({
           </div>
           {dailyTransactionDetailsList.map((transaction) => (
             <CardTransactionDailyListItem
-              key={transaction.transactionId}
+              key={transaction.transactionId || transaction.date}
               transaction={transaction}
             />
           ))}

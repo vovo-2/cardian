@@ -11,7 +11,7 @@ export default function ACategoryTransactionList() {
   const { categoryEntireTransactionList, setCategoryEntireTransactionList } =
     EntireCategoryCardTransactionStore();
 
-  const { consumeLabelList } = CategoryConsumeStore();
+  const { selectedMonth } = CategoryConsumeStore();
 
   const member_id = 1;
 
@@ -19,7 +19,6 @@ export default function ACategoryTransactionList() {
 
   useEffect(() => {
     axios.get(url).then(({ data }) => {
-      console.log(data.categoryEntireTransactionList);
       setCategoryEntireTransactionList(data.categoryEntireTransactionList);
     });
   }, []);
@@ -37,15 +36,17 @@ export default function ACategoryTransactionList() {
                 {/* month, monthlyTransactionDetailsList */}
                 {item.categoryMonthlyTransactionList.length > 0 &&
                   item.categoryMonthlyTransactionList.map((data) => {
-                    return (
-                      <CardTransactionMonthlyList
-                        key={data.month}
-                        month={data.month}
-                        monthlyTransactionDetailsList={
-                          data.monthlyTransactionDetailsList
-                        }
-                      />
-                    );
+                    if (data.month == selectedMonth) {
+                      return (
+                        <CardTransactionMonthlyList
+                          key={data.month}
+                          month={data.month}
+                          monthlyTransactionDetailsList={
+                            data.monthlyTransactionDetailsList
+                          }
+                        />
+                      );
+                    }
                   })}
               </Accordion.Content>
             </Accordion.Panel>

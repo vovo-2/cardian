@@ -9,8 +9,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 export default function ACategoryGraph() {
   const { consumeDataList, consumeLabelList, selectedMonth } =
     CategoryConsumeStore();
-  // console.log(consumeDataList);
-
+  useEffect(() => {}, [selectedMonth]);
   const data = {
     labels: consumeLabelList,
     datasets: [
