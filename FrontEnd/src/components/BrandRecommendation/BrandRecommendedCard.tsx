@@ -24,6 +24,7 @@ type CardType = {
 };
 
 export default function BrandRecommendedCard() {
+  const memberId: number = 1;
   const { associationId } = useParams();
 
   const [cardListPercent, setCardListPercent] = useState<CardType[]>();
@@ -31,12 +32,7 @@ export default function BrandRecommendedCard() {
 
   useEffect(() => {
     axios
-      .get("/search/association/card-list", {
-        params: {
-          memberId: 1,
-          associateId: associationId,
-        },
-      })
+      .get(`/search/${memberId}/${associationId}/card-list`)
       .then(({ data }) => {
         setCardListPercent(data[0]);
         setCardListPlus(data[1]);
