@@ -15,8 +15,10 @@ public class CategoryCardRecommend implements Comparable<CategoryCardRecommend>{
     private String cardImage;
     private String cardCompany;
     private String cardName;
+    private String associateName;
     private int goal;
     private int consume;
+    private boolean thisMonthAchieve;
     private Type cardType;
     private BenefitCode benefitCode;
     private int benefitLimitation;

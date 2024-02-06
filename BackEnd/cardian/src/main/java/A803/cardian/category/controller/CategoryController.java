@@ -45,8 +45,8 @@ public class CategoryController {
     }
 
     @GetMapping("/association/card-list")
-    public ResponseEntity<?> categoryCardRecommend(@RequestParam Integer memberId,@RequestParam String categoryCode){
+    public ResponseEntity<?> categoryCardRecommend(@RequestParam Integer memberId,@RequestParam Integer associateId){
 
-        return ResponseEntity.ok(categoryService.categoryCardRecommend(memberId,categoryCode));
+        return ResponseEntity.ok(categoryService.categoryCardRecommend(memberId,associateId));
     }
 }
