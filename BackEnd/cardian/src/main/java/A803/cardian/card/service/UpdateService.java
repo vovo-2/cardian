@@ -84,7 +84,7 @@ public class UpdateService {
 //        JSONParser jsonParser = new JSONParser();
 
         // 2. memberId로 카드사에서 거래 내역 가져오기
-        baseUrl = "http://i10a803.p.ssafy.io:8082";
+        baseUrl = "http://i10a803.p.ssafy.io:8082/cardcompany";
         path = "/transaction/1/".concat(updateDate);
         Map<String, Object> transactions = webClientService.get(baseUrl, path);
 
@@ -191,7 +191,7 @@ public class UpdateService {
     public void updateMyCard(Integer memberId){
 
         // 카드사에서 해당 유저의 카드 리스트 받아오기
-        String baseUrl = "http://i10a803.p.ssafy.io:8082";
+        String baseUrl = "http://i10a803.p.ssafy.io:8082/cardcompany";
         String path = "/card/".concat(String.valueOf(memberId));
 
         List<Map> result = webClientService.getJSONArray(baseUrl, path);
