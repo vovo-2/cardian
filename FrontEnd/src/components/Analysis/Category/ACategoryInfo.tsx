@@ -11,8 +11,6 @@ export default function ACategoryInfo() {
     setCategoryMonthlyConsumeList,
     selectedMonth,
     setSelectedMonth,
-    consumeDataList,
-    consumeLabelList,
     setConsumeDataList,
     setConsumeLabelList,
   } = CategoryConsumeStore();
@@ -91,7 +89,7 @@ export default function ACategoryInfo() {
           </Button>
         </div>
 
-        <div className="my-auto">{selectedMonth}월</div>
+        <div className="my-auto text-xl">{selectedMonth}월</div>
 
         <Button
           onClick={handleRightClick}
@@ -102,7 +100,7 @@ export default function ACategoryInfo() {
           <IoMdArrowDropright size={30} color="blue" />
         </Button>
       </div>
-      <div>
+      <div className="text-2xl font-bold ml-3">
         {categoryMonthlyConsumeList[selectedMonth - 1] && (
           <div>
             {formatPrice(

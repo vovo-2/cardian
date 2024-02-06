@@ -16,6 +16,9 @@ interface CategoryConsume {
   consumeLabelList: string[];
   setConsumeDataList: (consumeDataList: number[]) => void;
   setConsumeLabelList: (consumeLabelList: string[]) => void;
+
+  colorList: string[];
+  setColorList: (colorList: string[]) => void;
 }
 
 interface CategoryMonthlyConsume {
@@ -45,6 +48,23 @@ const CategoryConsumeStore = create<CategoryConsume>((set) => ({
   setConsumeDataList: (consumeDataList: number[]) => set({ consumeDataList }),
   setConsumeLabelList: (consumeLabelList: string[]) =>
     set({ consumeLabelList }),
+
+  colorList: [
+    "#172554",
+    "#1e3a8a",
+    "#1e40af",
+    "#1d4ed8",
+    "#2563eb",
+    "#3b82f6",
+
+    "#60a5fa",
+    "#93c5fd",
+    "#bfdbfe",
+    "#dbeafe",
+    "#eff6ff",
+    "#7dd3fc",
+  ],
+  setColorList: (colorList: string[]) => set({ colorList }),
 }));
 
 export default CategoryConsumeStore;
