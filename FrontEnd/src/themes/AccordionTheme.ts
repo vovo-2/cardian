@@ -1,33 +1,35 @@
 import { CustomFlowbiteTheme } from "flowbite-react";
 
-export const AccordionTheme: CustomFlowbiteTheme["accordion"] = {
-  root: {
-    base: "divide-y divide-gray-200 border-gray-200 ",
-    flush: {
-      off: "rounded-lg border ",
-      on: "border-b",
-    },
-  },
-  content: {
-    base: " py-5 px-5 last:rounded-b-lg dark:bg-gray-900 first:rounded-t-lg",
-  },
-  title: {
-    arrow: {
-      base: "h-6 w-6 shrink-0 ",
-      open: {
+export const AccordionTheme: CustomFlowbiteTheme = {
+  accordion: {
+    root: {
+      base: "border-none",
+      flush: {
         off: "",
-        on: "rotate-180 ",
+        on: "",
       },
     },
-    base: "flex w-full items-center justify-between first:rounded-t-lg last:rounded-b-lg py-5 px-5 text-left font-medium text-gray-500 ",
-    flush: {
-      off: "hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 dark:hover:bg-gray-800 dark:focus:ring-gray-800",
-      on: "bg-transparent dark:bg-transparent",
+    content: {
+      base: "border-2 rounded-xl border-whiteblue mt-3 p-3",
     },
-    heading: "",
-    open: {
-      off: "",
-      on: "text-gray-900 bg-gray-100 dark:bg-gray-800 ",
+    title: {
+      arrow: {
+        base: "my-auto text-xl",
+        open: {
+          off: "text-blue",
+          on: "rotate-180 text-gray",
+        },
+      },
+      base: "bg-whiteblue p-4 w-full rounded-2xl mt-2 flex",
+      flush: {
+        off: "",
+        on: "",
+      },
+      heading: "w-full",
+      open: {
+        off: "",
+        on: "",
+      },
     },
   },
 };
