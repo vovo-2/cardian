@@ -20,8 +20,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -192,6 +191,9 @@ public class StatisticService {
             categoryMonthlyConsumeDetailsList.add(CategoryMonthlyConsumeDetails.from(categoryName, getMonthlyConsumePerCategory(memberId, localDate, categoryCode)));
         }
 
+        //소비금액 내림차순 정렬
+        Collections.sort(categoryMonthlyConsumeDetailsList, Comparator.comparingInt(CategoryMonthlyConsumeDetails::getMonthlyConsumePerCategory));
+
         return categoryMonthlyConsumeDetailsList;
     }
 
@@ -208,6 +210,7 @@ public class StatisticService {
             categoryMonthlyConsumeList.add(CategoryMonthlyConsume.from(month, monthlyConsume, getCategoryMonthlyConsumeDetailsWithCategorycode(memberId, startDate, monthlyConsume)));
             startDate = startDate.plusMonths(1);
         }
+
         return categoryMonthlyConsumeList;
     }
 
@@ -292,5 +295,94 @@ public class StatisticService {
 
     public CategoryTransactionResponse getCategoryTransactionResponse(int memberId){
         return CategoryTransactionResponse.toResponse(memberId, getCategoryEntireTransaction(memberId));
+    }
+
+
+    //상세내역 가져오기
+    public List<CategoryDayTransactionDetails> getCategoryDayTransactionDetails(int memberId, LocalDate localDate, String categoryCode){
+        List<CategoryDayTransactionDetails> categoryDayTransactionDetailList = new ArrayList<>();
+
+        List<MyCard> myCardList = mycardRepository.findMyCardsByMemberId(memberId);
+        for(MyCard myCard : myCardList){
+            //해당 일자 소비 내역 가져오기
+            List<Transaction> transactionList = transactionRepository.findTransactionsByMyCardIdAndDay(myCard.getId(), localDate);
+            //없으면 다음 카드 보기
+            if(transactionList.size() == 0){
+                continue;
+            }
+            for(Transaction transaction : transactionList){
+                Associate associate = associateRepository.findByName(transaction.getStore())
+                        .orElseThrow(() ->
+                                new RuntimeException());
+                //카테고리 확인
+                if(associate.getCategoryCode().equals(categoryCode)){
+                    categoryDayTransactionDetailList.add(CategoryDayTransactionDetails.from(transaction, associate));
+                }
+            }
+        }
+        return categoryDayTransactionDetailList;
+    }
+
+    //카테고리별 일 소비내역 가지고 오기 (월 넘겨받음)
+    public List<CategoryDayTransaction> getCategoryDayTransaction(int memberId, LocalDate localDate, String categoryName){
+        List<CategoryDayTransaction> categoryDayTransactionList = new ArrayList<>();
+
+        //카테고리이름으로 카테고리코드 가져오기
+        SubCommonCode subCommonCode = subCommonCodeRepository.findByName(categoryName).get();
+        String categoryCode = subCommonCode.getDetailCode();
+
+        //해당월 소비내역 확인
+        LocalDate startDate = localDate;
+        LocalDate endDate = localDate.plusMonths(1);
+        while(startDate.isBefore(endDate)){
+            int day = startDate.getDayOfMonth();
+            List<CategoryDayTransactionDetails> categoryDayTransactionDetailsList = getCategoryDayTransactionDetails(memberId, startDate, categoryCode);
+            if (categoryDayTransactionDetailsList.size() == 0) {
+                startDate = startDate.plusDays(1);
+                continue;
+            }
+            //해당일의 상세내역 가져와서 넣어주기
+            categoryDayTransactionList.add(CategoryDayTransaction.from(day, categoryDayTransactionDetailsList));
+            startDate = startDate.plusDays(1);
+        }
+
+        return categoryDayTransactionList;
+    }
+
+    //카테고리별 월 소비내역 가지고 오기
+    public List<CategoryTransaction> getCategoryTransaction(int memberId, int month){
+        List<CategoryTransaction> categoryTransactionList = new ArrayList<>();
+
+        //카테고리별
+        List<SubCommonCode> subCommonCodeList = subCommonCodeRepository.findAll();
+        for(SubCommonCode subCommonCode : subCommonCodeList){
+            //카테고리 이름
+            String categoryName = subCommonCode.getName();
+            System.out.println(categoryName + "카테고리 계산 중");
+            //카테고리 코드
+            String categoryCode = subCommonCode.getDetailCode();
+
+            //월 소비 내역
+            List<MonthDay> monthDayList = Arrays.stream(MonthDay.values()).toList();
+            LocalDate localDate = monthDayList.get(month - 1).toLocalDate().withDayOfMonth(1);
+            System.out.println(localDate + "월입니다.");
+            //일자별 가져오기
+            //추후 테이블 사용으로 코드 변경
+            categoryTransactionList.add(CategoryTransaction.from(categoryName, getMonthlyConsumePerCategory(memberId, localDate, categoryCode),getCategoryDayTransaction(memberId, localDate, categoryName)));
+        }
+
+        //내림차순으로 정렬
+        Collections.sort(categoryTransactionList, Comparator.comparingInt(CategoryTransaction::getCategoryConsume).reversed());
+
+        return categoryTransactionList;
+    }
+
+    /*
+    //카테고리별 월 총 소비 금액
+    public int getMonthlyConsumePerCategory(int memberId, LocalDate localDate, String categoryCode)
+     */
+
+    public CategoryMonthTransactionResponse getCategoryMonthTransactionResponse(int memberId, int month){
+        return CategoryMonthTransactionResponse.toResponse(memberId, month, getCategoryTransaction(memberId, month));
     }
 }
