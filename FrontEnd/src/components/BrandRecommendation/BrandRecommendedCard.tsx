@@ -78,6 +78,11 @@ export default function BrandRecommendedCard() {
                   key={card.myCardId}
                   cardImage={card.cardImage}
                   cardName={card.cardName}
+                  discountAmount={card.discountAmount}
+                  discountSign={card.discountSign}
+                  thisMonthAchieve={card.thisMonthAchieve}
+                  currentBenefit={card.currentBenefit}
+                  benefitLimitation={card.benefitLimitation}
                 />
               );
             })}
@@ -108,6 +113,11 @@ export default function BrandRecommendedCard() {
                   key={card.myCardId}
                   cardImage={card.cardImage}
                   cardName={card.cardName}
+                  discountAmount={card.discountAmount}
+                  discountSign={card.discountSign}
+                  thisMonthAchieve={card.thisMonthAchieve}
+                  currentBenefit={card.currentBenefit}
+                  benefitLimitation={card.benefitLimitation}
                 />
               );
             })}
