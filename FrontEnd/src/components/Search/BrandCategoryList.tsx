@@ -31,6 +31,7 @@ export default function BrandCategoryList({categoryCode, categoryName}: Category
             <Brand
               key={associate.associationId}
               categoryName={categoryName}
+              associationId={associate.associationId}
               associationName={associate.associationName}
               associationImage={associate.associationImage}
             />
