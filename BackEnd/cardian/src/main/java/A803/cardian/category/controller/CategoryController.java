@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "검색 컨트롤러", description = "검색 관련 정보")
-@RequestMapping("/search")
+@RequestMapping("/api/search")
 @RequiredArgsConstructor
 @RestController
 public class CategoryController {
