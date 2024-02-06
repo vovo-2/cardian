@@ -1,5 +1,6 @@
 package A803.cardian.statistic.controller;
 
+import A803.cardian.statistic.data.dto.response.category.CategoryMonthTransactionResponse;
 import A803.cardian.statistic.data.dto.response.category.CategoryMonthlyConsumeResponse;
 import A803.cardian.statistic.data.dto.response.category.CategoryTransactionResponse;
 import A803.cardian.statistic.data.dto.response.EntireCardTransactionsResponse;
@@ -40,5 +41,11 @@ public class StatisticController {
     @GetMapping("/{member_id}/CategoryTransaction")
     public ResponseEntity<CategoryTransactionResponse> getCategoryTransactionResponse(@PathVariable("member_id")int memberId){
         return ResponseEntity.ok(statisticService.getCategoryTransactionResponse(memberId));
+    }
+
+    @Operation(summary = "전체 카드의 월별 카테고리별 사용 내역 조회", description = "전체 카드의 월별 카테고리별 사용 내역을 불러오는 API입니다.")
+    @GetMapping("/{member_id}/{month}/categoryTransaction")
+    public ResponseEntity<CategoryMonthTransactionResponse> getCategoryMonthTransactionResponse(@PathVariable("member_id")int memberId, @PathVariable("month")int month){
+        return ResponseEntity.ok(statisticService.getCategoryMonthTransactionResponse(memberId, month));
     }
 }
