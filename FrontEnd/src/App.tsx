@@ -5,6 +5,7 @@ import MyCardPage from "./pages/MyCardPage";
 import CardDetailPage from "./pages/CardDetailPage";
 import "./App.css";
 import SearchPage from "./pages/SearchPage";
+import CardRecommendPage from "./pages/CardRecommendPage";
 
 function App() {
   return (
@@ -17,7 +18,7 @@ function App() {
         </Route>
         <Route path="/search" element={<SearchPage />} />
         <Route path="/analysis" element={<div>analysis</div>} />
-        <Route path="/recommendation" element={<div>recommendation</div>} />
+        <Route path="/recommendation" element={<CardRecommendPage />} />
         <Route path="/menu" element={<div>menu</div>} />
 
         {/* 404 처리 */}
