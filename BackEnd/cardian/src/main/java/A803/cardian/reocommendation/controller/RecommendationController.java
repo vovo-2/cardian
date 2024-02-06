@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "추천 컨트롤러", description = "카드 추천 기능")
-@RequestMapping("/recommendation")
+@RequestMapping("/api/recommendation")
 @RequiredArgsConstructor
 @RestController
 public class RecommendationController {

@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "통계 컨트롤러", description = "통계 관련 정보")
-@RequestMapping("/statistic")
+@RequestMapping("/api/statistic")
 @RequiredArgsConstructor
 @RestController
 public class StatisticController {

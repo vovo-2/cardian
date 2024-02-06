@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 @Tag(name = "카드 컨트롤러", description = "카드 관련 정보")
-@RequestMapping("/card")
+@RequestMapping("/api/card")
 @RequiredArgsConstructor
 @RestController
 public class CardController {
