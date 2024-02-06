@@ -48,6 +48,9 @@ export default function BrandRecommendedCard() {
   return (
     <div>
       <button onClick={handleButtonClick}>버튼</button>
+      <div>
+        
+      </div>
       {isPercent ? (
         <div>
           {cardListPercent && cardListPercent.length > 0 && (

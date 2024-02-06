@@ -26,7 +26,7 @@ export default function BrandOtherCard({cardImage, cardName, discountAmount, dis
             <span className="text-xl">{cardName}</span>
             <span className="text-xl">{discountAmount}{ discountSign=="%" ? "% 할인" : "원 할인"}</span>
             <span>이번달 실적 {thisMonthAchieve ? "충족" : "미충족"}</span>
-            <span>혜택 상한 {benefitLimitation-currentBenefit <= 0 ? "0" : benefitLimitation-currentBenefit}원 남음</span>
+            <span>혜택 상한 {(benefitLimitation-currentBenefit <= 0) ? "0" : (benefitLimitation-currentBenefit)}원 남음</span>
           </div>
         </div>
       </div>
