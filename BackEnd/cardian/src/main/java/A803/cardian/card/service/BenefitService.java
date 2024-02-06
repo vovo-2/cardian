@@ -294,6 +294,7 @@ public class BenefitService {
 
                     // 예외 혜택 Dto
                     exceptionBenefitStore = BenefitStore.from(exceptionBenefit.get(), exceptionAssociate.get().getName());
+
                 }else{
                     // 예외 혜택 부분 없으면 빈 값
                     exceptionBenefitStore = new BenefitStore("", 0, "" );
@@ -304,7 +305,7 @@ public class BenefitService {
                 Optional<CategoryBenefit> categoryBenefit = categoryBenefitRepository.findCategoryBenefitByCardIdAndCategoryCode(cardId, categoryCode);
 
                 if(categoryBenefit.isEmpty()){
-                    exceptionBenefitStore = new BenefitStore("", 0, "" );
+
                     storeList.add(new BenefitStore("", 0, "" ));
                     return CardBenefitCategoryResponse.toResponse(exceptionBenefitStore, storeList);
                 }else{
