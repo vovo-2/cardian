@@ -31,6 +31,7 @@ export default function BrandKeywordList({ keyword }: Keyword) {
           <Brand
             key={associate.associationId}
             categoryName={associate.categoryName}
+            associationId={associate.associationId}
             associationName={associate.associationName}
             associationImage={associate.associationImage}
           />

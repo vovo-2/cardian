@@ -16,7 +16,7 @@ export default {
         darkgray: "#666666",
       },
       screens: {
-        mobile: "280px",
+        mobile: "281px",
         tablet: "640px",
         laptop: "1024px",
         desktop: "1280px",

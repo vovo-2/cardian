@@ -4,7 +4,7 @@ import TopBar from "../layouts/TopBar";
 
 export default function HomePage() {
   return (
-    <div className="container grid grid-rows-12 h-full">
+    <div className="grid grid-rows-12 h-full">
       <TopBar />
 
       <div className="main row-span-10 flex justify-center items-center">

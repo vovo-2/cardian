@@ -8,8 +8,8 @@ import { BENEFIT_CODE } from "../constants/cardInfo";
  * ```
  */
 export const formatDate = (month: number, day: number) => {
-  const paddedMonth = month.toString().padStart(2, '0');
-  const paddedDay = day.toString().padStart(2, '0');
+  const paddedMonth = month.toString().padStart(2, "0");
+  const paddedDay = day.toString().padStart(2, "0");
 
   const result = `${paddedMonth}월 ${paddedDay}일`;
 
@@ -65,4 +65,17 @@ export const formatBenefitType = (benefitCode: string) => {
   const result = BENEFIT_CODE[benefitCode as keyof typeof BENEFIT_CODE];
 
   return result;
+};
+
+/**
+ * @example
+ * ```ts
+ * // 10%
+ * console.log(formatPriceToPercentage(10,100));
+ * ```
+ */
+export const formatPriceToPercentage = (price: number, total: number) => {
+  const result = ((price / total) * 100).toFixed(2);
+
+  return `${result}%`;
 };

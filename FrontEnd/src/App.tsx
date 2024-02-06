@@ -6,6 +6,9 @@ import CardDetailPage from "./pages/CardDetailPage";
 import "./App.css";
 import SearchPage from "./pages/SearchPage";
 import LoginPage from "./pages/LoginPage";
+import CardRecommendPage from "./pages/CardRecommendPage";
+import BrandRecommendationPage from "./pages/BrandRecommendationPage";
+import AnalysisPage from "./pages/AnalysisPage";
 
 function App() {
   return (
@@ -18,9 +21,10 @@ function App() {
           <Route path=":card_id" element={<CardDetailPage />} />
         </Route>
         <Route path="/search" element={<SearchPage />} />
-        <Route path="/analysis" element={<div>analysis</div>} />
-        <Route path="/recommendation" element={<div>recommendation</div>} />
+        <Route path="/recommendation" element={<CardRecommendPage />} />
+        <Route path="/analysis" element={<AnalysisPage />} />
         <Route path="/menu" element={<div>menu</div>} />
+        <Route path="/brand/:associationId" element={<BrandRecommendationPage />} />
 
         {/* 404 처리 */}
         <Route path="/*" element={<div>404 Error</div>} />
