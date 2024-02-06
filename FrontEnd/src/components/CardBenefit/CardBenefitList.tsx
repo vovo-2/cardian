@@ -36,7 +36,7 @@ export default function CardBenefitList() {
           CategoryBenefitInfoList.map((b) => (
             <Accordion.Panel key={b.categorybenefitId}>
               <Accordion.Title className="bg-whiteblue w-full rounded-2xl border-none mt-2">
-                <div className="flex w-full">
+                <div className="flex">
                   <img src={`${b.iconImage}`} className="w-8 h-8 "></img>
                   <div className=" ml-5 my-auto text-5">
                     {b.name}
