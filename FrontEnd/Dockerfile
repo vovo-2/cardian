@@ -20,7 +20,7 @@ RUN rm /etc/nginx/conf.d/default.conf
 COPY ./nginx.conf /etc/nginx/conf.d
 
 # host pc의 sites-available/myapp를 아래 경로에 복사
-COPY ./sites-available/myapp /etc/nginx/sites-available/myapp
+COPY ./sites-available/myapp.conf /etc/nginx/sites-available/myapp
 
 # 80 포트 개방
 EXPOSE 80
