@@ -24,7 +24,7 @@ import java.text.ParseException;
 
 @Tag(name = "멤버 컨트롤러", description = "멤버 관련 정보")
 @RequiredArgsConstructor
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 @RestController
 //@CrossOrigin(origins = {"http://i10a803.p.ssafy.io", "http://localhost:5173"}, allowCredentials = "true")
 public class memberController {

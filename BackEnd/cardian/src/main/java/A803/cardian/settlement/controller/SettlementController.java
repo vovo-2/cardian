@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "연말정산 컨트롤러", description = "연말정산 관련 정보")
-@RequestMapping("/settlement")
+@RequestMapping("/api/settlement")
 @RequiredArgsConstructor
 @RestController
 public class SettlementController {
