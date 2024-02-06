@@ -83,10 +83,13 @@ public class CategoryService {
         for(MyCardDetails c:cardDetails){
             MyCardInfoResponse info = cardService.getMyCardInfo(c.getMycardId());
             Integer cardId= cardService.getCardId(c.getMycardId());
-            System.out.println("ASsssssssssssssssssssssssss"+cardId);
+
             Optional<Associate> associate = associateRepository.findById(associateId);
             String associateName= associate.get().getName();
             String categoryCode=associate.get().getCategoryCode();
+
+            System.out.println("associateName: "+associateName);
+
             Optional<AccumulateBenefit> accumulateBenefit = accumulateBenefitRepository.findAccumulateBenefitByCardIdAndCategoryCode(c.getMycardId(), categoryCode);
             boolean tf= goalService.getCardGoalAchieve(c.getMycardId());
             boolean thisMonthAchieve=false;
@@ -99,11 +102,13 @@ public class CategoryService {
             }
 
 
-            CardBenefitCategoryResponse benefits=benefitService.getMyCardBenefitStoresOfCategory(c.getMycardId(),categoryCode);
+            CardBenefitCategoryResponse benefits=benefitService.recommendCategoryCard(c.getMycardId(),associateId,categoryCode);
+            System.out.println("benefitAmount: "+benefits.getExceptionBenefitStore().getDiscountAmount());
             if(benefits.getExceptionBenefitStore().getDiscountAmount()!=0){
                 if(benefits.getExceptionBenefitStore().getStoreName().equals(associateName)){
                     Optional<ExceptionBenefit> categoryBenefit=exceptionBenefitRepository.findByCardIdAndCategoryCode(cardId,categoryCode);
-
+                    System.out.println("associateName: "+associateName);
+                    System.out.println("benefitAmount: "+categoryBenefit.get().getDiscountAmount());
                     int discountAmount=benefits.getExceptionBenefitStore().getDiscountAmount();
                     String discountSign=benefits.getExceptionBenefitStore().getSign();
 

@@ -19,5 +19,8 @@ public interface ExceptionBenefitRepository extends JpaRepository<ExceptionBenef
     @Query("select e from ExceptionBenefit e where e.cardId= :cardId and e.companyId = :companyId and e.categoryCode = :categoryCode")
     Optional<ExceptionBenefit> findByCardIdAndCompanyIdAndCategoryCode(Integer cardId, Integer companyId, String categoryCode);
 
+    @Query("select e from ExceptionBenefit e where e.cardId= :cardId and e.associateId= :associateId")
+    Optional<ExceptionBenefit> findByCardIdAndAssociateId(Integer cardId, Integer associateId);
+
 
 }

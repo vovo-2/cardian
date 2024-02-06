@@ -10,7 +10,7 @@ spring:
       #      show_sql: true
       format_sql: true
     #      use_sql_comments: true
-    show-sql: true
+    show-sql: false
     defer-datasource-initialization: true
     open-in-view: true
 
