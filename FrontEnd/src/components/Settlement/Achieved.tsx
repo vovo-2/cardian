@@ -1,20 +1,45 @@
 import VerticalProgressBar from "../ui/VerticalProgressBar";
 
+import { useState, useEffect } from "react"
+import { axios } from "../../api"
+
 interface AchievedProps {
   userName: string;
-  maxSettlement: number;
-  mySettlement: number;
+  salary: number;
+  onSetCheckCard: (consume: number) => void;
+  onSetCreditCard: (consume: number) => void;
 }
 
-export default function Achieved({
-  userName,
-  maxSettlement,
-  mySettlement,
-}: AchievedProps) {
+export default function Achieved({ userName, salary, onSetCheckCard, onSetCreditCard }: AchievedProps) {
+  
+  const [maxSettlement, setMaxSettlement] = useState(0);
+  const [mySettlement, setMySettlement] = useState(0);
+
+  function setCheckCard(consume: number) {
+    onSetCheckCard(consume);
+  }
+
+  function setCreditCard(consume: number) {
+    onSetCreditCard(consume);
+  }
+
+  useEffect(() => {
+    axios.get("/settlement/achievement", {
+      params: {
+        memberId: 1
+      }
+    }).then(({ data }) => {
+      setMaxSettlement(data.maxSettlement);
+      setMySettlement(data.mySettlement);
+      setCheckCard(data.annualCheckConsume);
+      setCreditCard(data.annualCreditConsume);
+    });
+  }, [salary]);
+
   return (
     <div>
       <div>
-        <div className="flex justify-center text-2xl mt-2">
+        <div className="flex justify-center text-2xl mt-10">
           {userName}님은 연말정산 혜택을
         </div>
         <div className="flex justify-center text-2xl">받을 수 있어요!</div>

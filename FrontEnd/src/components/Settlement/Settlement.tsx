@@ -3,26 +3,54 @@ import MyUsage from "./MyUsage";
 import Achieved from "./Achieved";
 import NotAchieved from "./NotAchieved";
 
-const userName: string = "이서준";
-const income: number = 40000000;
-const checkCard: number = 4000000; // 넘어오는 값
-const creditCard: number = 3600000; // 넘어오는 값
-const accumulate: number = checkCard + creditCard;
-const goal: number = 10000000; // 넘어오는 값
-const maxSettlement: number = 3000000; // 넘어오는 값
-const mySettlement: number = 1234567; // 넘어오는 값
+import { useState, useEffect } from "react"
+import { axios } from "../../api"
 
-const isAchieved: boolean = false;
+const userName: string = "사용자";
 
 export default function Settlement() {
 
+  const [isLoading, setLoading] = useState(true);
+
+  const [isAchieved, setAchieved] = useState(false);
+  const [salary, setSalary] = useState(0);
+  const [checkCard, setCheckCard] = useState(0);
+  const [creditCard, setCreditCard] = useState(0);
+
+  function onSetSalary (salary: number) {
+    setSalary(salary);
+  }
+
+  function onSetCheckCard (consume: number) {
+    setCheckCard(consume);
+  }
+  function onSetCreditCard (consume: number) {
+    setCreditCard(consume);
+  }
+
+  useEffect(() => {
+    axios.get("/settlement/achievement-standard", {
+      params: {
+        memberId: 1
+      }
+    }).then(({ data }) => {
+      setAchieved(data.achieve);
+    }).finally(() => {
+      setLoading(false);
+    });
+  }, [salary]);
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+
   return (
     <div>
-      <MyIncome userName={userName} income={income} />
+      <MyIncome userName={userName} salary={salary} onSetSalary={onSetSalary} />
       {
         isAchieved
-        ? <Achieved userName={userName} maxSettlement={maxSettlement} mySettlement={mySettlement} />
-        : <NotAchieved userName={userName} accumulate={accumulate} goal={goal} />
+        ? <Achieved userName={userName} salary={salary} onSetCheckCard={onSetCheckCard} onSetCreditCard={onSetCreditCard} />
+        : <NotAchieved userName={userName} salary={salary} onSetCheckCard={onSetCheckCard} onSetCreditCard={onSetCreditCard} />
       }
       <MyUsage checkCard={checkCard} creditCard={creditCard} />
     </div>

@@ -10,7 +10,7 @@ export default function ProgressBar({ total, value }: progressProps) {
     <div className="flex justify-center">
       <div className="bg-lightgray rounded-lg w-20 h-52 flex flex-col-reverse">
         <div
-          className="bg-blue rounded-b-lg w-20"
+          className="bg-blue rounded-lg w-20"
           style={{ height: `${pro * 208}px` }}
         ></div>
       </div>
