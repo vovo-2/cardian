@@ -277,11 +277,13 @@ public class BenefitService {
                 Integer companyId = card.get().getCompany().getId();
 
 
-
+//                System.out.println("카드아이디:"+cardId);
+//                System.out.println("제휴사아이디:"+associateId);
+//                System.out.println("카테고리코드"+categoryCode);
                 // 3. 카드 아이디, 카드사 아이디, 카테고리 코드 -> 예외 혜택 리스트 조회
                 // : 상호명, 할인금액, 부호 가져오기 <- Map<"exceptionBenefitList", List>
                 // 예외 혜택이 있는지 확인
-                Optional<ExceptionBenefit> exceptionBenefit = exceptionBenefitRepository.findByCardIdAndAssociateId(mycardId,associateId);
+                Optional<ExceptionBenefit> exceptionBenefit = exceptionBenefitRepository.findByCardIdAndAssociateId(cardId,associateId);
 
 
 
