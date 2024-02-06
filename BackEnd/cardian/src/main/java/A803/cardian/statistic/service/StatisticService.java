@@ -192,7 +192,7 @@ public class StatisticService {
         }
 
         //소비금액 내림차순 정렬
-        Collections.sort(categoryMonthlyConsumeDetailsList, Comparator.comparingInt(CategoryMonthlyConsumeDetails::getMonthlyConsumePerCategory));
+        Collections.sort(categoryMonthlyConsumeDetailsList, Comparator.comparingInt(CategoryMonthlyConsumeDetails::getMonthlyConsumePerCategory).reversed());
 
         return categoryMonthlyConsumeDetailsList;
     }
