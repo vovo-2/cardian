@@ -34,7 +34,7 @@ public class SettlementController {
 
     @Operation(summary = "연말정산 기준 달성 여부 조회", description = "달성시 true, 미달성시 false")
     @GetMapping("/{member_id}/achievement-standard")
-    public ResponseEntity<?> getAchieve(@PathVariable int memberId){
+    public ResponseEntity<?> getAchieve(@PathVariable("member_id") int memberId){
 
         return ResponseEntity.ok(goalService.getAchieve(memberId));
     }
