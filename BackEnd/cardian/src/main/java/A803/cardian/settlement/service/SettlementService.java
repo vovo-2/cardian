@@ -101,8 +101,8 @@ public class SettlementService {
         if(salary>standard.get(0).getSalary()){
             maxSettlemnet=standard.get(0).getHigh();
         }else{
-            if(salary*standard.get(0).getMax()<standard.get(0).getLow()){
-                maxSettlemnet=salary*standard.get(0).getMax();
+            if(salary*((double)standard.get(0).getMax()/100)<standard.get(0).getLow()){
+                maxSettlemnet= (int) (salary*((double)standard.get(0).getMax()/100));
             }else{
                 maxSettlemnet=standard.get(0).getLow();
             }

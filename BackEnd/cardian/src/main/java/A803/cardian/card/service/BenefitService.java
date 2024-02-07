@@ -315,6 +315,7 @@ public class BenefitService {
                     if(cardCategoryMapping.size() > 0){
                         for (CardCategoryMapping categoryMapping : cardCategoryMapping) {
                             // 3.  상호명 가져오기 -> 제휴사 아이디로 조회
+                            categoryMapping.getCategoryBenefit().getSign();
                             Optional<Associate> associate = associateRepository.findById(categoryMapping.getAssociate().getId());
                             // 제휴사가 존재하면
                             if(associate.isPresent()){
