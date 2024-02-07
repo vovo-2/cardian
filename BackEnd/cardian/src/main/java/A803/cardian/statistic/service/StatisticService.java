@@ -456,6 +456,7 @@ public class StatisticService {
     //1. 회원가입 시 (처음) 전체 소비내역으로 계산해준 후 insert
 
     //2. 로그인 시, updateDate를 기준으로 새 소비내역이 있으면 계산해준 후 update
+    @Transactional
     public void updateMonthlyCardStatistic(int memberId){
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() ->
@@ -482,13 +483,16 @@ public class StatisticService {
             for(MyCarMonthCosumeAfterUpdateDetails myCarMonthCosumeAfterUpdateDetails : myCarMonthCosumeAfterUpdateDetailsList){
                 int month = myCarMonthCosumeAfterUpdateDetails.getMonth();
                 int consumeAfterUpdate = myCarMonthCosumeAfterUpdateDetails.getConsumeAfterUpdate();
-                //update 해주기
-                MonthlyCardStatistic monthlyCardStatistic = monthlyCardStatisticRepository.findByMyCardIdAndAndMonth(myCard.getId(), month).get();
 
+                MonthlyCardStatistic monthlyCardStatistic = monthlyCardStatisticRepository.findByMyCardIdAndAndMonth(myCard.getId(), month)
+                                .orElseThrow(() ->
+                                        new RuntimeException());
+                int consumeBeforeUpdate = monthlyCardStatistic.getTotalPrice();
+                //update해주기
+                monthlyCardStatisticRepository.updateMonthlyCardStatistic(myCard.getId(), month, (consumeBeforeUpdate + consumeAfterUpdate));
             }
         }
     }
-
     //카드별 마지막 갱신일 이후로 생긴 소비 누적액 구하기
     public List<MyCarMonthCosumeAfterUpdateDetails> getMyCarMonthCosumeAfterUpdateDetails(MyCard myCard, LocalDateTime updateDate) {
         List<MyCarMonthCosumeAfterUpdateDetails> myCarMonthCosumeAfterUpdateDetailsList = new ArrayList<>();
@@ -515,10 +519,13 @@ public class StatisticService {
 
         return myCarMonthCosumeAfterUpdateDetailsList;
     }
-
     //2. 로그인 시, updateDate를 기준으로 새 소비내역이 있으면 계산해준 후 update
 
-    //달마다 전체 초기화 update
+    //연마다 전체 초기화 update
+    public void clearMonthlyConsumeStatistic(int memberId){
+        monthlyCardStatisticRepository.clearMonthlyCardStatistic(memberId, 0);
+    }
+    //연마다 전체 초기화 update
 
     //카드별 월별 통계 테이블 관련 끝
 }
