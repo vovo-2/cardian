@@ -70,12 +70,12 @@ export const formatBenefitType = (benefitCode: string) => {
 /**
  * @example
  * ```ts
- * // 10%
+ * // 10
  * console.log(formatPriceToPercentage(10,100));
  * ```
  */
 export const formatPriceToPercentage = (price: number, total: number) => {
   const result = ((price / total) * 100).toFixed(2);
 
-  return `${result}%`;
+  return Number(result);
 };
