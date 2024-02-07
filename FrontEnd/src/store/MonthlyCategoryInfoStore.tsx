@@ -3,7 +3,7 @@ import { create } from "zustand";
 interface MonthlyCategoryInfo {
   // Graph
   nowMonthConsumeList: number[];
-  lastMonthConsumeList: number[];
+  lastMonthConsumeList: (number | undefined)[];
 
   nowMonthLabelList: string[];
   lastMonthLabelList: string[];
@@ -39,7 +39,7 @@ const MonthlyCategoryInfoStore = create<MonthlyCategoryInfo>((set) => ({
     set({ nowMonthConsumeList }),
 
   lastMonthConsumeList: [],
-  setLastMonthConsumeList: (lastMonthConsumeList: number[]) =>
+  setLastMonthConsumeList: (lastMonthConsumeList: (number | undefined)[]) =>
     set({ lastMonthConsumeList }),
 
   nowMonthLabelList: [],
