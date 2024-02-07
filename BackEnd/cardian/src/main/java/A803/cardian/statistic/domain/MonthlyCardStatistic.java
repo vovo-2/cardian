@@ -38,8 +38,9 @@ public class MonthlyCardStatistic {
     @Column(nullable = false)
     private int month;
 
-    @OneToMany(mappedBy = "monthlyCardStatistic")
-    private List<CategoryMonthConsume> categoryMonthConsumes=new ArrayList<>();
+    public void updateTotalPrice(int newTotalPrice){
+        this.totalPrice = newTotalPrice;
+    }
 
     @Builder
     public MonthlyCardStatistic(Member member,

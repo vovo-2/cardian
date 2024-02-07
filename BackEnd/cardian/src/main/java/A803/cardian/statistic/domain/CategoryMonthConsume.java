@@ -1,8 +1,11 @@
 package A803.cardian.statistic.domain;
 
 import A803.cardian.card.domain.Company;
+import A803.cardian.card.domain.Type;
+import A803.cardian.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,9 +21,32 @@ public class CategoryMonthConsume {
     private String categoryCode;
 
     @Column(nullable = false)
-    private Integer consume;
+    private int consume;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "monthlycardstatistic_id")
-    private MonthlyCardStatistic monthlyCardStatistic;
+    @Column(nullable = false)
+    private int myCardId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Type type;
+
+    @Column(nullable = false)
+    private int month;
+
+    public void updateConsume(int newConsume){
+        this.consume = newConsume;
+    }
+
+    @Builder
+    public CategoryMonthConsume(String categoryCode,
+                                int consume,
+                                int myCardId,
+                                Type type,
+                                int month){
+        this.categoryCode = categoryCode;
+        this.consume = consume;
+        this.myCardId = myCardId;
+        this.type = type;
+        this.month = month;
+    }
 }
