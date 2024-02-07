@@ -1,9 +1,11 @@
 package A803.cardian.statistic.domain;
 
 import A803.cardian.card.domain.Company;
+import A803.cardian.card.domain.Type;
 import A803.cardian.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -24,10 +26,10 @@ public class MonthlyCardStatistic {
     private Member member;
 
     @Column(nullable = false)
-    private Integer cardId;
+    private int myCardId;
 
     @Column(nullable = false, length = 5)
-    private String sort;
+    private Type type;
 
     @Column(nullable = false)
     private int totalPrice;
@@ -37,4 +39,17 @@ public class MonthlyCardStatistic {
 
     @OneToMany(mappedBy = "monthlyCardStatistic")
     private List<CategoryMonthConsume> categoryMonthConsumes=new ArrayList<>();
+
+    @Builder
+    public MonthlyCardStatistic(Member member,
+                                int myCardId,
+                                Type type,
+                                int totalPrice,
+                                int month){
+        this.member = member;
+        this.myCardId = myCardId;
+        this.type = type;
+        this.totalPrice = totalPrice;
+        this.month = month;
+    }
 }

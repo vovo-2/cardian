@@ -5,9 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MonthlyCardStatisticRepository extends JpaRepository<MonthlyCardStatistic,Integer> {
     @Query("SELECT s FROM MonthlyCardStatistic s WHERE s.member.id = :memberId")
     List<MonthlyCardStatistic> findByMember_Id(Integer memberId);
 
+    Optional<MonthlyCardStatistic> findByMyCardIdAndAndMonth(int cardId, int month);
 }

@@ -2,28 +2,37 @@ package A803.cardian.statistic.service;
 
 import A803.cardian.associate.domain.Associate;
 import A803.cardian.associate.repository.AssociateRepository;
+import A803.cardian.card.domain.Card;
 import A803.cardian.card.domain.MonthDay;
 import A803.cardian.card.domain.MyCard;
 import A803.cardian.card.domain.Transaction;
+import A803.cardian.card.repository.CardRepository;
 import A803.cardian.card.repository.MycardRepository;
 import A803.cardian.card.repository.TransactionRepository;
 import A803.cardian.card.service.TransactionService;
 import A803.cardian.category.domain.SubCommonCode;
 import A803.cardian.category.repository.SubCommonCodeRepository;
+import A803.cardian.member.domain.Member;
+import A803.cardian.member.repository.MemberRepository;
 import A803.cardian.statistic.data.dto.response.*;
 import A803.cardian.statistic.data.dto.response.category.*;
 import A803.cardian.statistic.data.dto.response.monthlyCategory.MonthlyTransactionDetails;
 import A803.cardian.statistic.data.dto.response.monthlyCategory.DailyTransactionDetails;
 import A803.cardian.statistic.data.dto.response.monthlyCategory.CategoryMonthTransactionResponse;
 import A803.cardian.statistic.data.dto.response.monthlyCategory.CategoryTransaction;
+import A803.cardian.statistic.domain.MonthlyCardStatistic;
+import A803.cardian.statistic.repository.MonthlyCardStatisticRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class StatisticService {
@@ -31,6 +40,9 @@ public class StatisticService {
     private final TransactionRepository transactionRepository;
     private final AssociateRepository associateRepository;
     private final SubCommonCodeRepository subCommonCodeRepository;
+    private final MonthlyCardStatisticRepository monthlyCardStatisticRepository;
+    private final MemberRepository memberRepository;
+    private final CardRepository cardRepository;
     private final TransactionService transactionService;
 
     //전체 카드 월별 소비금액
@@ -395,8 +407,116 @@ public class StatisticService {
     //카테고리 통계 테이블 관련 끝
 
     //카드별 월별 통계 테이블 관련 시작
-    //회원가입 시 (처음) 전체 소비내역으로 계산해준 후 insert
-    //로그인 시, updateDate를 기준으로 새 소비내역이 있으면 계산해준 후 update
+    //1. 회원가입 시 (처음) 전체 소비내역으로 계산해준 후 insert
+    @Transactional
+    public void saveMonthlyCardStatistic(int memberId){
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() ->
+                        new RuntimeException());
+        /*
+        추후 MemberException으로 변경
+         */
+        MonthDay[] monthDayList = MonthDay.values();
+        //내 카드 리스트 가지고 오기
+        List<MyCard> myCardList = mycardRepository.findMyCardsByMemberId(memberId);
+        for(MyCard myCard : myCardList){
+            Card card = myCard.getCard();
+            for(int i = 0; i < monthDayList.length; i++){
+                //카드별 월 소비 금액
+                int monthConsume = 0;
+
+                LocalDate startDate = monthDayList[i].toLocalDate().withDayOfMonth(1);
+                LocalDate endDate = startDate.plusMonths(1);
+                //당월 누적 소비금액 계산
+                while (startDate.isBefore(endDate)) {
+                    monthConsume += calculateMyCardMonthConsume(myCard, startDate);
+                    startDate = startDate.plusDays(1);
+                }
+                //entity생성해서
+                MonthlyCardStatistic monthlyCardStatistic = MonthlyCardStatistic.builder()
+                        .member(member)
+                        .myCardId(myCard.getId())
+                        .type(card.getType())
+                        .totalPrice(monthConsume).build();
+
+                //insert
+                monthlyCardStatisticRepository.save(monthlyCardStatistic);
+            }
+        }
+    }
+    //내 카드 일 누적사용금액
+    public int calculateMyCardMonthConsume(MyCard myCard, LocalDate localDate) {
+        int myCardMonthConsume = 0;
+        List<Transaction> transactionList = transactionRepository.findTransactionsByMyCardIdAndDay(myCard.getId(), localDate);
+        for(Transaction transaction : transactionList){
+            myCardMonthConsume += transaction.getPrice();
+        }
+        return myCardMonthConsume;
+    }
+    //1. 회원가입 시 (처음) 전체 소비내역으로 계산해준 후 insert
+
+    //2. 로그인 시, updateDate를 기준으로 새 소비내역이 있으면 계산해준 후 update
+    public void updateMonthlyCardStatistic(int memberId){
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() ->
+                        new RuntimeException());
+        /*
+        추후 MemberException으로 변경
+         */
+        //카드별로 월별로 갱신된 소비 금액 가져오기
+        List<MyCarMonthCosumeAfterUpdate> myCarMonthCosumeAfterUpdateList = new ArrayList<>();
+        //내 카드 리스트 가지고 오기
+        List<MyCard> myCardList = mycardRepository.findMyCardsByMemberId(memberId);
+        for(MyCard myCard : myCardList) {
+            Card card = myCard.getCard();
+            //카드별로 마지막 갱신일 이후의 누적 소비 금액 계산
+            myCarMonthCosumeAfterUpdateList.add(MyCarMonthCosumeAfterUpdate.from(myCard, getMyCarMonthCosumeAfterUpdateDetails(myCard, member.getUpdateDate())));
+        }
+
+        //계산된 카드별 마지막 갱신일 이후의 누적 소비 금액 가져오기
+        for(MyCarMonthCosumeAfterUpdate myCarMonthCosumeAfterUpdate : myCarMonthCosumeAfterUpdateList){
+            //카드 가져오기
+            MyCard myCard = myCarMonthCosumeAfterUpdate.getMyCard();
+            //월별 누적 소비 금액 가져오기
+            List<MyCarMonthCosumeAfterUpdateDetails> myCarMonthCosumeAfterUpdateDetailsList = myCarMonthCosumeAfterUpdate.getMyCarMonthCosumeAfterUpdateDetailsList();
+            for(MyCarMonthCosumeAfterUpdateDetails myCarMonthCosumeAfterUpdateDetails : myCarMonthCosumeAfterUpdateDetailsList){
+                int month = myCarMonthCosumeAfterUpdateDetails.getMonth();
+                int consumeAfterUpdate = myCarMonthCosumeAfterUpdateDetails.getConsumeAfterUpdate();
+                //update 해주기
+                MonthlyCardStatistic monthlyCardStatistic = monthlyCardStatisticRepository.findByMyCardIdAndAndMonth(myCard.getId(), month).get();
+
+            }
+        }
+    }
+
+    //카드별 마지막 갱신일 이후로 생긴 소비 누적액 구하기
+    public List<MyCarMonthCosumeAfterUpdateDetails> getMyCarMonthCosumeAfterUpdateDetails(MyCard myCard, LocalDateTime updateDate) {
+        List<MyCarMonthCosumeAfterUpdateDetails> myCarMonthCosumeAfterUpdateDetailsList = new ArrayList<>();
+        //카드별로 마지막 갱신일 이후의 거래내역 가져오기
+        List<Transaction> transactionList = transactionRepository.findTransactionsByMyCardAndDateAfter(myCard, updateDate);
+        //마지막 갱신이 이루어진 달
+        int month = updateDate.getMonthValue();
+        int monthConsumeAfterUpdate = 0;
+        for(Transaction transaction : transactionList){
+            int nowMonth = transaction.getDay().getMonthValue();
+            //month 값이 달라지면 이전 month값과 누적소비금액 저장해줌
+            if(month != nowMonth){
+                myCarMonthCosumeAfterUpdateDetailsList.add(MyCarMonthCosumeAfterUpdateDetails.from(month, monthConsumeAfterUpdate));
+                //month 값 갱신
+                month = nowMonth;
+                //누적 소비 금액 초기화
+                monthConsumeAfterUpdate = 0;
+            }
+            //소비 금액 더해줌
+            monthConsumeAfterUpdate += transaction.getPrice();
+        }
+        //마지막 계산 중이던 값 넣어주기
+        myCarMonthCosumeAfterUpdateDetailsList.add(MyCarMonthCosumeAfterUpdateDetails.from(month, monthConsumeAfterUpdate));
+
+        return myCarMonthCosumeAfterUpdateDetailsList;
+    }
+
+    //2. 로그인 시, updateDate를 기준으로 새 소비내역이 있으면 계산해준 후 update
 
     //달마다 전체 초기화 update
 
