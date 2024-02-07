@@ -69,6 +69,7 @@ export default function BrandRecommendedCard() {
         <div>
           {cardListPercent && cardListPercent.length > 0 && (
             <BrandFirstCard
+              myCardId={cardListPercent[0].myCardId}
               cardImage={cardListPercent[0].cardImage}
               cardCompany={cardListPercent[0].cardCompany}
               cardName={cardListPercent[0].cardName}
@@ -89,6 +90,7 @@ export default function BrandRecommendedCard() {
               return (
                 <BrandOtherCard
                   key={card.myCardId}
+                  myCardId={card.myCardId}
                   cardImage={card.cardImage}
                   cardName={card.cardName}
                   discountAmount={card.discountAmount}
@@ -104,6 +106,7 @@ export default function BrandRecommendedCard() {
         <div>
           {cardListPlus && cardListPlus.length > 0 && (
             <BrandFirstCard
+              myCardId={cardListPlus[0].myCardId}
               cardImage={cardListPlus[0].cardImage}
               cardCompany={cardListPlus[0].cardCompany}
               cardName={cardListPlus[0].cardName}
@@ -124,6 +127,7 @@ export default function BrandRecommendedCard() {
               return (
                 <BrandOtherCard
                   key={card.myCardId}
+                  myCardId={card.myCardId}
                   cardImage={card.cardImage}
                   cardName={card.cardName}
                   discountAmount={card.discountAmount}
