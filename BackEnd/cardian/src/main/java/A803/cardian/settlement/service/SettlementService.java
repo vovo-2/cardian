@@ -1,6 +1,7 @@
 package A803.cardian.settlement.service;
 
 import A803.cardian.card.domain.MyCard;
+import A803.cardian.card.domain.Type;
 import A803.cardian.card.repository.MycardRepository;
 import A803.cardian.card.service.CardService;
 import A803.cardian.card.service.TransactionService;
@@ -60,7 +61,7 @@ public class SettlementService {
         int checkConsume=0;
         int creditConsume=0;
         for(MonthlyCardStatistic check: yearConsumeList){
-            if(check.getType().equals("CHECK")){
+            if(check.getType().equals(Type.CHECK)){
                 checkConsume+=check.getTotalPrice();
             }else{
                 creditConsume+=check.getTotalPrice();
@@ -90,7 +91,7 @@ public class SettlementService {
         int checkConsume=0;
         int creditConsume=0;
         for(MonthlyCardStatistic check: yearConsumeList){
-            if(check.getType().equals("체크")){
+            if(check.getType().equals(Type.CHECK)){
                 checkConsume+=check.getTotalPrice();
             }else{
                 creditConsume+=check.getTotalPrice();
