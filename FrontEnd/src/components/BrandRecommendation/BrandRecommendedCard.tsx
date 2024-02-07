@@ -6,6 +6,7 @@ import BrandOtherCard from "./BrandOtherCard";
 import BrandFirstCard from "./BrandFirstCard";
 import { Label, Radio } from "flowbite-react";
 import { RadioButtonTheme } from "../../themes/RadioButtonTheme";
+import BrandBlank from "./BrandBlank";
 
 type CardType = {
   myCardId: number;
@@ -67,7 +68,7 @@ export default function BrandRecommendedCard() {
       </div>
       {isPercent ? (
         <div>
-          {cardListPercent && cardListPercent.length > 0 && (
+          {cardListPercent && cardListPercent.length > 0 ? (
             <BrandFirstCard
               myCardId={cardListPercent[0].myCardId}
               cardImage={cardListPercent[0].cardImage}
@@ -84,7 +85,7 @@ export default function BrandRecommendedCard() {
               benefitLimitation={cardListPercent[0].benefitLimitation}
               benefitRemain={cardListPercent[0].benefitRemain}
             />
-          )}
+          ) : (<BrandBlank />)}
           {cardListPercent &&
             cardListPercent.slice(1).map((card) => {
               return (
@@ -104,7 +105,7 @@ export default function BrandRecommendedCard() {
         </div>
       ) : (
         <div>
-          {cardListPlus && cardListPlus.length > 0 && (
+          {cardListPlus && cardListPlus.length > 0 ? (
             <BrandFirstCard
               myCardId={cardListPlus[0].myCardId}
               cardImage={cardListPlus[0].cardImage}
@@ -121,7 +122,7 @@ export default function BrandRecommendedCard() {
               benefitLimitation={cardListPlus[0].benefitLimitation}
               benefitRemain={cardListPlus[0].benefitRemain}
             />
-          )}
+          ) : (<BrandBlank />)}
           {cardListPlus &&
             cardListPlus.slice(1).map((card) => {
               return (
