@@ -20,7 +20,9 @@ import A803.cardian.statistic.data.dto.response.monthlyCategory.MonthlyTransacti
 import A803.cardian.statistic.data.dto.response.monthlyCategory.DailyTransactionDetails;
 import A803.cardian.statistic.data.dto.response.monthlyCategory.CategoryMonthTransactionResponse;
 import A803.cardian.statistic.data.dto.response.monthlyCategory.CategoryTransaction;
+import A803.cardian.statistic.domain.CategoryMonthConsume;
 import A803.cardian.statistic.domain.MonthlyCardStatistic;
+import A803.cardian.statistic.repository.CategoryMonthConsumeRepository;
 import A803.cardian.statistic.repository.MonthlyCardStatisticRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -42,6 +44,7 @@ public class StatisticService {
     private final SubCommonCodeRepository subCommonCodeRepository;
     private final MonthlyCardStatisticRepository monthlyCardStatisticRepository;
     private final MemberRepository memberRepository;
+    private final CategoryMonthConsumeRepository categoryMonthConsumeRepository;
     private final CardRepository cardRepository;
     private final TransactionService transactionService;
 
@@ -401,21 +404,172 @@ public class StatisticService {
         return CategoryMonthTransactionResponse.toResponse(memberId, month, 100000, getCategoryTransaction(memberId, month));
     }
 
-    ////카테고리별 월별 소비 테이블 관련 시작----------------------------------------------------------------------------
+    ////카드별 카테고리별 월별 소비 테이블 관련 시작----------------------------------------------------------------------------
     //1. 회원가입 시 (처음) 전체 소비내역으로 계산해준 후 insert 시작
     @Transactional
     public void saveCategoryMonthConsume(int memberId) {
-        //내 카드 전체 가져오기
-        //
+        //카테고리 리스트 가지고 오기
+        List<SubCommonCode> subCommonCodeList = subCommonCodeRepository.findAll();
+
+        MonthDay[] monthDayList = MonthDay.values();
+        //내 카드 리스트 가지고 오기
+        List<MyCard> myCardList = mycardRepository.findMyCardsByMemberId(memberId);
+        //카드별
+        for(MyCard myCard : myCardList){
+            Card card = myCard.getCard();
+            //카테고리별
+            for(SubCommonCode subCommonCode : subCommonCodeList) {
+                String categoryCode = subCommonCode.getDetailCode();
+                //월별 소비 금액
+                for (int i = 0; i < monthDayList.length; i++) {
+                    int MonthConsume = 0;
+
+                    LocalDate startDate = monthDayList[i].toLocalDate().withDayOfMonth(1);
+                    LocalDate endDate = startDate.plusMonths(1);
+                    //당월 누적 소비금액 계산
+                    while (startDate.isBefore(endDate)) {
+                        MonthConsume += calculateCategoryMonthConsume(myCard, startDate, categoryCode);
+                        startDate = startDate.plusDays(1);
+                    }
+
+                    //entity생성해서
+                    CategoryMonthConsume categoryMonthConsume = CategoryMonthConsume.builder()
+                            .categoryCode(categoryCode)
+                            .myCardId(myCard.getId())
+                            .consume(MonthConsume)
+                            .type(card.getType())
+                            .month(i + 1)
+                            .build();
+
+                    //insert
+                    categoryMonthConsumeRepository.save(categoryMonthConsume);
+                }
+            }
+        }
+    }
+
+    //카드별 카테고리별 월 소비 누적 금액
+    public int calculateCategoryMonthConsume(MyCard myCard, LocalDate localDate, String categoryCode) {
+        int categoryDayConsume = 0;
+        //당일 소비 내역 다 가져오기
+        List<Transaction> transactionList = transactionRepository.findTransactionsByMyCardIdAndDay(myCard.getId(), localDate);
+        for(Transaction transaction : transactionList){
+            Associate associate = associateRepository.findByName(transaction.getStore())
+                    .orElseThrow(() ->
+                            new RuntimeException());
+            //카테고리 같으면
+            if(associate.getCategoryCode().equals(categoryCode)) {
+                //소비 금액 더해주기
+                categoryDayConsume += transaction.getPrice();
+            }
+        }
+        return categoryDayConsume;
     }
     //1. 회원가입 시 (처음) 전체 소비내역으로 계산해준 후 insert 끝
 
     //2. 로그인 시, updateDate를 기준으로 새 소비내역이 있으면 계산해준 후 update 시작
+    @Transactional
+    public void updateCategoryMonthConsume(int memberId){
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() ->
+                        new RuntimeException());
+        /*
+        추후 MemberException으로 변경
+         */
+        //카드별로 월별로 갱신된 소비 금액 가져오기
+        List<CategoryMonthConsumePerMyCard> categoryMonthConsumePerMyCardList = new ArrayList<>();
+        //내 카드 리스트 가지고 오기
+        List<MyCard> myCardList = mycardRepository.findMyCardsByMemberId(memberId);
+        for (MyCard myCard : myCardList) {
+            //카드별로 마지막 갱신일 이후의 누적 소비 금액 계산
+            categoryMonthConsumePerMyCardList.add(CategoryMonthConsumePerMyCard.from(myCard, getCategoryMonthConsumePerCategory(myCard, member.getUpdateDate())));
+        }
+
+        //계산된 카드별 마지막 갱신일 이후의 누적 소비 금액 가져오기
+        for (CategoryMonthConsumePerMyCard categoryMonthConsumePerMyCard : categoryMonthConsumePerMyCardList) {
+            //카드 가져오기
+            MyCard myCard = categoryMonthConsumePerMyCard.getMyCard();
+            //카테고리별 가져오기
+            List<CategoryMonthConsumePerCategory> categoryMonthConsumePerCategoryList = categoryMonthConsumePerMyCard.getCategoryMonthConsumePerCategoryList();
+            for (CategoryMonthConsumePerCategory categoryMonthConsumePerCategory : categoryMonthConsumePerCategoryList) {
+                //카테고리
+                String categoryCode = categoryMonthConsumePerCategory.getCategoryCode();
+                //월별 소비 금액 가져오기
+                List<CategoryMonthConsumeDetails> categoryMonthConsumeDetailsList = categoryMonthConsumePerCategory.getCategoryMonthConsumeDetailsList();
+                //월, 누적액 값 가져오기
+                for(CategoryMonthConsumeDetails categoryMonthConsumeDetails : categoryMonthConsumeDetailsList){
+                    int month = categoryMonthConsumeDetails.getMonth();
+                    int consumeAfterUpdate = categoryMonthConsumeDetails.getConsumeAfterUpdate();
+
+                    //해당 객체 가져오기
+                    CategoryMonthConsume categoryMonthConsume = categoryMonthConsumeRepository.findByCategoryCodeAndMyCardIdAndMonth(categoryCode, myCard.getId(), month);
+                    //갱신 이전의 누적값 가져오기
+                    int consumeBeforeUpdate = categoryMonthConsume.getConsume();
+                    categoryMonthConsume.updateConsume(consumeBeforeUpdate + consumeAfterUpdate);
+                }
+            }
+        }
+    }
+
+    //카드별 카테고리별 마지막 갱신일 이후로 생긴 소비 누적액 구하기 1
+    public List<CategoryMonthConsumePerCategory> getCategoryMonthConsumePerCategory(MyCard myCard, LocalDateTime updateDate){
+        List<CategoryMonthConsumePerCategory> categoryMonthConsumePerCategoryList = new ArrayList<>();
+
+        //카테고리 가져오기
+        List<SubCommonCode> subCommonCodeList = subCommonCodeRepository.findAll();
+        for(SubCommonCode subCommonCode : subCommonCodeList) {
+            String categoryCode = subCommonCode.getDetailCode();
+            //해당 월의 일별 계산해주기
+            categoryMonthConsumePerCategoryList.add(CategoryMonthConsumePerCategory.from(categoryCode, getCategoryMonthConsumeDetails(myCard, updateDate, categoryCode)));
+        }
+
+        return categoryMonthConsumePerCategoryList;
+    }
+
+    //카드별 카테고리별 마지막 갱신일 이후로 생긴 소비 누적액 구하기 2
+    public List<CategoryMonthConsumeDetails> getCategoryMonthConsumeDetails(MyCard myCard, LocalDateTime updateDate, String categoryCode){
+        List<CategoryMonthConsumeDetails> categoryMonthConsumeDetailsList = new ArrayList<>();
+
+        //소비 내역 가져오기
+        List<Transaction> transactionList = transactionRepository.findTransactionsByMyCardAndDateAfter(myCard, updateDate);
+        //마지막 갱신일의 월
+        int month = updateDate.getMonthValue();
+        int monthConsumeAfterUpdate = 0;
+        for (Transaction transaction : transactionList) {
+            Associate associate = associateRepository.findByName(transaction.getStore())
+                    .orElseThrow(() ->
+                            new RuntimeException());
+            //해당 카테고리의 내역만 계산해줌
+            if(associate.getCategoryCode().equals(categoryCode)) {
+                //소비내역 월 확인해주기
+                int nowMonth = transaction.getDay().getMonthValue();
+                //month 값이 달라지면 month값과 누적소비금액 저장
+                if (month != nowMonth) {
+                    categoryMonthConsumeDetailsList.add(CategoryMonthConsumeDetails.from(month, monthConsumeAfterUpdate));
+                    //month 값 갱신
+                    month = nowMonth;
+                    //초기화
+                    monthConsumeAfterUpdate = 0;
+                }
+                //소비 금액 더해줌
+                monthConsumeAfterUpdate += transaction.getPrice();
+            }
+        }
+        //당월 값 넣어주기
+        categoryMonthConsumeDetailsList.add(CategoryMonthConsumeDetails.from(month, monthConsumeAfterUpdate));
+
+        return categoryMonthConsumeDetailsList;
+    }
 
     //2. 로그인 시, updateDate를 기준으로 새 소비내역이 있으면 계산해준 후 update 끝
 
     //3. 월마다 전체 초기화 시작
-
+    public void clearCategoryMonthConsume() {
+        List<CategoryMonthConsume> categoryMonthConsumeList = categoryMonthConsumeRepository.findAll();
+        for(CategoryMonthConsume categoryMonthConsume : categoryMonthConsumeList){
+            categoryMonthConsume.updateConsume(0);
+        }
+    }
     //3. 월마다 전체 초기화 끝
 
     ////카테고리별 월별 소비 테이블 관련 끝----------------------------------------------------------------------------
@@ -451,7 +605,9 @@ public class StatisticService {
                         .member(member)
                         .myCardId(myCard.getId())
                         .type(card.getType())
-                        .totalPrice(monthConsume).build();
+                        .totalPrice(monthConsume)
+                        .month(i + 1)
+                        .build();
 
                 //insert
                 monthlyCardStatisticRepository.save(monthlyCardStatistic);
@@ -480,38 +636,44 @@ public class StatisticService {
         추후 MemberException으로 변경
          */
         //카드별로 월별로 갱신된 소비 금액 가져오기
-        List<MyCarMonthCosumeAfterUpdate> myCarMonthCosumeAfterUpdateList = new ArrayList<>();
+        List<MyCardMonthCosumeAfterUpdate> myCardMonthCosumeAfterUpdateList = new ArrayList<>();
         //내 카드 리스트 가지고 오기
         List<MyCard> myCardList = mycardRepository.findMyCardsByMemberId(memberId);
         for (MyCard myCard : myCardList) {
             Card card = myCard.getCard();
             //카드별로 마지막 갱신일 이후의 누적 소비 금액 계산
-            myCarMonthCosumeAfterUpdateList.add(MyCarMonthCosumeAfterUpdate.from(myCard, getMyCarMonthCosumeAfterUpdateDetails(myCard, member.getUpdateDate())));
+            myCardMonthCosumeAfterUpdateList.add(MyCardMonthCosumeAfterUpdate.from(myCard, getMyCarMonthCosumeAfterUpdateDetails(myCard, member.getUpdateDate())));
         }
 
         //계산된 카드별 마지막 갱신일 이후의 누적 소비 금액 가져오기
-        for (MyCarMonthCosumeAfterUpdate myCarMonthCosumeAfterUpdate : myCarMonthCosumeAfterUpdateList) {
+        for (MyCardMonthCosumeAfterUpdate myCardMonthCosumeAfterUpdate : myCardMonthCosumeAfterUpdateList) {
             //카드 가져오기
-            MyCard myCard = myCarMonthCosumeAfterUpdate.getMyCard();
+            MyCard myCard = myCardMonthCosumeAfterUpdate.getMyCard();
             //월별 누적 소비 금액 가져오기
-            List<MyCarMonthCosumeAfterUpdateDetails> myCarMonthCosumeAfterUpdateDetailsList = myCarMonthCosumeAfterUpdate.getMyCarMonthCosumeAfterUpdateDetailsList();
-            for (MyCarMonthCosumeAfterUpdateDetails myCarMonthCosumeAfterUpdateDetails : myCarMonthCosumeAfterUpdateDetailsList) {
-                int month = myCarMonthCosumeAfterUpdateDetails.getMonth();
-                int consumeAfterUpdate = myCarMonthCosumeAfterUpdateDetails.getConsumeAfterUpdate();
+            List<MyCardMonthCosumeAfterUpdateDetails> myCardMonthCosumeAfterUpdateDetailsList = myCardMonthCosumeAfterUpdate.getMyCardMonthCosumeAfterUpdateDetailsList();
+            for (MyCardMonthCosumeAfterUpdateDetails myCardMonthCosumeAfterUpdateDetails : myCardMonthCosumeAfterUpdateDetailsList) {
+                //현재 월
+                int month = myCardMonthCosumeAfterUpdateDetails.getMonth();
+                //마지막 갱신일 이후의 누적 소비 금액
+                int consumeAfterUpdate = myCardMonthCosumeAfterUpdateDetails.getConsumeAfterUpdate();
 
                 MonthlyCardStatistic monthlyCardStatistic = monthlyCardStatisticRepository.findByMyCardIdAndAndMonth(myCard.getId(), month)
                         .orElseThrow(() ->
                                 new RuntimeException());
+                //마지막 갱신일 때의 누적 소비 금액
                 int consumeBeforeUpdate = monthlyCardStatistic.getTotalPrice();
+
                 //update해주기
-                monthlyCardStatisticRepository.updateMonthlyCardStatistic(myCard.getId(), month, (consumeBeforeUpdate + consumeAfterUpdate));
+                monthlyCardStatistic.updateTotalPrice(consumeBeforeUpdate + consumeAfterUpdate);
+//                monthlyCardStatisticRepository.updateMonthlyCardStatistic(myCard.getId(), month, (consumeBeforeUpdate + consumeAfterUpdate));
+
             }
         }
     }
 
     //카드별 마지막 갱신일 이후로 생긴 소비 누적액 구하기
-    public List<MyCarMonthCosumeAfterUpdateDetails> getMyCarMonthCosumeAfterUpdateDetails(MyCard myCard, LocalDateTime updateDate) {
-        List<MyCarMonthCosumeAfterUpdateDetails> myCarMonthCosumeAfterUpdateDetailsList = new ArrayList<>();
+    public List<MyCardMonthCosumeAfterUpdateDetails> getMyCarMonthCosumeAfterUpdateDetails(MyCard myCard, LocalDateTime updateDate) {
+        List<MyCardMonthCosumeAfterUpdateDetails> myCardMonthCosumeAfterUpdateDetailsList = new ArrayList<>();
         //카드별로 마지막 갱신일 이후의 거래내역 가져오기
         List<Transaction> transactionList = transactionRepository.findTransactionsByMyCardAndDateAfter(myCard, updateDate);
         //마지막 갱신이 이루어진 달
@@ -521,7 +683,7 @@ public class StatisticService {
             int nowMonth = transaction.getDay().getMonthValue();
             //month 값이 달라지면 이전 month값과 누적소비금액 저장해줌
             if (month != nowMonth) {
-                myCarMonthCosumeAfterUpdateDetailsList.add(MyCarMonthCosumeAfterUpdateDetails.from(month, monthConsumeAfterUpdate));
+                myCardMonthCosumeAfterUpdateDetailsList.add(MyCardMonthCosumeAfterUpdateDetails.from(month, monthConsumeAfterUpdate));
                 //month 값 갱신
                 month = nowMonth;
                 //누적 소비 금액 초기화
@@ -531,65 +693,20 @@ public class StatisticService {
             monthConsumeAfterUpdate += transaction.getPrice();
         }
         //마지막 계산 중이던 값 넣어주기
-        myCarMonthCosumeAfterUpdateDetailsList.add(MyCarMonthCosumeAfterUpdateDetails.from(month, monthConsumeAfterUpdate));
+        myCardMonthCosumeAfterUpdateDetailsList.add(MyCardMonthCosumeAfterUpdateDetails.from(month, monthConsumeAfterUpdate));
 
-        return myCarMonthCosumeAfterUpdateDetailsList;
+        return myCardMonthCosumeAfterUpdateDetailsList;
     }
     //2. 로그인 시, updateDate를 기준으로 새 소비내역이 있으면 계산해준 후 update 끝
 
     //3. 연마다 전체 초기화 update 시작
-    public void clearMonthlyConsumeStatistic(int memberId) {
-        monthlyCardStatisticRepository.clearMonthlyCardStatistic(memberId, 0);
+    public void clearMonthlyConsumeStatistic() {
+        List<MonthlyCardStatistic> monthlyCardStatisticList = monthlyCardStatisticRepository.findAll();
+        for(MonthlyCardStatistic monthlyCardStatistic : monthlyCardStatisticList){
+            monthlyCardStatistic.updateTotalPrice(0);
+        }
     }
     //3. 연마다 전체 초기화 update 끝
 
     ////카드별 월별 통계 테이블 관련 끝 (카테고리별 월별 소비 테이블 사용 x)----------------------------------------------------------------------------
-
-    //1. 회원가입 시 (처음) 전체 소비내역으로 계산해준 후 insert 시작
-    @Transactional
-    public void saveMonthlyCardStatisticCopy(int memberId){
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() ->
-                        new RuntimeException());
-        /*
-        추후 MemberException으로 변경
-         */
-        MonthDay[] monthDayList = MonthDay.values();
-        //내 카드 리스트 가지고 오기
-        List<MyCard> myCardList = mycardRepository.findMyCardsByMemberId(memberId);
-        for(MyCard myCard : myCardList){
-            Card card = myCard.getCard();
-            for(int i = 0; i < monthDayList.length; i++){
-                //카드별 월 소비 금액
-                int monthConsume = 0;
-
-                LocalDate startDate = monthDayList[i].toLocalDate().withDayOfMonth(1);
-                LocalDate endDate = startDate.plusMonths(1);
-                //당월 누적 소비금액 계산
-                while (startDate.isBefore(endDate)) {
-                    monthConsume += calculateMyCardMonthConsume(myCard, startDate);
-                    startDate = startDate.plusDays(1);
-                }
-                //entity생성해서
-                MonthlyCardStatistic monthlyCardStatistic = MonthlyCardStatistic.builder()
-                        .member(member)
-                        .myCardId(myCard.getId())
-                        .type(card.getType())
-                        .totalPrice(monthConsume).build();
-
-                //insert
-                monthlyCardStatisticRepository.save(monthlyCardStatistic);
-            }
-        }
-    }
-    //내 카드 카테고리 별 일 누적사용금액
-    public int calculateMyCardMonthConsumeCopy(MyCard myCard, LocalDate localDate) {
-        int myCardMonthConsume = 0;
-        List<Transaction> transactionList = transactionRepository.findTransactionsByMyCardIdAndDay(myCard.getId(), localDate);
-        for(Transaction transaction : transactionList){
-            myCardMonthConsume += transaction.getPrice();
-        }
-        return myCardMonthConsume;
-    }
-    //1. 회원가입 시 (처음) 전체 소비내역으로 계산해준 후 insert 끝
 }

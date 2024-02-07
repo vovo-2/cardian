@@ -15,12 +15,4 @@ public interface MonthlyCardStatisticRepository extends JpaRepository<MonthlyCar
     Optional<MonthlyCardStatistic> findByMyCardIdAndAndMonth(int cardId, int month);
 
     List<MonthlyCardStatistic> findMonthlyCardStatisticsByMemberId(int memberId);
-
-    @Modifying(clearAutomatically = true)
-    @Query("UPDATE MonthlyCardStatistic m SET m.categoryMonthConsumes = :updateConsume where m.myCardId = :myCardId and m.month = :month")
-    void updateMonthlyCardStatistic(int myCardId, int month, int updateConsume);
-
-    @Modifying(clearAutomatically = true)
-    @Query("UPDATE MonthlyCardStatistic m SET m.categoryMonthConsumes = :updateConsume where m.member.id = :memberId")
-    void clearMonthlyCardStatistic(int memberId, int updateConsume);
 }

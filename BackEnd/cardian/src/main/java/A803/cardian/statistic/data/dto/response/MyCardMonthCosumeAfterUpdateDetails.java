@@ -6,16 +6,16 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class MyCarMonthCosumeAfterUpdateDetails {
+public class MyCardMonthCosumeAfterUpdateDetails {
     private int month;
     private int consumeAfterUpdate;
 
-    private MyCarMonthCosumeAfterUpdateDetails(int month, int consumeAfterUpdate){
+    private MyCardMonthCosumeAfterUpdateDetails(int month, int consumeAfterUpdate){
         this.month = month;
         this.consumeAfterUpdate = consumeAfterUpdate;
     }
 
-    public static MyCarMonthCosumeAfterUpdateDetails from(int month, int consumeAfterUpdate){
-        return new MyCarMonthCosumeAfterUpdateDetails(month, consumeAfterUpdate);
+    public static MyCardMonthCosumeAfterUpdateDetails from(int month, int consumeAfterUpdate){
+        return new MyCardMonthCosumeAfterUpdateDetails(month, consumeAfterUpdate);
     }
 }
