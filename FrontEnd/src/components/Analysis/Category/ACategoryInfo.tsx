@@ -1,86 +1,93 @@
 import { axios } from "../../../api";
-import { useEffect, useState } from "react";
-import CategoryConsumeStore from "../../../store/CategoryConsumeStore";
+import { useEffect } from "react";
 import { formatPrice } from "../../../utils/formatUtils";
 import { Button } from "flowbite-react";
 import { IoMdArrowDropleft, IoMdArrowDropright } from "react-icons/io";
 
+import { CiCirclePlus, CiCircleMinus } from "react-icons/ci";
+import MonthlyCategoryInfoStore from "../../../store/MonthlyCategoryInfoStore";
+import EntireCategoryCardTransactionStore from "../../../store/EntireCategoryCardTransactionStore";
+
 export default function ACategoryInfo() {
   const {
-    categoryMonthlyConsumeList,
-    setCategoryMonthlyConsumeList,
     selectedMonth,
+    selectedTopNCategory,
     setSelectedMonth,
-    setConsumeDataList,
-    setConsumeLabelList,
-  } = CategoryConsumeStore();
+    setSelectedTopNCategory,
+    setNowMonthConsumeList,
+    setLastMonthConsumeList,
+    setNowMonthLabelList,
+  } = MonthlyCategoryInfoStore();
 
-  const [isLoading, setIsLoading] = useState(true);
+  const {
+    entireCategoryConsume,
+    setMonth,
+    setEntireCategoryConsume,
+    setCategoryTransactionList,
+  } = EntireCategoryCardTransactionStore();
+
   useEffect(() => {
     const member_id = 1;
-    const url = `/statistic/${member_id}/CategoryMonthlyConsume`;
+    const nowCategoryNameList: string[] = [];
+    const nowConsumeList: number[] = [];
+    const lastConsumeList: (number | undefined)[] = [];
+    // 이번달 이용내역 통신 로직
+    let url = `/statistic/${member_id}/${selectedMonth}/categoryTransaction`;
+    axios
+      .get(url)
+      .then(({ data }) => {
+        setMonth(data.month);
+        setEntireCategoryConsume(data.entireCategoryConsume);
+        setCategoryTransactionList(data.categoryTransactionList);
 
-    axios.get(url).then(({ data }) => {
-      setCategoryMonthlyConsumeList(data.categoryMonthlyConsumeList);
-    });
-  }, []);
+        data.categoryTransactionList.map(
+          (item: { categoryName: string; categoryConsume: number }) => {
+            nowCategoryNameList.push(item.categoryName);
+            nowConsumeList.push(item.categoryConsume);
+          }
+        );
 
-  if (isLoading == true && categoryMonthlyConsumeList.length > 0) {
-    setIsLoading(false);
-  }
+        setNowMonthLabelList(nowCategoryNameList);
+        setNowMonthConsumeList(nowConsumeList);
+        // 이번달 이용내역 통신 로직 종료
+      })
+      .finally(
+        () => {
+          // 저번달 카테고리별 총 이용내역 통신 로직
+          if (selectedMonth - 1 > 0) {
+            url = `/statistic/${member_id}/${
+              selectedMonth - 1
+            }/categoryTransaction`;
+            axios.get(url).then(({ data }) => {
+              const lastMonthObj: Map<string, number> = new Map<
+                string,
+                number
+              >();
 
-  useEffect(() => {
-    if (isLoading == false) {
-      const dataList: number[] = [];
-      const labelList: string[] = [];
+              data.categoryTransactionList.map(
+                (item: { categoryName: string; categoryConsume: number }) => {
+                  lastMonthObj.set(item.categoryName, item.categoryConsume);
+                }
+              );
 
-      categoryMonthlyConsumeList[
-        selectedMonth - 1
-      ].categoryMonthlyConsumeDetails.map((item) => {
-        dataList.push(item.monthlyConsumePerCategory);
-        labelList.push(item.categoryName);
-      });
-
-      setConsumeDataList(dataList);
-      setConsumeLabelList(labelList);
-    }
-  }, [isLoading]);
-
-  useEffect(() => {
-    if (isLoading == true) return;
-    const dataList: number[] = [];
-    const labelList: string[] = [];
-
-    categoryMonthlyConsumeList[
-      selectedMonth - 1
-    ].categoryMonthlyConsumeDetails.map((item) => {
-      dataList.push(item.monthlyConsumePerCategory);
-      labelList.push(item.categoryName);
-    });
-
-    setConsumeDataList(dataList);
-    setConsumeLabelList(labelList);
+              nowCategoryNameList.map((label) => {
+                lastConsumeList.push(lastMonthObj.get(label));
+              });
+              setLastMonthConsumeList(lastConsumeList);
+            });
+          }
+        }
+        // 저번달 카테고리별 총 이용내역 통신 로직 종료
+      );
   }, [selectedMonth]);
 
-  function handleLeftClick() {
-    // --
-    if (selectedMonth > 1) {
-      setSelectedMonth(selectedMonth - 1);
-    }
-  }
-
-  function handleRightClick() {
-    // ++
-    if (selectedMonth < 12) {
-      setSelectedMonth(selectedMonth + 1);
-    }
-  }
   return (
     <div>
-      <div className="flex my-auto">
+      {/* 월 선택  */}
+      <div className="flex my-auto justify-center">
         <div>
           <Button
-            onClick={handleLeftClick}
+            onClick={() => setSelectedMonth(selectedMonth - 1)}
             color="gray"
             className="border-none"
             disabled={selectedMonth == 1}
@@ -92,7 +99,9 @@ export default function ACategoryInfo() {
         <div className="my-auto text-xl">{selectedMonth}월</div>
 
         <Button
-          onClick={handleRightClick}
+          onClick={() => {
+            setSelectedMonth(selectedMonth + 1);
+          }}
           color="gray"
           className="border-none"
           disabled={selectedMonth == 12}
@@ -100,15 +109,47 @@ export default function ACategoryInfo() {
           <IoMdArrowDropright size={30} color="blue" />
         </Button>
       </div>
-      <div className="text-2xl font-bold ml-3">
-        {categoryMonthlyConsumeList[selectedMonth - 1] && (
-          <div>
-            {formatPrice(
-              categoryMonthlyConsumeList[selectedMonth - 1].monthlyEntireConsume
-            )}
-          </div>
-        )}
+      {/* 월 선택 끝 */}
+
+      {/* 해당 월 총 소비 금액 */}
+      <div className="text-3xl font-bold ml-3 text-center">
+        <div>{formatPrice(entireCategoryConsume)}</div>
       </div>
+      {/* 해당 월 총 소비 금액 끝 */}
+
+      {/* 상위 N개 카테고리 선택 */}
+      <div className="my-auto mt-3 flex justify-center mx-auto">
+        <div className="mx-14">
+          <Button
+            onClick={() => setSelectedTopNCategory(selectedTopNCategory - 1)}
+            color="gray"
+            className="border-none"
+            disabled={selectedTopNCategory == 1}
+          >
+            <CiCircleMinus size={25} color="blue" />
+          </Button>
+        </div>
+
+        <div className="flex ">
+          <div className="my-auto">상위</div>
+          <div className="rounded-full border-2 w-10 h-10 border-blue my-auto flex mx-2 justify-center items-center font-bold">
+            {selectedTopNCategory}
+          </div>
+          <div className="my-auto">개</div>
+        </div>
+
+        <div className="mx-14">
+          <Button
+            onClick={() => setSelectedTopNCategory(selectedTopNCategory + 1)}
+            color="gray"
+            className="border-none"
+            disabled={selectedTopNCategory == 12}
+          >
+            <CiCirclePlus size={25} color="blue" />
+          </Button>
+        </div>
+      </div>
+      {/* 상위 N개 카테고리 선택 끝*/}
     </div>
   );
 }

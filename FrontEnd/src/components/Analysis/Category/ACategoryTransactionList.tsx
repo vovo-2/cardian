@@ -1,84 +1,58 @@
 import { Accordion, Flowbite } from "flowbite-react";
 import { AccordionTheme } from "../../../themes/AccordionTheme";
-
-import { axios } from "../../../api";
-import { useEffect } from "react";
 import EntireCategoryCardTransactionStore from "../../../store/EntireCategoryCardTransactionStore";
-import CategoryConsumeStore from "../../../store/CategoryConsumeStore";
 import CardTransactionMonthlyList from "../../CardTransaction/CardTransactionMonthlyList";
 import {
   formatPrice,
   formatPriceToPercentage,
 } from "../../../utils/formatUtils";
+import MonthlyCategoryInfoStore from "../../../store/MonthlyCategoryInfoStore";
 
 export default function ACategoryTransactionList() {
-  const { categoryEntireTransactionList, setCategoryEntireTransactionList } =
+  const { categoryTransactionList, entireCategoryConsume } =
     EntireCategoryCardTransactionStore();
 
-  const {
-    selectedMonth,
-    colorList,
-    consumeDataList,
-    categoryMonthlyConsumeList,
-  } = CategoryConsumeStore();
-
-  const member_id = 1;
-
-  const url = `/statistic/${member_id}/CategoryTransaction`;
-
-  useEffect(() => {
-    axios.get(url).then(({ data }) => {
-      setCategoryEntireTransactionList(data.categoryEntireTransactionList);
-    });
-  }, []);
+  const { selectedMonth } = MonthlyCategoryInfoStore();
 
   return (
     <div className="">
       <Flowbite theme={{ theme: AccordionTheme }}>
         <Accordion className="" collapseAll>
-          {categoryEntireTransactionList &&
-            categoryEntireTransactionList.map((item, idx) => (
+          {categoryTransactionList &&
+            categoryTransactionList.map((item, idx) => (
               <Accordion.Panel key={idx}>
                 <Accordion.Title className="">
-                  <div className="flex w-full ">
-                    <div
-                      className={
-                        colorList[idx]
-                          ? `bg-[${colorList[idx]}] rounded-full w-5 h-5 my-auto`
-                          : ""
-                      }
-                    ></div>
+                  <div className="flex w-full mx-2">
+                    {/* 카테고리 명, 총 이용내역 대비 해당 카테고리 비율 */}
                     <div className="w-1/5">
                       <div className="">{item.categoryName}</div>
                       <div className="text-xs text-gray">
-                        {formatPriceToPercentage(
-                          consumeDataList[idx],
-                          categoryMonthlyConsumeList[selectedMonth - 1]
-                            .monthlyEntireConsume
-                        )}
+                        {`${formatPriceToPercentage(
+                          item.categoryConsume,
+                          entireCategoryConsume
+                        )}%`}
                       </div>
                     </div>
-                    <div className="w-4/5 text-end my-auto mr-2">
-                      {formatPrice(consumeDataList[idx])}
+                    {/* 카테고리 명, 총 이용내역 대비 해당 카테고리 비율 끝 */}
+
+                    {/* 해당 카테고리 이용 금액 */}
+                    <div className="w-4/5 text-end my-auto mr-5">
+                      {formatPrice(item.categoryConsume)}
                     </div>
                   </div>
+                  {/* 해당 카테고리 이용 금액 끝 */}
                 </Accordion.Title>
                 <Accordion.Content className="">
                   {/* month, monthlyTransactionDetailsList */}
-                  {item.categoryMonthlyTransactionList.length > 0 &&
-                    item.categoryMonthlyTransactionList.map((data) => {
-                      if (data.month == selectedMonth) {
-                        return (
-                          <CardTransactionMonthlyList
-                            key={data.month}
-                            month={data.month}
-                            monthlyTransactionDetailsList={
-                              data.monthlyTransactionDetailsList
-                            }
-                          />
-                        );
+                  {item.monthlyTransactionDetailsList && (
+                    <CardTransactionMonthlyList
+                      key={selectedMonth}
+                      month={selectedMonth}
+                      monthlyTransactionDetailsList={
+                        item.monthlyTransactionDetailsList
                       }
-                    })}
+                    />
+                  )}
                 </Accordion.Content>
               </Accordion.Panel>
             ))}
