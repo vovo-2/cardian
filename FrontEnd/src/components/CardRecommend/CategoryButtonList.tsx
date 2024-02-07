@@ -16,7 +16,7 @@ export default function CategoryButtonList({
   onCategorySelect,
 }: CategoryButtonListProps) {
   return (
-    <div className="flex flex-wrap w-full overflow-x-scroll whitespace-nowrap gap-2 snap-x box-border">
+    <div className="flex flex-wrap w-full overflow-x-auto whitespace-nowrap gap-2 snap-x box-border">
       {categoryList.map((category) => {
         return (
           <CategoryButton
