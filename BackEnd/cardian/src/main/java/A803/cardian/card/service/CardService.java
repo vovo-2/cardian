@@ -1,5 +1,7 @@
 package A803.cardian.card.service;
 
+import A803.cardian.Exception.ErrorCode;
+import A803.cardian.Exception.ErrorException;
 import A803.cardian.card.data.dto.response.CardCategoryBenefitResponses;
 import A803.cardian.card.data.dto.response.MyCardInfoDetails;
 import A803.cardian.card.data.dto.response.MyCardInfoResponse;
@@ -57,7 +59,7 @@ public class CardService {
     public MyCardInfoResponse getMyCardInfo(int myCardId) {
         MyCard myCard = myCardRepository.findById(myCardId)
                 .orElseThrow(() ->
-                        new RuntimeException());
+                        new ErrorException(ErrorCode.NO_CARD));
 
         Card card = myCard.getCard();
         LocalDate localDate = LocalDate.now();

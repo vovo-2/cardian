@@ -1,5 +1,7 @@
 package A803.cardian.benefit.serivce;
 
+import A803.cardian.Exception.ErrorCode;
+import A803.cardian.Exception.ErrorException;
 import A803.cardian.associate.domain.Associate;
 import A803.cardian.benefit.domain.CardCategoryMapping;
 import A803.cardian.benefit.repository.CardCategoryMappingRepository;
@@ -19,7 +21,7 @@ public class CardCategoryMappingService {
         CardCategoryMapping cardCategoryMapping = cardCategoryMappingRepository.findByAssociateIdAndCardId(associate.getId(), card.getId())
                 .orElseThrow(() ->
                         //추후에 CardCategoryMappingException 구현
-                        new RuntimeException());
+                        new ErrorException(ErrorCode.NO_CARDCATEGORYMAPPING));
         return cardCategoryMapping;
     }
 }

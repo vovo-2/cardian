@@ -1,5 +1,7 @@
 package A803.cardian.card.service;
 
+import A803.cardian.Exception.ErrorCode;
+import A803.cardian.Exception.ErrorException;
 import A803.cardian.associate.domain.Associate;
 import A803.cardian.associate.repository.AssociateRepository;
 import A803.cardian.benefit.domain.CardCategoryMapping;
@@ -233,7 +235,7 @@ public class TransactionService {
             //1. 제휴사 가져오기
             Associate associate = associateRepository.findByName(transaction.getStore())
                     .orElseThrow(() ->
-                            new RuntimeException());
+                            new ErrorException(ErrorCode.NO_ASSOCIATE));
             //2. discountAmount 계산하기
             int discountAmount;
             //예외 혜택인지 카테고리 혜택인지 확인

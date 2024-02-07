@@ -1,5 +1,7 @@
 package A803.cardian.reocommendation.service;
 
+import A803.cardian.Exception.ErrorCode;
+import A803.cardian.Exception.ErrorException;
 import A803.cardian.associate.domain.Associate;
 import A803.cardian.associate.repository.AssociateRepository;
 import A803.cardian.benefit.domain.CardCategoryMapping;
@@ -207,8 +209,8 @@ public class RecommendationService {
         CardWithMaxBenefit resultCardMaxBenefit = CardWithMaxBenefit.from(null, Integer.MIN_VALUE);
        //카테고리이름으로 공통코드 가져오기
         SubCommonCode subCommonCode = subCommonCodeRepository.findByName(categoryName)
-                .orElseThrow((() ->
-                        new RuntimeException()));
+                .orElseThrow(() ->
+                        new ErrorException(ErrorCode.NO_SUBCOMMONCODE));
         //내 카드 리스트 가져오기
         List<MyCard> myCardList = mycardRepository.findMyCardsByMemberId(memberId);
         for(MyCard myCard : myCardList){
@@ -305,7 +307,7 @@ public class RecommendationService {
         List<CardBenefitDetails> cardBenefitDetailsList = new ArrayList<>();
         SubCommonCode subCommonCode = subCommonCodeRepository.findByName(categoryName)
                 .orElseThrow(() ->
-                        new RuntimeException());
+                        new ErrorException(ErrorCode.NO_SUBCOMMONCODE));
         String categoryCode = subCommonCode.getDetailCode();
         //해당 카드의 모든 혜택 가져오기
         //1. 예외 혜택 가져오기
@@ -315,7 +317,7 @@ public class RecommendationService {
             //예외 혜택의 제휴사 가져오기
             Associate exceptionAssociate = associateRepository.findById(exceptionBenefit.get().getAssociateId())
                     .orElseThrow(() ->
-                            new RuntimeException());
+                            new ErrorException(ErrorCode.NO_ASSOCIATE));
             //넣어주기
             cardBenefitDetailsList.add(CardBenefitDetails.from(exceptionBenefit.get(), exceptionAssociate));
         }
@@ -362,7 +364,7 @@ public class RecommendationService {
                 //1. 제휴사 가져오기
                 Associate associate = associateRepository.findByName(transaction.getStore())
                         .orElseThrow(() ->
-                                new RuntimeException());
+                                new ErrorException(ErrorCode.NO_ASSOCIATE));
                 //제휴사가 해당 카테고리가 아니면 넘기기
                 if(!associate.getCategoryCode().equals(categoryCode)){
                     continue;
