@@ -28,7 +28,8 @@ public class MonthlyCardStatistic {
     @Column(nullable = false)
     private int myCardId;
 
-    @Column(nullable = false, length = 5)
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 6)
     private Type type;
 
     @Column(nullable = false)
