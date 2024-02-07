@@ -81,105 +81,116 @@ public class CategoryService {
         List<List<CategoryCardRecommend>> list=new ArrayList<>();
 
         for(MyCardDetails c:cardDetails){
-            MyCardInfoResponse info = cardService.getMyCardInfo(c.getMycardId());
-            Integer cardId= cardService.getCardId(c.getMycardId());
-
-            Optional<Associate> associate = associateRepository.findById(associateId);
-            String associateName= associate.get().getName();
-            String categoryCode=associate.get().getCategoryCode();
-
-            System.out.println("associateName: "+associateName);
-
-            Optional<AccumulateBenefit> accumulateBenefit = accumulateBenefitRepository.findAccumulateBenefitByCardIdAndCategoryCode(c.getMycardId(), categoryCode);
             boolean tf= goalService.getCardGoalAchieve(c.getMycardId());
-            boolean thisMonthAchieve=false;
-            if(info.getMyCardInfoDetails().getGoal()-info.getMyCardInfoDetails().getAccumulate()<=0){
-                thisMonthAchieve=true;
-            }
-            int accumulateBenefitAmount =0;
-            if(accumulateBenefit.isPresent()){
-                accumulateBenefitAmount = accumulateBenefit.get().getBenefitAmount();
-            }
+            if(tf){
+                MyCardInfoResponse info = cardService.getMyCardInfo(c.getMycardId());
+                Integer cardId= cardService.getCardId(c.getMycardId());
+
+                Optional<Associate> associate = associateRepository.findById(associateId);
+                String associateName= associate.get().getName();
+                String categoryCode=associate.get().getCategoryCode();
 
 
-            CardBenefitCategoryResponse benefits=benefitService.recommendCategoryCard(c.getMycardId(),associateId,categoryCode);
-            System.out.println("benefitAmount: "+benefits.getExceptionBenefitStore().getDiscountAmount());
-            if(benefits.getExceptionBenefitStore().getDiscountAmount()!=0){
-                if(benefits.getExceptionBenefitStore().getStoreName().equals(associateName)){
-                    Optional<ExceptionBenefit> categoryBenefit=exceptionBenefitRepository.findByCardIdAndCategoryCode(cardId,categoryCode);
-                    System.out.println("associateName: "+associateName);
-                    System.out.println("benefitAmount: "+categoryBenefit.get().getDiscountAmount());
-                    int discountAmount=benefits.getExceptionBenefitStore().getDiscountAmount();
-                    String discountSign=benefits.getExceptionBenefitStore().getSign();
 
-                    boolean benefitRemain=false;
-                    if(categoryBenefit.get().getDiscountLimit()-accumulateBenefitAmount>0){
-                        benefitRemain=true;
-                    }
-                    CategoryCardRecommend card=CategoryCardRecommend.builder()
-                            .myCardId(info.getMyCardId())
-                            .cardImage(info.getMyCardInfoDetails().getCardImage())
-                            .cardCompany(info.getMyCardInfoDetails().getCompanyName())
-                            .cardName(info.getMyCardInfoDetails().getCardName())
-                            .associateName(associateName)
-                            .goal(info.getMyCardInfoDetails().getGoal())
-                            .consume(info.getMyCardInfoDetails().getAccumulate())
-                            .thisMonthAchieve(thisMonthAchieve)
-                            .cardType(info.getMyCardInfoDetails().getType())
-                            .benefitCode(info.getMyCardInfoDetails().getBenefitCode())
-                            .benefitLimitation(categoryBenefit.get().getDiscountLimit())
-                            .currentBenefit(accumulateBenefitAmount)
-                            .benefitRemain(benefitRemain)
-                            .discountAmount(discountAmount)
-                            .discountSign(discountSign)
-                            .goalAchieve(tf)
-                            .build();
-                    if(discountSign.equals("%")){
-                        percentCardList.add(card);
-                    }else{
-                        plusCardList.add(card);
-                    }
+                Optional<AccumulateBenefit> accumulateBenefit = accumulateBenefitRepository.findAccumulateBenefitByCardIdAndCategoryCode(c.getMycardId(), categoryCode);
+
+
+                boolean thisMonthAchieve=false;
+                if(info.getMyCardInfoDetails().getGoal()-info.getMyCardInfoDetails().getAccumulate()<=0){
+                    thisMonthAchieve=true;
+                }
+                int accumulateBenefitAmount =0;
+                if(accumulateBenefit.isPresent()){
+                    accumulateBenefitAmount = accumulateBenefit.get().getBenefitAmount();
                 }
 
-            }else {
-                List<BenefitStore> bList= benefits.getStoreList();
-                for(BenefitStore b:bList){
-                    if(b.getDiscountAmount()!=0 && b.getStoreName().equals(associateName)){
-                        Optional<CategoryBenefit> categoryBenefit=categoryBenefitRepository.findCategoryBenefitByCardIdAndCategoryCode(cardId,categoryCode);
 
-                        int discountAmount=b.getDiscountAmount();
-                        String discountSign=b.getSign();
+                CardBenefitCategoryResponse benefits=benefitService.recommendCategoryCard(c.getMycardId(),associateId,categoryCode);
+                System.out.println("benefitAmount: "+benefits.getExceptionBenefitStore().getDiscountAmount());
+                if(benefits.getExceptionBenefitStore().getDiscountAmount()!=0){
+                    if(benefits.getExceptionBenefitStore().getStoreName().equals(associateName)){
+                        Optional<ExceptionBenefit> categoryBenefit=exceptionBenefitRepository.findByCardIdAndCategoryCode(cardId,categoryCode);
+                        System.out.println("associateName: "+associateName);
+                        System.out.println("benefitAmount: "+categoryBenefit.get().getDiscountAmount());
+                        int discountAmount=benefits.getExceptionBenefitStore().getDiscountAmount();
+                        String discountSign=benefits.getExceptionBenefitStore().getSign();
 
                         boolean benefitRemain=false;
                         if(categoryBenefit.get().getDiscountLimit()-accumulateBenefitAmount>0){
                             benefitRemain=true;
                         }
-                        CategoryCardRecommend card=CategoryCardRecommend.builder()
-                                .myCardId(info.getMyCardId())
-                                .cardImage(info.getMyCardInfoDetails().getCardImage())
-                                .cardCompany(info.getMyCardInfoDetails().getCompanyName())
-                                .cardName(info.getMyCardInfoDetails().getCardName())
-                                .associateName(associateName)
-                                .goal(info.getMyCardInfoDetails().getGoal())
-                                .consume(info.getMyCardInfoDetails().getAccumulate())
-                                .thisMonthAchieve(thisMonthAchieve)
-                                .cardType(info.getMyCardInfoDetails().getType())
-                                .benefitCode(info.getMyCardInfoDetails().getBenefitCode())
-                                .benefitLimitation(categoryBenefit.get().getDiscountLimit())
-                                .currentBenefit(accumulateBenefitAmount)
-                                .benefitRemain(benefitRemain)
-                                .discountAmount(discountAmount)
-                                .discountSign(discountSign)
-                                .goalAchieve(tf)
-                                .build();
-                        if(discountSign.equals("%")){
-                            percentCardList.add(card);
-                        }else{
-                            plusCardList.add(card);
+                        if(benefitRemain){
+                            CategoryCardRecommend card=CategoryCardRecommend.builder()
+                                    .myCardId(info.getMyCardId())
+                                    .cardImage(info.getMyCardInfoDetails().getCardImage())
+                                    .cardCompany(info.getMyCardInfoDetails().getCompanyName())
+                                    .cardName(info.getMyCardInfoDetails().getCardName())
+                                    .associateName(associateName)
+                                    .goal(info.getMyCardInfoDetails().getGoal())
+                                    .consume(info.getMyCardInfoDetails().getAccumulate())
+                                    .thisMonthAchieve(thisMonthAchieve)
+                                    .cardType(info.getMyCardInfoDetails().getType())
+                                    .benefitCode(info.getMyCardInfoDetails().getBenefitCode())
+                                    .benefitLimitation(categoryBenefit.get().getDiscountLimit())
+                                    .currentBenefit(accumulateBenefitAmount)
+                                    .benefitRemain(benefitRemain)
+                                    .discountAmount(discountAmount)
+                                    .discountSign(discountSign)
+                                    .goalAchieve(tf)
+                                    .build();
+                            if(discountSign.equals("%")){
+                                percentCardList.add(card);
+                            }else{
+                                plusCardList.add(card);
+                            }
+                        }
+
+                    }
+
+                }else {
+                    List<BenefitStore> bList= benefits.getStoreList();
+                    for(BenefitStore b:bList){
+                        if(b.getDiscountAmount()!=0 && b.getStoreName().equals(associateName)){
+                            Optional<CategoryBenefit> categoryBenefit=categoryBenefitRepository.findCategoryBenefitByCardIdAndCategoryCode(cardId,categoryCode);
+
+                            int discountAmount=b.getDiscountAmount();
+                            String discountSign=b.getSign();
+
+                            boolean benefitRemain=false;
+                            if(categoryBenefit.get().getDiscountLimit()-accumulateBenefitAmount>0){
+                                benefitRemain=true;
+                            }
+                            if(benefitRemain){
+                                CategoryCardRecommend card=CategoryCardRecommend.builder()
+                                        .myCardId(info.getMyCardId())
+                                        .cardImage(info.getMyCardInfoDetails().getCardImage())
+                                        .cardCompany(info.getMyCardInfoDetails().getCompanyName())
+                                        .cardName(info.getMyCardInfoDetails().getCardName())
+                                        .associateName(associateName)
+                                        .goal(info.getMyCardInfoDetails().getGoal())
+                                        .consume(info.getMyCardInfoDetails().getAccumulate())
+                                        .thisMonthAchieve(thisMonthAchieve)
+                                        .cardType(info.getMyCardInfoDetails().getType())
+                                        .benefitCode(info.getMyCardInfoDetails().getBenefitCode())
+                                        .benefitLimitation(categoryBenefit.get().getDiscountLimit())
+                                        .currentBenefit(accumulateBenefitAmount)
+                                        .benefitRemain(benefitRemain)
+                                        .discountAmount(discountAmount)
+                                        .discountSign(discountSign)
+                                        .goalAchieve(tf)
+                                        .build();
+                                if(discountSign.equals("%")){
+                                    percentCardList.add(card);
+                                }else{
+                                    plusCardList.add(card);
+                                }
+                            }
+
                         }
                     }
                 }
             }
+
         }
 
         Collections.sort(percentCardList);
