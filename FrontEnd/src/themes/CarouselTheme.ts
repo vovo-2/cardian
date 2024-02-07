@@ -10,11 +10,11 @@ export const CarouselTheme: CustomFlowbiteTheme["carousel"] = {
   },
   indicators: {
     active: {
-      off: "bg-gray hover:bg-white dark:bg-gray-800/50 dark:hover:bg-gray-800",
+      off: "bg-gray hover:bg-darkgray dark:bg-gray-800/50 dark:hover:bg-gray-800",
       on: "bg-yellow dark:bg-gray-800 w-10",
     },
     base: "h-3 w-3 rounded-full",
-    wrapper: "absolute bottom-5 left-1/2 flex -translate-x-1/2 space-x-3",
+    wrapper: "absolute -bottom-5 left-1/2 flex -translate-x-1/2 space-x-3",
   },
   item: {
     base: "absolute top-1/2 left-1/2 block w-full -translate-x-1/2 -translate-y-1/2",
