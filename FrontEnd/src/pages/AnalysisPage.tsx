@@ -19,7 +19,7 @@ export default function AnalysisPage() {
     //   <YearTransactionList />
     // </div>
 
-    <div>
+    <div className='pb-[100px]'>
       <Tabs
       theme={CardDetailTabsTheme}
       aria-label="Tabs with underline"
