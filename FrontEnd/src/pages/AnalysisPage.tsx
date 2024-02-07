@@ -2,8 +2,6 @@ import { Tabs } from "flowbite-react";
 import { CardDetailTabsTheme } from "../themes/CardDetailTabsTheme";
 import Settlement from "../components/Settlement/Settlement";
 import ACategoryInfo from "../components/Analysis/Category/ACategoryInfo";
-import ACategoryGraph from "../components/Analysis/Category/ACategoryGraph";
-import ACategoryTransactionList from "../components/Analysis/Category/ACategoryTransactionList";
 import ACategory from "../components/Analysis/Category/ACategory";
 
 export default function AnalysisPage() {
