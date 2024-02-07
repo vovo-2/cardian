@@ -60,7 +60,7 @@ public class SettlementService {
         int checkConsume=0;
         int creditConsume=0;
         for(MonthlyCardStatistic check: yearConsumeList){
-            if(check.getSort().equals("CHECK")){
+            if(check.getType().equals("CHECK")){
                 checkConsume+=check.getTotalPrice();
             }else{
                 creditConsume+=check.getTotalPrice();
@@ -90,7 +90,7 @@ public class SettlementService {
         int checkConsume=0;
         int creditConsume=0;
         for(MonthlyCardStatistic check: yearConsumeList){
-            if(check.getSort().equals("체크")){
+            if(check.getType().equals("체크")){
                 checkConsume+=check.getTotalPrice();
             }else{
                 creditConsume+=check.getTotalPrice();
