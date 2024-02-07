@@ -1,4 +1,4 @@
-package A803.cardian.statistic.data.dto.response.category;
+package A803.cardian.statistic.data.dto.response.monthlyCategory;
 
 import A803.cardian.associate.domain.Associate;
 import A803.cardian.card.domain.Transaction;
@@ -10,14 +10,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @Getter
-public class CategoryDayTransactionDetails {
+public class DailyTransactionDetails {
     private String store;
     private int price;
     private LocalDateTime date;
     private String associateImage;
 
-    public static CategoryDayTransactionDetails from(Transaction transaction, Associate associate){
-        return CategoryDayTransactionDetails.builder()
+    public static DailyTransactionDetails from(Transaction transaction, Associate associate){
+        return DailyTransactionDetails.builder()
                 .store(associate.getName())
                 .price(transaction.getPrice())
                 .date(transaction.getDate())

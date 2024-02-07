@@ -1,6 +1,6 @@
 package A803.cardian.statistic.controller;
 
-import A803.cardian.statistic.data.dto.response.category.CategoryMonthTransactionResponse;
+import A803.cardian.statistic.data.dto.response.monthlyCategory.CategoryMonthTransactionResponse;
 import A803.cardian.statistic.data.dto.response.category.CategoryMonthlyConsumeResponse;
 import A803.cardian.statistic.data.dto.response.category.CategoryTransactionResponse;
 import A803.cardian.statistic.data.dto.response.EntireCardTransactionsResponse;

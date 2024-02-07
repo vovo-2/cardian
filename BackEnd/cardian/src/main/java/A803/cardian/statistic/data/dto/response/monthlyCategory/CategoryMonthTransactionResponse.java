@@ -1,4 +1,4 @@
-package A803.cardian.statistic.data.dto.response.category;
+package A803.cardian.statistic.data.dto.response.monthlyCategory;
 
 import lombok.AccessLevel;
 import lombok.Getter;
