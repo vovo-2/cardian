@@ -55,14 +55,13 @@ export default function BrandRecommendedCard() {
     <div>
       <div className="bg-whiteblue rounded-lg mb-3 p-2">
         <fieldset className="grid grid-cols-2">
-          {/* <legend>제목</legend> */}
           <div>
             <Radio theme={RadioButtonTheme} id="%" name="criteria" value="true" onChange={makePercent} defaultChecked />
-            <Label htmlFor="%"> %</Label>
+            <Label htmlFor="%"> 할인율</Label>
           </div>
           <div>
             <Radio theme={RadioButtonTheme} id="+" name="criteria" value="false" onChange={makePlus} />
-            <Label htmlFor="+"> +</Label>
+            <Label htmlFor="+"> 할인금액</Label>
           </div>
         </fieldset>
       </div>
