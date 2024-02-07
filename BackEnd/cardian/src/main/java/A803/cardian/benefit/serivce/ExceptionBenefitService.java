@@ -1,5 +1,7 @@
 package A803.cardian.benefit.serivce;
 
+import A803.cardian.Exception.ErrorCode;
+import A803.cardian.Exception.ErrorException;
 import A803.cardian.associate.domain.Associate;
 import A803.cardian.associate.repository.AssociateRepository;
 import A803.cardian.benefit.domain.ExceptionBenefit;
@@ -26,7 +28,7 @@ public class ExceptionBenefitService {
         Associate associate = associateRepository.findByName(transaction.getStore())
                 .orElseThrow(() ->
                         //추후 AssociateException 만들기
-                        new RuntimeException());
+                        new ErrorException(ErrorCode.NO_ASSOCIATE));
         int associateId = associate.getId();
 
         //2. 내 카드아이디로 가져온 카드아이디
