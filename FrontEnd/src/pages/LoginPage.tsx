@@ -27,6 +27,7 @@ export default function LoginPage() {
             residentRegistrationNumber,
             phoneNumber,
           },
+          { withCredentials: true, }
         )
         .then((res) => {
           console.log(res);
