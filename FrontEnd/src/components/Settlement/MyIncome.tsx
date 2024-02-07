@@ -58,9 +58,9 @@ export default function MyIncome({ userName, salary, onSetSalary }: IncomeProps)
         <span className="font-semibold">{userName}</span>님의 연봉&nbsp;
         {
           salary < 100000000
-          ? <span><span className="text-blue font-semibold">{Math.round(salary / 10000)}만</span>원</span>
-          : ( (salary / 10000) - Math.floor(salary / 100000000)*10000 == 0 ) ? <span><span className="text-blue font-semibold">{Math.round(salary / 100000000)}억</span>원</span>
-          : <span><span className="text-blue font-semibold">{Math.round(salary / 100000000)}억{Math.round(salary / 10000) - Math.round(salary / 100000000)*10000}만</span>원</span>
+          ? <span><span className="text-blue font-semibold">{Math.floor(salary / 10000)}만</span>원</span>
+          : ( (salary / 10000) - Math.floor(salary / 100000000)*10000 == 0 ) ? <span><span className="text-blue font-semibold">{Math.floor(salary / 100000000)}억</span>원</span>
+          : <span><span className="text-blue font-semibold">{Math.floor(salary / 100000000)}억{Math.floor(salary / 10000) - Math.floor(salary / 100000000)*10000}만</span>원</span>
         }
       </span>
       <div className="flex justify-end">
