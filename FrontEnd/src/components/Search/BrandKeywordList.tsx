@@ -25,7 +25,7 @@ export default function BrandKeywordList({ keyword }: Keyword) {
   }, [keyword]);
 
   return (
-    <div className="h-96 overflow-auto scrollbar-hide">
+    <div className="overflow-auto scrollbar-hide">
       {associationList && associationList.length > 0 ? (
         associationList.map((associate) => (
           <Brand
