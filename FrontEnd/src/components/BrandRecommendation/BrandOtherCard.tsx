@@ -24,7 +24,6 @@ export default function BrandOtherCard({
   return (
     <div>
       <Link to={`/mycard/${myCardId}`}>
-        <div className="" />
         <div>
           <div className="rounded-lg flex-row mt-2 p-2 grid grid-cols-12">
             <div className="col-span-3">
@@ -33,18 +32,18 @@ export default function BrandOtherCard({
             </div>
             <div className="col-span-9 ml-3 flex flex-col justify-evenly">
               {/* 설명 */}
-              <span className="text-xl">{cardName}</span>
-              <span className="text-xl">
+              <span className="text-xl font-semibold">{cardName}</span>
+              <span className="text-lg">
                 {discountAmount}
                 {discountSign == "%" ? "% 할인" : "원 할인"}
               </span>
-              <span>이번달 실적 {thisMonthAchieve ? "충족" : "미충족"}</span>
+              <span>이번달 실적 {thisMonthAchieve ? <span className="text-blue font-semibold">충족</span> : <span className="text-gray">미충족</span>}</span>
               <span>
-                혜택 상한{" "}
+                남은 혜택{" "}
                 {benefitLimitation - currentBenefit <= 0
                   ? "0"
                   : benefitLimitation - currentBenefit}
-                원 남음
+                원
               </span>
             </div>
           </div>
