@@ -11,15 +11,17 @@ import java.util.List;
 public class CategoryMonthTransactionResponse {
     private int memberId;
     private int month;
+    private int entireCategoryConsume;
     private List<CategoryTransaction> categoryTransactionList;
 
-    private CategoryMonthTransactionResponse(int memberId, int month, List<CategoryTransaction> categoryTransactionList){
+    private CategoryMonthTransactionResponse(int memberId, int month, int entireCategoryConsume, List<CategoryTransaction> categoryTransactionList){
         this.memberId = memberId;
         this.month = month;
+        this.entireCategoryConsume = entireCategoryConsume;
         this.categoryTransactionList = categoryTransactionList;
     }
 
-    public static CategoryMonthTransactionResponse toResponse(int memberId, int month, List<CategoryTransaction> categoryTransactionList){
-        return new CategoryMonthTransactionResponse(memberId, month, categoryTransactionList);
+    public static CategoryMonthTransactionResponse toResponse(int memberId, int month, int entireCategoryConsume, List<CategoryTransaction> categoryTransactionList){
+        return new CategoryMonthTransactionResponse(memberId, month, entireCategoryConsume, categoryTransactionList);
     }
 }
