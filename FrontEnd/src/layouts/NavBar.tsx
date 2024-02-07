@@ -38,6 +38,10 @@ function LinkSetter({ goto, icon }: LinkSetterProps) {
   );
 }
 export default function NavBar() {
+  if(useLocation().pathname === '/login') {
+    return null;
+  }
+  
   return (
     <div className="text-4xl fixed bottom-0 left-0 right-0 mx-auto max-w-[600px] h-[100px] bg-white">
       <div className="relative max-w-[600px] justify-center flex h-full ">

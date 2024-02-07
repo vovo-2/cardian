@@ -23,7 +23,7 @@ export default function CardList() {
 
   return (
     <div className="flex">
-      <Carousel theme={CarouselTheme} slide={false}>
+      <Carousel theme={CarouselTheme} slide={false} className="overflow-y-visible">
         {cardList &&
           cardList.map((card) => {
             return (
