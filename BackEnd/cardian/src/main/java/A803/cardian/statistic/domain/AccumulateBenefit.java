@@ -14,11 +14,11 @@ public class AccumulateBenefit {
     private Integer id;
 
     @Column(nullable = false)
-    private Integer cardId;
+    private int cardId;
 
     @Column(nullable = false,length = 10)
     private String categoryCode;
 
     @Column(nullable = false)
-    private Integer benefitAmount;
+    private int benefitAmount;
 }
