@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import { axios } from "../../api";
 import BrandOtherCard from "./BrandOtherCard";
 import BrandFirstCard from "./BrandFirstCard";
+import { Label, Radio } from "flowbite-react";
+import { RadioButtonTheme } from "../../themes/RadioButtonTheme";
 
 type CardType = {
   myCardId: number;
@@ -41,15 +43,27 @@ export default function BrandRecommendedCard() {
 
   const [isPercent, setPercent] = useState(true);
 
-  const handleButtonClick = () => {
-    setPercent((prevPercent) => !prevPercent);
-  };
+  const makePercent = () => {
+    setPercent(true);
+  }
+  const makePlus = () => {
+    setPercent(false);
+  }
 
   return (
     <div>
-      <button onClick={handleButtonClick}>버튼</button>
-      <div>
-        
+      <div className="bg-whiteblue rounded-lg mb-3 p-2">
+        <fieldset className="grid grid-cols-2">
+          {/* <legend>제목</legend> */}
+          <div>
+            <Radio theme={RadioButtonTheme} id="%" name="criteria" value="true" onChange={makePercent} defaultChecked />
+            <Label htmlFor="%"> %</Label>
+          </div>
+          <div>
+            <Radio theme={RadioButtonTheme} id="+" name="criteria" value="false" onChange={makePlus} />
+            <Label htmlFor="+"> +</Label>
+          </div>
+        </fieldset>
       </div>
       {isPercent ? (
         <div>
