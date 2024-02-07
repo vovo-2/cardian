@@ -4,6 +4,7 @@ import Settlement from "../components/Settlement/Settlement";
 import ACategoryInfo from "../components/Analysis/Category/ACategoryInfo";
 import ACategoryGraph from "../components/Analysis/Category/ACategoryGraph";
 import ACategoryTransactionList from "../components/Analysis/Category/ACategoryTransactionList";
+import ACategory from "../components/Analysis/Category/ACategory";
 
 export default function AnalysisPage() {
   return (
@@ -17,8 +18,7 @@ export default function AnalysisPage() {
         <Tabs.Item active title="통계">
           {/* 통계 최상위 컴포넌트 */}
           <ACategoryInfo />
-          <ACategoryGraph />
-          <ACategoryTransactionList />
+          <ACategory />
         </Tabs.Item>
         <Tabs.Item title="연말정산">
           <Settlement />

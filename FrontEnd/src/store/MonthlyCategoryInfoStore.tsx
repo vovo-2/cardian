@@ -24,6 +24,10 @@ interface MonthlyCategoryInfo {
 
   setSelectedMonth: (selectedMonth: number) => void;
   setSelectedTopNCategory: (selectedTopNCategory: number) => void;
+
+  // loading
+  isLoading: boolean;
+  setIsLoading: (isLoading: boolean) => void;
 }
 
 const MonthlyCategoryInfoStore = create<MonthlyCategoryInfo>((set) => ({
@@ -65,6 +69,9 @@ const MonthlyCategoryInfoStore = create<MonthlyCategoryInfo>((set) => ({
     "#eff6ff",
     "#7dd3fc",
   ],
+
+  isLoading: true,
+  setIsLoading: (isLoading: boolean) => set({ isLoading }),
 }));
 
 export default MonthlyCategoryInfoStore;

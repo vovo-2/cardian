@@ -17,6 +17,7 @@ export default function ACategoryInfo() {
     setNowMonthConsumeList,
     setLastMonthConsumeList,
     setNowMonthLabelList,
+    setIsLoading,
   } = MonthlyCategoryInfoStore();
 
   const {
@@ -31,6 +32,8 @@ export default function ACategoryInfo() {
     const nowCategoryNameList: string[] = [];
     const nowConsumeList: number[] = [];
     const lastConsumeList: (number | undefined)[] = [];
+
+    setIsLoading(true);
     // 이번달 이용내역 통신 로직
     let url = `/statistic/${member_id}/${selectedMonth}/categoryTransaction`;
     axios
@@ -78,7 +81,10 @@ export default function ACategoryInfo() {
           }
         }
         // 저번달 카테고리별 총 이용내역 통신 로직 종료
-      );
+      )
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, [selectedMonth]);
 
   return (
@@ -92,7 +98,11 @@ export default function ACategoryInfo() {
             className="border-none"
             disabled={selectedMonth == 1}
           >
-            <IoMdArrowDropleft size={30} color="blue" />
+            <IoMdArrowDropleft
+              size={30}
+              color="blue"
+              className="hover:scale-125"
+            />
           </Button>
         </div>
 
@@ -106,7 +116,11 @@ export default function ACategoryInfo() {
           className="border-none"
           disabled={selectedMonth == 12}
         >
-          <IoMdArrowDropright size={30} color="blue" />
+          <IoMdArrowDropright
+            size={30}
+            color="blue"
+            className="hover:scale-125"
+          />
         </Button>
       </div>
       {/* 월 선택 끝 */}
@@ -119,14 +133,18 @@ export default function ACategoryInfo() {
 
       {/* 상위 N개 카테고리 선택 */}
       <div className="my-auto mt-3 flex justify-center mx-auto">
-        <div className="mx-14">
+        <div className="">
           <Button
             onClick={() => setSelectedTopNCategory(selectedTopNCategory - 1)}
             color="gray"
             className="border-none"
             disabled={selectedTopNCategory == 1}
           >
-            <CiCircleMinus size={25} color="blue" />
+            <CiCircleMinus
+              size={25}
+              color="blue"
+              className="hover:scale-125 "
+            />
           </Button>
         </div>
 
@@ -138,14 +156,14 @@ export default function ACategoryInfo() {
           <div className="my-auto">개</div>
         </div>
 
-        <div className="mx-14">
+        <div className="">
           <Button
             onClick={() => setSelectedTopNCategory(selectedTopNCategory + 1)}
             color="gray"
             className="border-none"
             disabled={selectedTopNCategory == 12}
           >
-            <CiCirclePlus size={25} color="blue" />
+            <CiCirclePlus size={25} color="blue" className="hover:scale-125" />
           </Button>
         </div>
       </div>
