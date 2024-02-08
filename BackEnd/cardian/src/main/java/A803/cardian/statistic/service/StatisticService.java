@@ -405,28 +405,40 @@ public class StatisticService {
         switch (month){
             case 1:
                 entireConsume = 9050600;
+                break;
             case 2:
                 entireConsume = 6592900;
+                break;
             case 3:
                 entireConsume = 11789000;
+                break;
             case 4:
                 entireConsume = 10150600;
+                break;
             case 5:
                 entireConsume = 9304800;
+                break;
             case 6:
                 entireConsume = 8670500;
+                break;
             case 7:
                 entireConsume = 6259500;
+                break;
             case 8:
                 entireConsume = 8182500;
+                break;
             case 9:
                 entireConsume = 11015000;
+                break;
             case 10:
                 entireConsume = 7181300;
+                break;
             case 11:
                 entireConsume = 7181300;
+                break;
             case 12:
                 entireConsume = 7181300;
+                break;
         }
         return CategoryMonthTransactionResponse.toResponse(memberId, month, entireConsume, getCategoryTransaction(memberId, month));
     }
