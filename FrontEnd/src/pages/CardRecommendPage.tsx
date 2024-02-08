@@ -55,19 +55,37 @@ export default function CardRecommendPage() {
       });
   };
 
+  const resultPhrase = (moreReceivedBenefit: number) => {
+    let result = "";
+
+    if (moreReceivedBenefit <= 0) {
+      result = "이미 잘 사용하고 있어요!";
+    } else if (moreReceivedBenefit <= 1000) {
+      result = "조금 더 혜택을 받을 수 있었어요!";
+    } else {
+      result = "이만큼 더 혜택 받을 수 있었어요!";
+    }
+
+    return result;
+  };
+
   return (
-    <div className="w-full">
+    <div className="w-full box-border pb-[100px]">
       <CategoryButtonList
         categoryList={categoryList}
         onCategorySelect={handleCategorySelect}
       />
 
-      {!selectedCategory && <div>카테고리를 선택해주세요!</div>}
+      {!selectedCategory && (
+        <div className="my-5">
+          가장 큰 혜택의 카드를 보고싶은 카테고리를 선택해주세요!
+        </div>
+      )}
       {selectedCategory && (
         <div className="h-full flex flex-col justify-between">
           <div className="my-5">
             '<span className="font-bold">{selectedCategory?.categoryName}</span>
-            ' 카테고리는 이 카드가 제일 좋아요!
+            ' 카테고리는 이 카드를 써보세요!
           </div>
 
           <div className="flex">
@@ -86,30 +104,33 @@ export default function CardRecommendPage() {
                 <Badge benefitCode={recommendationCard?.benefitCode} />
               </div>
 
-              <ul className="max-h-20 overflow-y-auto laptop:max-h-40 scrollbar-hide">
+              <div className="max-h-20 overflow-y-auto laptop:max-h-40 scrollbar-hide">
                 {recommendationCard?.cardBenefitDetailsList.map(
                   ({ associateName, discountAmount, sign }, index) => {
                     return (
-                      <li key={index} className="w-full grid grid-cols-12 mobile:text-sm">
+                      <div
+                        key={index}
+                        className="w-full grid grid-cols-12 mobile:text-sm items-baseline"
+                      >
                         <span className="col-span-5">{associateName}</span>
-                        <span className="col-span-4 text-4xl font-bold text-blue ">
+                        <span className="col-span-4 text-xl font-bold text-blue">
                           <span>{discountAmount}</span>
-                          <span>{sign}</span>
+                          <span>{sign === '+' ? '원' : sign}</span>
                         </span>
                         <span className="col-span-3">
                           {formatBenefitType(recommendationCard.benefitCode)}
                         </span>
-                      </li>
+                      </div>
                     );
                   }
                 )}
-              </ul>
+              </div>
             </div>
           </div>
 
           <div>
-            <div className="text-4xl font-bold text-blue my-8 text-center">
-              잘 사용하고 있어요!
+            <div className="text-4xl mobile:text-xl tablet:text-2xl font-bold text-blue my-8 text-center">
+              {resultPhrase(moreReceivedBenefit)}
             </div>
             <div className="w-full flex flex-col gap-3 text-xl px-5">
               <div className="w-full flex justify-between text-darkgray">

@@ -1,30 +1,39 @@
 import { create } from "zustand";
-import { CardTransactionMonthlyListProps } from "../types/type.d";
+import { MonthlyTransactionDetails } from "../types/type.d";
 
-interface CategoryEntireTransaction {
+interface CategoryTransaction {
   categoryName: string;
-  categoryMonthlyTransactionList: CardTransactionMonthlyListProps[];
+  categoryConsume: number;
+  monthlyTransactionDetailsList: MonthlyTransactionDetails[];
 }
-
 interface EntireCategoryCardTransaction {
   memberId: number;
-  categoryEntireTransactionList: CategoryEntireTransaction[];
+  month: number;
+  entireCategoryConsume: number;
+  categoryTransactionList: CategoryTransaction[];
 
   setMemberId: (memberId: number) => void;
-  setCategoryEntireTransactionList: (
-    categoryEntireTransactionList: CategoryEntireTransaction[]
+  setMonth: (month: number) => void;
+  setEntireCategoryConsume: (entireCategoryConsume: number) => void;
+  setCategoryTransactionList: (
+    categoryTransactionList: CategoryTransaction[]
   ) => void;
 }
 
 const EntireCategoryCardTransactionStore =
   create<EntireCategoryCardTransaction>((set) => ({
     memberId: 1,
-    categoryEntireTransactionList: [],
+    month: 12,
+    entireCategoryConsume: 0,
+    categoryTransactionList: [],
 
     setMemberId: (memberId: number) => set({ memberId }),
-    setCategoryEntireTransactionList: (
-      categoryEntireTransactionList: CategoryEntireTransaction[]
-    ) => set({ categoryEntireTransactionList }),
+    setMonth: (month: number) => set({ month }),
+    setEntireCategoryConsume: (entireCategoryConsume: number) =>
+      set({ entireCategoryConsume }),
+    setCategoryTransactionList: (
+      categoryTransactionList: CategoryTransaction[]
+    ) => set({ categoryTransactionList }),
   }));
 
 export default EntireCategoryCardTransactionStore;

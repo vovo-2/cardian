@@ -4,7 +4,7 @@ import BrandRecommendedCard from '../components/BrandRecommendation/BrandRecomme
 export default function BrandRecommendationPage() {
 
   return (
-    <div>
+    <div className='pb-[100px]'>
       <BrandTitle />
       <BrandRecommendedCard />
     </div>

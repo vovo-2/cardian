@@ -23,12 +23,10 @@ export default function NotAchieved({userName, salary, onSetCheckCard, onSetCred
     onSetCreditCard(consume);
   }
 
+  const memberId = 1;
+
   useEffect(() => {
-    axios.get("/settlement/not-achievement", {
-      params: {
-        memberId: 1
-      }
-    }).then(({ data }) => {
+    axios.get(`/settlement/${memberId}/not-achievement`).then(({ data }) => {
       setAccumulate(data.annualConsume);
       setGoal(data.settlementStandard);
       setCheckCard(data.annualCheckConsume);
@@ -48,8 +46,18 @@ export default function NotAchieved({userName, salary, onSetCheckCard, onSetCred
         </div>
 
         <div className="flex justify-between">
-          <span>{Math.round(accumulate / 10000).toLocaleString()}만원</span>
-          <span>{Math.round(goal / 10000).toLocaleString()}만원</span>
+          {
+            accumulate < 100000000
+            ? <span>{Math.floor(accumulate / 10000)}만원</span>
+            : ( (accumulate / 10000) - Math.floor(accumulate / 100000000)*10000 == 0 ) ? <span>{Math.floor(accumulate / 100000000)}억원</span>
+            : <span>{Math.floor(accumulate / 100000000)}억{Math.floor(accumulate / 10000) - Math.floor(accumulate / 100000000)*10000}만원</span>
+          }
+          {
+            goal < 100000000
+            ? <span>{Math.floor(goal / 10000)}만원</span>
+            : ( (goal / 10000) - Math.floor(goal / 100000000)*10000 == 0 ) ? <span>{Math.floor(goal / 100000000)}억원</span>
+            : <span>{Math.floor(goal / 100000000)}억{Math.floor(goal / 10000) - Math.floor(goal / 100000000)*10000}만원</span>
+          }
         </div>
       </div>
 
