@@ -41,7 +41,6 @@ public class RecommendationService {
     private final ExceptionBenefitRepository exceptionBenefitRepository;
     private final SubCommonCodeRepository subCommonCodeRepository;
     private final CategoryBenefitRepository categoryBenefitRepository;
-    private final GoalRepository goalRepository;
     private final AssociateRepository associateRepository;
     private final CardCategoryMappingRepository cardCategoryMappingRepository;
     private final TransactionService transactionService;

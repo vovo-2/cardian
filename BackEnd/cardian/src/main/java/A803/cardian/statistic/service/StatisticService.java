@@ -401,7 +401,34 @@ public class StatisticService {
 
     //총 소비 금액 값 임시 저장 -> 추후 수정 필요
     public CategoryMonthTransactionResponse getCategoryMonthTransactionResponse(int memberId, int month) {
-        return CategoryMonthTransactionResponse.toResponse(memberId, month, 100000, getCategoryTransaction(memberId, month));
+        int entireConsume = 0;
+        switch (month){
+            case 1:
+                entireConsume = 9050600;
+            case 2:
+                entireConsume = 6592900;
+            case 3:
+                entireConsume = 11789000;
+            case 4:
+                entireConsume = 10150600;
+            case 5:
+                entireConsume = 9304800;
+            case 6:
+                entireConsume = 8670500;
+            case 7:
+                entireConsume = 6259500;
+            case 8:
+                entireConsume = 8182500;
+            case 9:
+                entireConsume = 11015000;
+            case 10:
+                entireConsume = 7181300;
+            case 11:
+                entireConsume = 7181300;
+            case 12:
+                entireConsume = 7181300;
+        }
+        return CategoryMonthTransactionResponse.toResponse(memberId, month, entireConsume, getCategoryTransaction(memberId, month));
     }
 
     ////카드별 카테고리별 월별 소비 테이블 관련 시작----------------------------------------------------------------------------

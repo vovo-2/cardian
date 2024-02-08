@@ -1,12 +1,12 @@
 package A803.cardian.statistic.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AccumulateBenefit {
     @Id
@@ -14,11 +14,12 @@ public class AccumulateBenefit {
     private Integer id;
 
     @Column(nullable = false)
-    private Integer cardId;
+    private int myCardId;
 
     @Column(nullable = false,length = 10)
     private String categoryCode;
 
     @Column(nullable = false)
-    private Integer benefitAmount;
+    private int benefitAmount;
+
 }
