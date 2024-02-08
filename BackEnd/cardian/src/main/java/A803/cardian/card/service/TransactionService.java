@@ -8,20 +8,29 @@ import A803.cardian.benefit.domain.CardCategoryMapping;
 import A803.cardian.benefit.domain.CategoryBenefit;
 import A803.cardian.benefit.domain.ExceptionBenefit;
 import A803.cardian.benefit.repository.CardCategoryMappingRepository;
+import A803.cardian.benefit.repository.CategoryBenefitRepository;
+import A803.cardian.benefit.repository.ExceptionBenefitRepository;
 import A803.cardian.benefit.serivce.ExceptionBenefitService;
-import A803.cardian.card.data.dto.response.DailyTransactionDetails;
-import A803.cardian.card.data.dto.response.EntireTransactionsByMyCardResponse;
-import A803.cardian.card.data.dto.response.MonthlyTransactionDetails;
-import A803.cardian.card.data.dto.response.YearTransactionDetails;
+import A803.cardian.card.data.dto.response.*;
 import A803.cardian.card.domain.*;
 
+import A803.cardian.card.repository.CardRepository;
+import A803.cardian.card.repository.MyCardBenefitRepository;
+import A803.cardian.card.repository.MycardRepository;
 import A803.cardian.card.repository.TransactionRepository;
+import A803.cardian.category.domain.SubCommonCode;
+import A803.cardian.category.repository.SubCommonCodeRepository;
+import A803.cardian.member.domain.Member;
+import A803.cardian.member.repository.MemberRepository;
+import A803.cardian.reocommendation.service.RecommendationService;
+import A803.cardian.statistic.domain.AccumulateBenefit;
 import A803.cardian.statistic.repository.AccumulateBenefitRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -34,7 +43,10 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final CardCategoryMappingRepository cardCategoryMappingRepository;
     private final AccumulateBenefitRepository accumulateBenefitRepository;
+    private final MycardRepository mycardRepository;
+    private final SubCommonCodeRepository subCommonCodeRepository;
     private final ExceptionBenefitService exceptionBenefitService;
+//    private final RecommendationService recommendationService;
 
     //(예외혜택이 아니면) 카드아이디와 제휴사아이디로 카드카테고리매핑 객체를 가져와서
     //이때 없으면 이 카드로 혜택을 받을 수 없는 제휴사임.
@@ -306,12 +318,70 @@ public class TransactionService {
 
     //카테고리별 누적 혜택 금액 테이블 관련 시작--------------------------------------------------------------------
     //1. 회원가입 시 (처음) 전체 소비내역으로 계산해준 후 insert 시작
-    public void saveAccumulateBenefit(){
+//    public void saveAccumulateBenefit(int memberId){
+//        //        LocalDate now = LocalDate.now();
+//        LocalDate now = MonthDay.DECEMBER.toLocalDate(); //현재 시점 12/31 가정.
+//
+//        //카테고리 가져오기
+//        List<SubCommonCode> subCommonCodeList = subCommonCodeRepository.findAll();
+//        //내 카드 전체 가져오기
+//        List<MyCard> myCardList = mycardRepository.findMyCardsByMemberId(memberId);
+//        //값 가져올 객체 리스트 생성
+//        List<CategoryBenefitPerCard> categoryBenefitPerCardList = new ArrayList<>();
+//        //카드별 당월 소비 내역 가져오기
+//        for(MyCard myCard : myCardList){
+//            //카테고리별 혜택 금액 정보 리스트
+//            List<CategoryBenefitPerCardDetatils> categoryBenefitPerCardDetatilsList = new ArrayList<>();
+//
+//            for(SubCommonCode subCommonCode : subCommonCodeList) {
+//                String categoryCode = subCommonCode.getDetailCode();
+//                //당월 누적 혜택 금액
+//                int monthBenefit = getRecievedBenefitAmount(myCard, now, categoryCode);
+//                categoryBenefitPerCardDetatilsList.add(CategoryBenefitPerCardDetatils.from(categoryCode, monthBenefit));
+//            }
+//
+//            categoryBenefitPerCardList.add(CategoryBenefitPerCard.from(myCard.getId(), categoryBenefitPerCardDetatilsList));
+//        }
+//
+//        //객체 생성해서 테이블에 넣어주기
+//        for(CategoryBenefitPerCard categoryBenefitPerCard : categoryBenefitPerCardList){
+//            List<CategoryBenefitPerCardDetatils> categoryBenefitPerCardDetatilsList = new ArrayList<>();
+//            int myCardId = categoryBenefitPerCard.getMyCardId();
+//
+//            for(CategoryBenefitPerCardDetatils categoryBenefitPerCardDetatils : categoryBenefitPerCardDetatilsList){
+//                String categoryCode = categoryBenefitPerCardDetatils.getCategoryCode();
+//                int monthBenefit = categoryBenefitPerCardDetatils.getMonthBenefit();
+//
+//                AccumulateBenefit accumulateBenefit = AccumulateBenefit.builder()
+//                        .myCardId(myCardId)
+//                        .categoryCode(categoryCode)
+//                        .benefitAmount(monthBenefit)
+//                        .build();
+//
+//                accumulateBenefitRepository.save(accumulateBenefit);
+//            }
+//        }
+//    }
+//
+//    //카테고리별 실제 받은 혜택 계산하기
+//    public int getRecievedBenefitAmount(MyCard myCard, LocalDate now, String categoryName){
+//        int recievedBenefitAmount = recommendationService.getRecievedBenefitAmountPerMyCard(myCard, now, categoryName);
+//        return recievedBenefitAmount;
+//    }
+    /*
+            //마지막 최종 갱신일
+        LocalDateTime updateDate = member.getUpdateDate();
+//        LocalDateTime now = LocalDateTime.now();
+        //현재는 2023 12/31 23:59:59 라는 가정
+        LocalDateTime now = LocalDateTime.of(2023, 12, 31, 23, 59, 59);
+     */
 
-    }
     //1. 회원가입 시 (처음) 전체 소비내역으로 계산해준 후 insert 끝
 
     //2. 로그인 시, updateDate를 기준으로 새 소비내역이 있으면 계산해준 후 update 시작
+    public void updateAccumulateBenefit(int memberId){
+
+    }
     //2. 로그인 시, updateDate를 기준으로 새 소비내역이 있으면 계산해준 후 update 끝
 
     //3. 월마다 전체 초기화 시작

@@ -92,7 +92,7 @@ public class CategoryService {
 
 
 
-                Optional<AccumulateBenefit> accumulateBenefit = accumulateBenefitRepository.findAccumulateBenefitByCardIdAndCategoryCode(c.getMycardId(), categoryCode);
+                Optional<AccumulateBenefit> accumulateBenefit = accumulateBenefitRepository.findAccumulateBenefitByMyCardIdAndCategoryCode(c.getMycardId(), categoryCode);
 
 
                 boolean thisMonthAchieve=false;

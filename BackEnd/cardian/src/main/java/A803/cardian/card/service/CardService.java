@@ -69,7 +69,7 @@ public class CardService {
         public static MyCardInfoDetails from(MyCard myCard, int accumulateBenefitAmount, int accumulate)
          */
         //누적 혜택 가져오기
-        Optional<AccumulateBenefit> accumulateBenefit = accumulateBenefitRepository.findAccumulateBenefitByCardIdAndCategoryCode(myCard.getId(), card.getBenefitCode().getValue());
+        Optional<AccumulateBenefit> accumulateBenefit = accumulateBenefitRepository.findAccumulateBenefitByMyCardIdAndCategoryCode(myCard.getId(), card.getBenefitCode().getValue());
         //누적 혜택 금액 가져오기
         int accumulateBenefitAmount = 0;
         if(accumulateBenefit.isPresent()){
