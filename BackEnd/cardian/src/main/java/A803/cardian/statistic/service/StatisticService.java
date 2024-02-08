@@ -434,10 +434,10 @@ public class StatisticService {
                 entireConsume = 7181300;
                 break;
             case 11:
-                entireConsume = 7181300;
+                entireConsume = 11989000;
                 break;
             case 12:
-                entireConsume = 7181300;
+                entireConsume = 10231300;
                 break;
         }
         return CategoryMonthTransactionResponse.toResponse(memberId, month, entireConsume, getCategoryTransaction(memberId, month));
