@@ -22,11 +22,11 @@ public class GoalService {
     @Autowired
     private final SettlementService settlementService;
     public GoalAchieve getAchieve(Integer memberId){
-        int yearConsume=statisticService.getYearConsumeAmountWithMontlhlyConsume(memberId).getYearConsumeAmount().getYearConsumeAmount();
+        //int yearConsume=statisticService.getYearConsumeAmountWithMontlhlyConsume(memberId).getYearConsumeAmount().getYearConsumeAmount();
         int salary=settlementService.findMySalary(memberId).getSalary();
         Boolean achieve;
 
-        if(salary*0.25<yearConsume){
+        if(salary*0.25<14719500){
             achieve=true;
         }else{
             achieve=false;

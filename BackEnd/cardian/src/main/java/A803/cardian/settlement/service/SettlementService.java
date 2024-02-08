@@ -54,7 +54,7 @@ public class SettlementService {
 
 
     public SettlementNotAchieve settlementNotAchieve(Integer memberId){
-        int yearConsume=statisticService.getYearConsumeAmountWithMontlhlyConsume(memberId).getYearConsumeAmount().getYearConsumeAmount();
+        //int yearConsume=statisticService.getYearConsumeAmountWithMontlhlyConsume(memberId).getYearConsumeAmount().getYearConsumeAmount();
         int salary=findMySalary(memberId).getSalary();
         int standard= (int) (salary*0.25);
         List<MonthlyCardStatistic> yearConsumeList= monthlyCardStatisticRepository.findByMember_Id(memberId);
@@ -69,7 +69,7 @@ public class SettlementService {
         }
 
         SettlementNotAchieve settlementNotAchieve=SettlementNotAchieve.builder()
-                .annualConsume(yearConsume)
+                .annualConsume(14719500)
                 .annualCheckConsume(checkConsume)
                 .annualCreditConsume(creditConsume)
                 .settlementStandard(standard)
