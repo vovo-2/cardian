@@ -4,6 +4,7 @@ import A803.cardian.benefit.domain.ExceptionBenefit;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ExceptionBenefitRepository extends JpaRepository<ExceptionBenefit, Integer>{
@@ -11,6 +12,7 @@ public interface ExceptionBenefitRepository extends JpaRepository<ExceptionBenef
     Optional<ExceptionBenefit> findByAssociateIdAndCardId(int associateId, int cardId);
     //카드아이디와 카테고리코드로 예외혜택 가져오기
     Optional<ExceptionBenefit> findByCardIdAndCategoryCode(int cardId, String categoryCode);
+    List<ExceptionBenefit> findExceptionBenefitsByCardIdAndCategoryCode(int cardId, String categoryCode);
     /*
      * 작성자 : 정여민
      * 작성일시 : 2024.01.31

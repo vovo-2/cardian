@@ -461,21 +461,22 @@ public class StatisticService {
                 String categoryCode = subCommonCode.getDetailCode();
                 //월별 소비 금액
                 for (int i = 0; i < monthDayList.length; i++) {
-                    int MonthConsume = 0;
+                    int monthConsume = 0;
 
                     LocalDate startDate = monthDayList[i].toLocalDate().withDayOfMonth(1);
                     LocalDate endDate = startDate.plusMonths(1);
                     //당월 누적 소비금액 계산
                     while (startDate.isBefore(endDate)) {
-                        MonthConsume += calculateCategoryMonthConsume(myCard, startDate, categoryCode);
+                        monthConsume += calculateCategoryMonthConsume(myCard, startDate, categoryCode);
                         startDate = startDate.plusDays(1);
                     }
+                    System.out.println("카드별 카테고리별 월별 소비 금액 " + card.getId() + "번 카드 " + categoryCode + "카테고리" + (i+1) + "월 소비 금액 " + monthConsume);
 
                     //entity생성해서
                     CategoryMonthConsume categoryMonthConsume = CategoryMonthConsume.builder()
                             .categoryCode(categoryCode)
                             .myCardId(myCard.getId())
-                            .consume(MonthConsume)
+                            .consume(monthConsume)
                             .type(card.getType())
                             .month(i + 1)
                             .build();
@@ -639,6 +640,7 @@ public class StatisticService {
                     monthConsume += calculateMyCardMonthConsume(myCard, startDate);
                     startDate = startDate.plusDays(1);
                 }
+                System.out.println("카드별 월별 통계 " + card.getId() + "번 카드 " + (i + 1) + "월 소비 금액 " + monthConsume);
                 //entity생성해서
                 MonthlyCardStatistic monthlyCardStatistic = MonthlyCardStatistic.builder()
                         .member(member)
