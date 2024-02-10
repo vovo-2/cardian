@@ -48,13 +48,13 @@ public class memberController {
             // 로그인 정보
             // 세션 쿠키
             createCookie(request, response, "memberId", String.valueOf(member.getId()), "session");
-<<<<<<< HEAD
-
-=======
+            
+            // 멤버가 있을 시, 멤버 아이디를 통해 카드사에서 거래 내역 가져와서 업데이트
+            updateService.updateTransactions(member.getId());
 
 //            memberService.saveTable(member.getId());
 
->>>>>>> 321de00cfa3f94e1232139e4a0d9bd82011429a7
+
             return ResponseEntity.ok("로그인 성공!");
         }
         return ResponseEntity.ok("로그인 실패!");
