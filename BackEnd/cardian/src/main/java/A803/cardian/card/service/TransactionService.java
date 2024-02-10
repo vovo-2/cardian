@@ -42,11 +42,8 @@ public class TransactionService {
     private final AssociateRepository associateRepository;
     private final TransactionRepository transactionRepository;
     private final CardCategoryMappingRepository cardCategoryMappingRepository;
-    private final AccumulateBenefitRepository accumulateBenefitRepository;
-    private final MycardRepository mycardRepository;
-    private final SubCommonCodeRepository subCommonCodeRepository;
     private final ExceptionBenefitService exceptionBenefitService;
-//    private final RecommendationService recommendationService;
+
 
     //(예외혜택이 아니면) 카드아이디와 제휴사아이디로 카드카테고리매핑 객체를 가져와서
     //이때 없으면 이 카드로 혜택을 받을 수 없는 제휴사임.
@@ -57,12 +54,11 @@ public class TransactionService {
 
     //할인금액 계산
     //예외혜택
-    public int calculateDiscountAmountWithExceptionBenefit(Transaction transaction, ExceptionBenefit exceptionBenefit) {
+    public int calculateDiscountAmountWithExceptionBenefit(Transaction transaction, ExceptionBenefit exceptionBenefit, int benefitAmount) {
         Card card = transaction.getMyCard().getCard();
         /*
        추후에 accumulateBenefit 데이터 넣으면 수정하기
          */
-        int benefitAmount = 0;
         int discountLimit = exceptionBenefit.getDiscountLimit(); //혜택 한도
 
         //1. 해당 카테고리의 누적혜택금액이 한도를 채웠으면 혜택 0원
@@ -105,7 +101,7 @@ public class TransactionService {
 
     //할인금액 계산
     //카테고리혜택
-    public int calculateDiscountAmountWithCategoryBenefit(Transaction transaction, CategoryBenefit categoryBenefit) {
+    public int calculateDiscountAmountWithCategoryBenefit(Transaction transaction, CategoryBenefit categoryBenefit, int benefitAmount) {
         Card card = transaction.getMyCard().getCard();
 //        AccumulateBenefit accumulateBenefit = getAccumulateBenefit(transaction)
 //                .orElseThrow(() ->
@@ -115,7 +111,6 @@ public class TransactionService {
         /*
        추후에 accumulateBenefit 데이터 넣으면 수정하기
          */
-        int benefitAmount = 0;
         int discountLimit = categoryBenefit.getDiscountLimit(); //혜택 한도
 
         //1. 해당 카테고리의 누적혜택금액이 한도를 채웠으면 혜택 0원
@@ -132,7 +127,15 @@ public class TransactionService {
                 /*
                 할인일 때의 혜택 계산 로직 구현하기
                  */
-                return getDiscountAmountUsingSignWithDiscount(price, discountLine, discountAmount, categoryBenefit.getSign());
+                int benefit = getDiscountAmountUsingSignWithDiscount(price, discountLine, discountAmount, categoryBenefit.getSign());
+                int result = benefitAmount + benefit;
+                //한도 넘으면
+                if( result >= discountLimit){
+                    return discountLimit - benefitAmount; //받을 수 있는 혜택만 반환해주기
+                }
+                else{
+                    return benefit;
+                }
             }
             //적립, 캐시백일 때
             else {
@@ -242,33 +245,33 @@ public class TransactionService {
 
         List<DailyTransactionDetails> dailyTransactionDetailsList = new ArrayList<>();
 
+        int exceptionBenefitAmount = 0;
+        int categoryBenefitAmount = 0;
         for (Transaction transaction : transactions) {
             //associate, discountAmount(계산을 해주려면 혜택 정보 있어야 함)
             //1. 제휴사 가져오기
             Associate associate = associateRepository.findByName(transaction.getStore())
                     .orElseThrow(() ->
                             new ErrorException(ErrorCode.NO_ASSOCIATE));
-            //2. discountAmount 계산하기
-            int discountAmount;
             //예외 혜택인지 카테고리 혜택인지 확인
             Optional<ExceptionBenefit> exceptionBenefit = exceptionBenefitService.getExceptionBenefit(transaction);
             //예외혜택이 있으면 예외 혜택으로 계산
             if (exceptionBenefit.isPresent()) {
-                discountAmount = calculateDiscountAmountWithExceptionBenefit(transaction, exceptionBenefit.get());
+                exceptionBenefitAmount += calculateDiscountAmountWithExceptionBenefit(transaction, exceptionBenefit.get(), exceptionBenefitAmount);
+
+                dailyTransactionDetailsList.add(DailyTransactionDetails.from(transaction, associate, exceptionBenefitAmount));
             } else {
                 //없으면 카드카테고리매핑객체 가져와서
                 Optional<CardCategoryMapping> cardCategoryMapping = cardCategoryMappingRepository.findByAssociateIdAndCardId(associate.getId(), myCardId);
-                //있으면
+                //있으면 계산
                 if (cardCategoryMapping.isPresent()) {
                     //카테고리혜택 가져와서 계산
                     CategoryBenefit categoryBenefit = cardCategoryMapping.get().getCategoryBenefit();
-                    discountAmount = calculateDiscountAmountWithCategoryBenefit(transaction, categoryBenefit);
-                } else {
-                    //없으면 혜택 없음
-                    discountAmount = 0;
+                    categoryBenefitAmount += calculateDiscountAmountWithCategoryBenefit(transaction, categoryBenefit, categoryBenefitAmount);
+
+                    dailyTransactionDetailsList.add(DailyTransactionDetails.from(transaction, associate, categoryBenefitAmount));
                 }
             }
-            dailyTransactionDetailsList.add(DailyTransactionDetails.from(transaction, associate, discountAmount));
         }
         return dailyTransactionDetailsList;
     }
@@ -316,76 +319,4 @@ public class TransactionService {
         return EntireTransactionsByMyCardResponse.toResponse(myCardId, yearTransactionDetailsList);
     }
 
-    //카테고리별 누적 혜택 금액 테이블 관련 시작--------------------------------------------------------------------
-    //1. 회원가입 시 (처음) 전체 소비내역으로 계산해준 후 insert 시작
-//    public void saveAccumulateBenefit(int memberId){
-//        //        LocalDate now = LocalDate.now();
-//        LocalDate now = MonthDay.DECEMBER.toLocalDate(); //현재 시점 12/31 가정.
-//
-//        //카테고리 가져오기
-//        List<SubCommonCode> subCommonCodeList = subCommonCodeRepository.findAll();
-//        //내 카드 전체 가져오기
-//        List<MyCard> myCardList = mycardRepository.findMyCardsByMemberId(memberId);
-//        //값 가져올 객체 리스트 생성
-//        List<CategoryBenefitPerCard> categoryBenefitPerCardList = new ArrayList<>();
-//        //카드별 당월 소비 내역 가져오기
-//        for(MyCard myCard : myCardList){
-//            //카테고리별 혜택 금액 정보 리스트
-//            List<CategoryBenefitPerCardDetatils> categoryBenefitPerCardDetatilsList = new ArrayList<>();
-//
-//            for(SubCommonCode subCommonCode : subCommonCodeList) {
-//                String categoryCode = subCommonCode.getDetailCode();
-//                //당월 누적 혜택 금액
-//                int monthBenefit = getRecievedBenefitAmount(myCard, now, categoryCode);
-//                categoryBenefitPerCardDetatilsList.add(CategoryBenefitPerCardDetatils.from(categoryCode, monthBenefit));
-//            }
-//
-//            categoryBenefitPerCardList.add(CategoryBenefitPerCard.from(myCard.getId(), categoryBenefitPerCardDetatilsList));
-//        }
-//
-//        //객체 생성해서 테이블에 넣어주기
-//        for(CategoryBenefitPerCard categoryBenefitPerCard : categoryBenefitPerCardList){
-//            List<CategoryBenefitPerCardDetatils> categoryBenefitPerCardDetatilsList = new ArrayList<>();
-//            int myCardId = categoryBenefitPerCard.getMyCardId();
-//
-//            for(CategoryBenefitPerCardDetatils categoryBenefitPerCardDetatils : categoryBenefitPerCardDetatilsList){
-//                String categoryCode = categoryBenefitPerCardDetatils.getCategoryCode();
-//                int monthBenefit = categoryBenefitPerCardDetatils.getMonthBenefit();
-//
-//                AccumulateBenefit accumulateBenefit = AccumulateBenefit.builder()
-//                        .myCardId(myCardId)
-//                        .categoryCode(categoryCode)
-//                        .benefitAmount(monthBenefit)
-//                        .build();
-//
-//                accumulateBenefitRepository.save(accumulateBenefit);
-//            }
-//        }
-//    }
-//
-//    //카테고리별 실제 받은 혜택 계산하기
-//    public int getRecievedBenefitAmount(MyCard myCard, LocalDate now, String categoryName){
-//        int recievedBenefitAmount = recommendationService.getRecievedBenefitAmountPerMyCard(myCard, now, categoryName);
-//        return recievedBenefitAmount;
-//    }
-    /*
-            //마지막 최종 갱신일
-        LocalDateTime updateDate = member.getUpdateDate();
-//        LocalDateTime now = LocalDateTime.now();
-        //현재는 2023 12/31 23:59:59 라는 가정
-        LocalDateTime now = LocalDateTime.of(2023, 12, 31, 23, 59, 59);
-     */
-
-    //1. 회원가입 시 (처음) 전체 소비내역으로 계산해준 후 insert 끝
-
-    //2. 로그인 시, updateDate를 기준으로 새 소비내역이 있으면 계산해준 후 update 시작
-    public void updateAccumulateBenefit(int memberId){
-
-    }
-    //2. 로그인 시, updateDate를 기준으로 새 소비내역이 있으면 계산해준 후 update 끝
-
-    //3. 월마다 전체 초기화 시작
-    //3. 월마다 전체 초기화 끝
-
-    //카테고리별 누적 혜택 금액 테이블 관련 끝--------------------------------------------------------------------
 }

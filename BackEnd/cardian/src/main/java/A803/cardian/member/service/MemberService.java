@@ -15,6 +15,8 @@ import A803.cardian.member.domain.Gender;
 import A803.cardian.member.domain.Member;
 import A803.cardian.member.domain.embbeded.PhoneNumber;
 import A803.cardian.member.repository.MemberRepository;
+import A803.cardian.statistic.service.AccumulateBenefitService;
+import A803.cardian.statistic.service.StatisticService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -39,7 +41,9 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final UpdateService updateService;
+    private final AccumulateBenefitService accumulateBenefitService;
+    private final StatisticService statisticService;
+
 
     // 새로운 유저 추가
 //    @Transactional
@@ -100,6 +104,41 @@ public class MemberService {
 //            return member1.get();
 //        }
 //
+//    }
+//    @Transactional
+//    public void updateTable(int memberId){
+//        Member member = memberRepository.findById(memberId)
+//                .orElseThrow(() ->
+//                        new RuntimeException());
+//        //update 필요한 테이블들 update
+//        //1. 누적 혜택 테이블 3개
+////            accumulateBenefitService.updateAccumulateBenefit(member.getId());
+//        accumulateBenefitService.updateAccumulateBenefit(member.getId());
+//        //2. 카드 월별 통계
+////            statisticService.updateMonthlyCardStatistic(member.getId());
+//        statisticService.updateMonthlyCardStatistic(member.getId());
+//        //카테고리별 월별 통계
+////            statisticService.updateCategoryMonthConsume(member.getId());
+//        statisticService.updateCategoryMonthConsume(member.getId());
+//        //update 필요한 테이블들 update
+//    }
+//
+//    @Transactional
+//    public void saveTable(int memberId){
+//        Member member = memberRepository.findById(memberId)
+//                .orElseThrow(() ->
+//                        new RuntimeException());
+//        //save
+//        //1. 누적 혜택 테이블 3개
+////            accumulateBenefitService.updateAccumulateBenefit(member.getId());
+//        accumulateBenefitService.saveAccumulateBenefit(member.getId());
+//        //2. 카드 월별 통계
+////            statisticService.updateMonthlyCardStatistic(member.getId());
+//        statisticService.saveMonthlyCardStatistic(member.getId());
+//        //카테고리별 월별 통계
+////            statisticService.updateCategoryMonthConsume(member.getId());
+//        statisticService.saveCategoryMonthConsume(member.getId());
+//        //save
 //    }
 
     @Transactional
