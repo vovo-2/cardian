@@ -4,6 +4,8 @@ import A803.cardian.card.service.UpdateService;
 import A803.cardian.member.data.request.MemberRequestDto;
 import A803.cardian.member.domain.Member;
 import A803.cardian.member.service.MemberService;
+import A803.cardian.statistic.service.AccumulateBenefitService;
+import A803.cardian.statistic.service.StatisticService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,7 +31,6 @@ import java.text.ParseException;
 @RestController
 //@CrossOrigin(origins = {"http://i10a803.p.ssafy.io", "http://localhost:5173"}, allowCredentials = "true")
 public class memberController {
-
     private final MemberService memberService;
     private final UpdateService updateService;
 
@@ -47,19 +48,23 @@ public class memberController {
             // 로그인 정보
             // 세션 쿠키
             createCookie(request, response, "memberId", String.valueOf(member.getId()), "session");
-            updateService.updateTransactions(member.getId());
+<<<<<<< HEAD
+
+=======
+
+//            memberService.saveTable(member.getId());
+
+>>>>>>> 321de00cfa3f94e1232139e4a0d9bd82011429a7
             return ResponseEntity.ok("로그인 성공!");
         }
         return ResponseEntity.ok("로그인 실패!");
-        
+
     }
 
     @GetMapping
     public void sample(){
         System.out.println("GET은 잘 동작합!");
     }
-
-
 
     /*
      *   작성자 : 정여민

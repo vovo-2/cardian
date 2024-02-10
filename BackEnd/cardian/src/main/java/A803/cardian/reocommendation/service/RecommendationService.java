@@ -391,13 +391,23 @@ public class RecommendationService {
                                 //혜택 한도
                                 int discountLimit = categoryBenefit.getDiscountLimit();
 
+                                //누적 혜택값이 한도와 같거나 크면 넘기기
+                                if(categoryBenefitAmount >= discountLimit){
+                                    continue;
+                                }
+
                                 //계산된 혜택
                                 int calAmount = calculateDiscountAmountWithCategoryBenefit(transaction, categoryBenefit, categoryBenefitAmount);
                                 //누적합 + 계산혜택
                                 int newAccumulate = categoryBenefitAmount + calAmount;
+
+                                //newAccumulate가 한도를 넘으면 한도값을 넣어주기
+                                if(newAccumulate >= discountLimit){
+                                    newAccumulate = discountLimit;
+                                }
                                 //새로 넣어줌
                                 categoryBenefitAccumulateList.remove(categoryBenefitAccumulateList.get(i));
-                                categoryBenefitAccumulateList.add(CategoryBenefitAccumulate.from(categoryBenefit, newAccumulate));
+                                categoryBenefitAccumulateList.add(i, CategoryBenefitAccumulate.from(categoryBenefit, newAccumulate));
                                 i++;
                             }
                         }
