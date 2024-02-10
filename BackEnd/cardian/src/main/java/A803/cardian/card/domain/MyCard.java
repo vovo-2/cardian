@@ -17,7 +17,6 @@ import java.util.List;
 *   내용 : updateDate를 MyCard가 아닌, Member로 변경
 * 
 * */
-@ToString
 @Entity
 @Getter
 @Setter

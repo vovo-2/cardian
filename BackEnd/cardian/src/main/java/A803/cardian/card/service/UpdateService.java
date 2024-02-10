@@ -85,7 +85,7 @@ public class UpdateService {
 
         // 2. memberId로 카드사에서 거래 내역 가져오기
         baseUrl = "http://i10a803.p.ssafy.io:8082/cardcompany";
-        path = "/transaction/1/".concat(updateDate);
+        path = "/transaction/".concat(String.valueOf(memberId)).concat("/").concat(updateDate);
         Map<String, Object> transactions = webClientService.get(baseUrl, path);
 
         // 거래 내역이 없으면
@@ -104,18 +104,20 @@ public class UpdateService {
         for (Object o : transactionJsonArray) {
             // 거래내역 -> 카드아이디(카드사DB카드아이디) -> 카드에 가서 내 카드 가져오기
             // 거래내역 1개 가져오기
-            System.out.println("o = " + o);
+            log.info("o = " + o);
             JSONObject transaction = (JSONObject) o;
 
-            System.out.println("transaction = " + transaction);
+            log.info("transaction = " + transaction);
 
-            System.out.println("transaction1 = " + transaction.get("id"));
+            log.info("transactionId = " + transaction.get("id"));
 
             // 카드 정보
             JSONObject transactionCard = (JSONObject) transaction.get("card");
             int carddbID = transactionCard.getInt("id");
-            System.out.println("carddbID = " + carddbID);
+            log.info("carddbID = " + carddbID);
             Card card = cardRepository.findCardByCardDatabaseId(carddbID);
+
+            log.info("card = " + card);
 
             Optional<MyCard> myCard = mycardRepository.findByCard_Id(card.getId());
 
@@ -133,7 +135,7 @@ public class UpdateService {
                     .build();
 
 
-            System.out.println("newTransaction = " + newTransaction);
+            log.info("newTransaction = " + newTransaction);
 
             // 거래 내역 저장하고
             transactionRepository.save(newTransaction);
@@ -149,7 +151,7 @@ public class UpdateService {
     /*
      * 업데이트 날짜 반환 메서드
      * 작성일시 : 2024.02.02
-     * 업데이트 : 2024.02.04
+     * 업데이트 : 2024.02.10
      * 내용 : updateDate를 MyCard가 아닌 member에서 가져옴
      */
     public String updateDate(Integer memberId){
@@ -160,9 +162,12 @@ public class UpdateService {
         // 멤버가 존재하면
         if(member.isPresent()){
             // 카드사 서버에 쿼리하기 위한 형식으로 바꾸기 yyyy-MM-ddHH:mm:ss 형태
-            String temp_updateDate = String.valueOf(member.get().getUpdateDate());
+            String temp_updateDate = String.valueOf(member.get().getUpdateDate());  // 가져온 날짜 형태 yyyy-MM-ddTHH:mm
+            log.info("temp_updateDate = " + temp_updateDate);
             String [] updateDate01 = temp_updateDate.split("T");
-            updateDate = updateDate01[0].concat(updateDate01[1]).split("\\.")[0];
+            log.info("updateDate01 = " + updateDate01[0]);
+            updateDate = updateDate01[0].concat(updateDate01[1]).split("\\.")[0];   // 2024-02-10 21:01:46.813561 이런 형태이므로 . 앞에만 잘라넣기
+            log.info("updateDate = " + updateDate);
         }
 
         log.info(updateDate);
@@ -196,11 +201,11 @@ public class UpdateService {
 
         List<Map> result = webClientService.getJSONArray(baseUrl, path);
 
-        System.out.println("cardList = " + result);
+        log.info("cardList = " + result);
 
         JSONArray cardList = new JSONArray(result);
 
-        System.out.println("cardList = " + cardList.get(0));
+        log.info("cardList = " + cardList.get(0));
 
         // 멤버
         Optional<Member> member = memberRepository.findById(memberId);
@@ -231,7 +236,7 @@ public class UpdateService {
                                 .build();
 
                 mycardRepository.save(mycard);
-                System.out.println("mycard = " + mycard);
+                log.info("mycard = " + mycard);
             }
             // 이미 있는 카드면 넘어가기
             else{

@@ -1,5 +1,6 @@
 package A803.cardian.member.controller;
 
+import A803.cardian.card.service.UpdateService;
 import A803.cardian.member.data.request.MemberRequestDto;
 import A803.cardian.member.domain.Member;
 import A803.cardian.member.service.MemberService;
@@ -31,6 +32,7 @@ import java.text.ParseException;
 //@CrossOrigin(origins = {"http://i10a803.p.ssafy.io", "http://localhost:5173"}, allowCredentials = "true")
 public class memberController {
     private final MemberService memberService;
+    private final UpdateService updateService;
 
 
     @PostMapping("/login")
@@ -46,8 +48,12 @@ public class memberController {
             // 로그인 정보
             // 세션 쿠키
             createCookie(request, response, "memberId", String.valueOf(member.getId()), "session");
+            
+            // 멤버가 있을 시, 멤버 아이디를 통해 카드사에서 거래 내역 가져와서 업데이트
+            updateService.updateTransactions(member.getId());
 
 //            memberService.saveTable(member.getId());
+
 
             return ResponseEntity.ok("로그인 성공!");
         }
