@@ -161,6 +161,7 @@ public class BenefitService {
         if(myCard.isEmpty()){
             exceptionBenefitStore = new BenefitStore("", 0, "" );
             storeList.add(new BenefitStore("", 0, "" ));
+            System.out.println("내 카드 정보 없음");
             return CardBenefitCategoryResponse.toResponse(exceptionBenefitStore, storeList);
         }else{
         // 2. 카드 조회 -> 카드사 아이디
@@ -169,6 +170,7 @@ public class BenefitService {
             if(card.isEmpty()){
                 exceptionBenefitStore = new BenefitStore("", 0, "" );
                 storeList.add(new BenefitStore("", 0, "" ));
+                System.out.println("카드 없음");
                 return CardBenefitCategoryResponse.toResponse(exceptionBenefitStore, storeList);
             }else{
                 Integer cardId = card.get().getId();
@@ -196,6 +198,7 @@ public class BenefitService {
                     exceptionBenefitStore = BenefitStore.from(exceptionBenefit.get(), exceptionAssociate.get().getName());
                 }else{
                     // 예외 혜택 부분 없으면 빈 값
+                    System.out.println("예외 혜택 없음");
                     exceptionBenefitStore = new BenefitStore("", 0, "" );
 
                 }
@@ -204,7 +207,6 @@ public class BenefitService {
                 Optional<CategoryBenefit> categoryBenefit = categoryBenefitRepository.findCategoryBenefitByCardIdAndCategoryCode(cardId, categoryCode);
 
                 if(categoryBenefit.isEmpty()){
-                    exceptionBenefitStore = new BenefitStore("", 0, "" );
                     storeList.add(new BenefitStore("", 0, "" ));
                     return CardBenefitCategoryResponse.toResponse(exceptionBenefitStore, storeList);
                 }else{
@@ -231,7 +233,6 @@ public class BenefitService {
                             }
                         }
                     }else{
-                        exceptionBenefitStore = new BenefitStore("", 0, "" );
                         storeList.add(new BenefitStore("", 0, "" ));
                     }
 

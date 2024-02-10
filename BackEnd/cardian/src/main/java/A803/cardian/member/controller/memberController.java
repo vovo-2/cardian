@@ -1,5 +1,6 @@
 package A803.cardian.member.controller;
 
+import A803.cardian.card.service.UpdateService;
 import A803.cardian.member.data.request.MemberRequestDto;
 import A803.cardian.member.domain.Member;
 import A803.cardian.member.service.MemberService;
@@ -30,6 +31,7 @@ import java.text.ParseException;
 public class memberController {
 
     private final MemberService memberService;
+    private final UpdateService updateService;
 
 
     @PostMapping("/login")
@@ -45,6 +47,7 @@ public class memberController {
             // 로그인 정보
             // 세션 쿠키
             createCookie(request, response, "memberId", String.valueOf(member.getId()), "session");
+            updateService.updateTransactions(member.getId());
             return ResponseEntity.ok("로그인 성공!");
         }
         return ResponseEntity.ok("로그인 실패!");
