@@ -15,11 +15,10 @@ import A803.cardian.category.repository.SubCommonCodeRepository;
 import A803.cardian.member.domain.Member;
 import A803.cardian.member.repository.MemberRepository;
 import A803.cardian.statistic.data.dto.response.*;
+import A803.cardian.statistic.data.dto.response.DailyTransactionDetails;
+import A803.cardian.statistic.data.dto.response.MonthlyTransactionDetails;
 import A803.cardian.statistic.data.dto.response.category.*;
-import A803.cardian.statistic.data.dto.response.monthlyCategory.MonthlyTransactionDetails;
-import A803.cardian.statistic.data.dto.response.monthlyCategory.DailyTransactionDetails;
-import A803.cardian.statistic.data.dto.response.monthlyCategory.CategoryMonthTransactionResponse;
-import A803.cardian.statistic.data.dto.response.monthlyCategory.CategoryTransaction;
+import A803.cardian.statistic.data.dto.response.monthlyCategory.*;
 import A803.cardian.statistic.domain.CategoryMonthConsume;
 import A803.cardian.statistic.domain.MonthlyCardStatistic;
 import A803.cardian.statistic.repository.CategoryMonthConsumeRepository;
@@ -374,8 +373,8 @@ public class StatisticService {
 
 
     //상세내역 가져오기
-    public List<DailyTransactionDetails> getCategoryDayTransactionDetails(int memberId, LocalDate localDate, String categoryCode) {
-        List<DailyTransactionDetails> categoryDayTransactionDetailList = new ArrayList<>();
+    public List<A803.cardian.statistic.data.dto.response.monthlyCategory.DailyTransactionDetails> getCategoryDayTransactionDetails(int memberId, LocalDate localDate, String categoryCode) {
+        List<A803.cardian.statistic.data.dto.response.monthlyCategory.DailyTransactionDetails> categoryDayTransactionDetailList = new ArrayList<>();
 
         List<MyCard> myCardList = mycardRepository.findMyCardsByMemberId(memberId);
         for (MyCard myCard : myCardList) {
@@ -391,16 +390,20 @@ public class StatisticService {
                                 new RuntimeException());
                 //카테고리 확인
                 if (associate.getCategoryCode().equals(categoryCode)) {
-                    categoryDayTransactionDetailList.add(DailyTransactionDetails.from(transaction, associate));
+                    categoryDayTransactionDetailList.add(A803.cardian.statistic.data.dto.response.monthlyCategory.DailyTransactionDetails.from(transaction, associate));
                 }
             }
         }
+
+        //내림차순으로 정렬
+        Collections.sort(categoryDayTransactionDetailList, Comparator.comparingInt(A803.cardian.statistic.data.dto.response.monthlyCategory.DailyTransactionDetails::getPrice).reversed());
+
         return categoryDayTransactionDetailList;
     }
 
     //카테고리별 일 소비내역 가지고 오기 (월 넘겨받음)
-    public List<MonthlyTransactionDetails> getCategoryDayTransaction(int memberId, LocalDate localDate, String categoryName) {
-        List<MonthlyTransactionDetails> monthlyTransactionDetailsList = new ArrayList<>();
+    public List<A803.cardian.statistic.data.dto.response.monthlyCategory.MonthlyTransactionDetails> getCategoryDayTransaction(int memberId, LocalDate localDate, String categoryName) {
+        List<A803.cardian.statistic.data.dto.response.monthlyCategory.MonthlyTransactionDetails> monthlyTransactionDetailsList = new ArrayList<>();
 
         //카테고리이름으로 카테고리코드 가져오기
         SubCommonCode subCommonCode = subCommonCodeRepository.findByName(categoryName).get();
@@ -411,22 +414,32 @@ public class StatisticService {
         LocalDate endDate = localDate.plusMonths(1);
         while (startDate.isBefore(endDate)) {
             int day = startDate.getDayOfMonth();
-            List<DailyTransactionDetails> dailyTransactionDetailsList = getCategoryDayTransactionDetails(memberId, startDate, categoryCode);
+            List<A803.cardian.statistic.data.dto.response.monthlyCategory.DailyTransactionDetails> dailyTransactionDetailsList = getCategoryDayTransactionDetails(memberId, startDate, categoryCode);
             if (dailyTransactionDetailsList.size() == 0) {
                 startDate = startDate.plusDays(1);
                 continue;
             }
             //해당일의 상세내역 가져와서 넣어주기
-            monthlyTransactionDetailsList.add(MonthlyTransactionDetails.from(day, dailyTransactionDetailsList));
+            monthlyTransactionDetailsList.add(A803.cardian.statistic.data.dto.response.monthlyCategory.MonthlyTransactionDetails.from(day, dailyTransactionDetailsList));
             startDate = startDate.plusDays(1);
         }
 
         return monthlyTransactionDetailsList;
     }
 
-    //카테고리별 월 소비내역 가지고 오기
-    public List<CategoryTransaction> getCategoryTransaction(int memberId, int month) {
-        List<CategoryTransaction> categoryTransactionList = new ArrayList<>();
+    //월별 특정 카테고리 소비 내역 가지고 오기
+    public CategoryMonthTransactionResponse getCategoryMonthTransactionResponse(int memberId, int month, String categoryName) {
+        //카테고리별
+        //월 소비 내역 가져오기
+        List<MonthDay> monthDayList = Arrays.stream(MonthDay.values()).toList();
+        LocalDate localDate = monthDayList.get(month - 1).toLocalDate().withDayOfMonth(1);
+
+        return CategoryMonthTransactionResponse.toResponse(categoryName, month, getCategoryDayTransaction(memberId, localDate, categoryName));
+    }
+
+    //카테고리별 월 소비금액 가지고 오기
+    public List<CategoryConsume> getCategoryConsume(int memberId, int month) {
+        List<CategoryConsume> categoryConsumeList = new ArrayList<>();
         List<MyCard> myCardList = mycardRepository.findMyCardsByMemberId(memberId);
 
         //카테고리별
@@ -450,18 +463,18 @@ public class StatisticService {
                     categoryConsume += categoryMonthConsume.get().getConsume();
                 }
             }
-//            categoryTransactionList.add(CategoryTransaction.from(categoryName, getMonthlyConsumePerCategory(memberId, localDate, categoryCode), getCategoryDayTransaction(memberId, localDate, categoryName)));
-            categoryTransactionList.add(CategoryTransaction.from(categoryName, categoryConsume, getCategoryDayTransaction(memberId, localDate, categoryName)));
+//            categoryTransactionList.add(CategoryTransaction.from(categoryName, getMonthlyConsumePerCategory(memberId, localDate, categoryCode)));
+            categoryConsumeList.add(CategoryConsume.from(categoryName, categoryConsume));
         }
 
         //내림차순으로 정렬
-        Collections.sort(categoryTransactionList, Comparator.comparingInt(CategoryTransaction::getCategoryConsume).reversed());
+        Collections.sort(categoryConsumeList, Comparator.comparingInt(CategoryConsume::getCategoryConsume).reversed());
 
-        return categoryTransactionList;
+        return categoryConsumeList;
     }
 
     //월별 전체카테고리 총 소비 금액 - 테이블
-    public CategoryMonthTransactionResponse getCategoryMonthTransactionResponse(int memberId, int month) {
+    public CategoryMonthConsumeResponse getCategoryMonthConsumeResponse(int memberId, int month) {
         int entireConsume = 0;
         //전체 카드 월 소비 금액 == 전체 카테고리 월 소비 금액
         List<MyCard> myCardList = mycardRepository.findMyCardsByMemberId(memberId);
@@ -470,7 +483,7 @@ public class StatisticService {
             entireConsume += monthlyCardStatistic.getTotalPrice();
         }
 
-        return CategoryMonthTransactionResponse.toResponse(memberId, month, entireConsume, getCategoryTransaction(memberId, month));
+        return CategoryMonthConsumeResponse.toResponse(memberId, month, entireConsume, getCategoryConsume(memberId, month));
     }
 
     ////카드별 카테고리별 월별 소비 테이블 관련 시작----------------------------------------------------------------------------
