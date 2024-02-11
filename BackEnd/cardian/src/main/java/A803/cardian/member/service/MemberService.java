@@ -140,6 +140,11 @@ public class MemberService {
 //            statisticService.updateCategoryMonthConsume(member.getId());
         statisticService.saveCategoryMonthConsume(member.getId());
         //save
+
+        //멤버테이블 update 날짜 현재로 변경해주기
+//        LocalDateTime newUpdateDate = LocalDateTime.now();
+        LocalDateTime newUpdateDate = LocalDateTime.of(2023,12,31,23,59,59);
+        member.updateUpdateDate(newUpdateDate);
     }
 
     @Transactional

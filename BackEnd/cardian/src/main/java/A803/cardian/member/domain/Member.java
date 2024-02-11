@@ -66,6 +66,11 @@ public class Member {
 
     @OneToOne(mappedBy = "member")
     private Settlement settlement;
+
+    public void updateUpdateDate(LocalDateTime newUpdateDate){
+        this.updateDate = newUpdateDate;
+    }
+
     @Builder
     public Member(String name,
                   LocalDate birth,

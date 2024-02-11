@@ -23,6 +23,8 @@ import A803.cardian.reocommendation.data.dto.response.CardBenefitDetails;
 import A803.cardian.reocommendation.data.dto.response.CardRecommendationResponse;
 import A803.cardian.reocommendation.data.dto.response.CardWithMaxBenefit;
 import A803.cardian.reocommendation.data.dto.response.CategoryBenefitAccumulate;
+import A803.cardian.statistic.domain.AccumulateBenefit;
+import A803.cardian.statistic.repository.AccumulateBenefitRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,6 +45,7 @@ public class RecommendationService {
     private final CategoryBenefitRepository categoryBenefitRepository;
     private final AssociateRepository associateRepository;
     private final CardCategoryMappingRepository cardCategoryMappingRepository;
+    private final AccumulateBenefitRepository accumulateBenefitRepository;
     private final TransactionService transactionService;
     private final ExceptionBenefitService exceptionBenefitService;
 
@@ -424,17 +427,37 @@ public class RecommendationService {
         return recievedBenefitAmountPerMyCard;
     }
 
-    //카테고리별 실제 받은 혜택 계산하기
+    //카테고리별 실제 받은 혜택 계산하기 - 로직
+//    public int getRecievedBenefitAmount(int memberId, String categoryName){
+//        int recievedBenefitAmount = 0;
+//        //내 카드 리스트
+//        List<MyCard> myCardList = mycardRepository.findMyCardsByMemberId(memberId);
+//        for(MyCard myCard : myCardList){
+//            LocalDate now = MonthDay.DECEMBER.toLocalDate(); //현재 시점 12/31 가정.
+//            recievedBenefitAmount += getRecievedBenefitAmountPerMyCard(myCard, now, categoryName);
+//        }
+//        return recievedBenefitAmount;
+//    }
+    //카테고리별 실제 받은 혜택 계산하기 - 로직
+
+    //카테고리별 실제 받은 혜택 계산하기 - 테이블
     public int getRecievedBenefitAmount(int memberId, String categoryName){
+        SubCommonCode subCommonCode = subCommonCodeRepository.findByName(categoryName)
+                .orElseThrow(() ->
+                        new RuntimeException());
+        String categoryCode = subCommonCode.getDetailCode();
         int recievedBenefitAmount = 0;
         //내 카드 리스트
         List<MyCard> myCardList = mycardRepository.findMyCardsByMemberId(memberId);
         for(MyCard myCard : myCardList){
-            LocalDate now = MonthDay.DECEMBER.toLocalDate(); //현재 시점 12/31 가정.
-            recievedBenefitAmount += getRecievedBenefitAmountPerMyCard(myCard, now, categoryName);
+            Optional<AccumulateBenefit> accumulateBenefit = accumulateBenefitRepository.findAccumulateBenefitByMyCardIdAndCategoryCode(myCard.getId(), categoryCode);
+            if(accumulateBenefit.isPresent()) {
+                recievedBenefitAmount += accumulateBenefit.get().getBenefitAmount();
+            }
         }
         return recievedBenefitAmount;
     }
+    //카테고리별 실제 받은 혜택 계산하기 - 테이블
     /*
     Card - 추천해줄 카드
     List<CardBenefitDetails> - 혜택 디테일 정보

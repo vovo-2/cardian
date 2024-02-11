@@ -44,7 +44,7 @@ public class StatisticController {
     }
 
     @Operation(summary = "전체 카드의 월별 카테고리별 사용 내역 조회", description = "전체 카드의 월별 카테고리별 사용 내역을 불러오는 API입니다.")
-    @GetMapping("/{member_id}/{month}/categoryTransaction")
+    @GetMapping("/{member_id}/{month}/CategoryTransaction")
     public ResponseEntity<CategoryMonthTransactionResponse> getCategoryMonthTransactionResponse(@PathVariable("member_id")int memberId, @PathVariable("month")int month){
         return ResponseEntity.ok(statisticService.getCategoryMonthTransactionResponse(memberId, month));
     }
