@@ -5,23 +5,21 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-//추가 api
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class CategoryMonthTransactionResponse {
-    private int memberId;
+    private String categoryName;
     private int month;
-    private int entireCategoryConsume;
-    private List<CategoryTransaction> categoryTransactionList;
+    private List<MonthlyTransactionDetails> monthlyTransactionDetailsList;
 
-    private CategoryMonthTransactionResponse(int memberId, int month, int entireCategoryConsume, List<CategoryTransaction> categoryTransactionList){
-        this.memberId = memberId;
+    private CategoryMonthTransactionResponse(String categoryName, int month, List<MonthlyTransactionDetails> monthlyTransactionDetailsList){
+        this.categoryName = categoryName;
         this.month = month;
-        this.entireCategoryConsume = entireCategoryConsume;
-        this.categoryTransactionList = categoryTransactionList;
+        this.monthlyTransactionDetailsList = monthlyTransactionDetailsList;
     }
 
-    public static CategoryMonthTransactionResponse toResponse(int memberId, int month, int entireCategoryConsume, List<CategoryTransaction> categoryTransactionList){
-        return new CategoryMonthTransactionResponse(memberId, month, entireCategoryConsume, categoryTransactionList);
+    public static CategoryMonthTransactionResponse toResponse(String categoryName, int month, List<MonthlyTransactionDetails> monthlyTransactionDetailsList){
+        return new CategoryMonthTransactionResponse(categoryName, month, monthlyTransactionDetailsList);
     }
-}
+    }
