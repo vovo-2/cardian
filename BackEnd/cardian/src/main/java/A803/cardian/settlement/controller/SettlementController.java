@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 public class SettlementController {
-    private final  SettlementService settlementService;
+    private final SettlementService settlementService;
     private final GoalService goalService;
 
     @Operation(summary = "내 연봉 조회", description = "내 연봉 조회")
@@ -51,5 +51,11 @@ public class SettlementController {
     public ResponseEntity<?> getAchieveSettlement(@PathVariable("member_id")int memberId){
 
         return ResponseEntity.ok(settlementService.settlementAchieve(memberId));
+    }
+
+    @PostMapping("/test")
+    public void saveTest(@RequestParam int memberId){
+
+        goalService.saveGoal(memberId);
     }
 }
