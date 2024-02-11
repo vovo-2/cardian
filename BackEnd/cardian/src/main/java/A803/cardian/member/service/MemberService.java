@@ -105,41 +105,42 @@ public class MemberService {
 //        }
 //
 //    }
-//    @Transactional
-//    public void updateTable(int memberId){
-//        Member member = memberRepository.findById(memberId)
-//                .orElseThrow(() ->
-//                        new RuntimeException());
-//        //update 필요한 테이블들 update
-//        //1. 누적 혜택 테이블 3개
-////            accumulateBenefitService.updateAccumulateBenefit(member.getId());
-//        accumulateBenefitService.updateAccumulateBenefit(member.getId());
-//        //2. 카드 월별 통계
-////            statisticService.updateMonthlyCardStatistic(member.getId());
-//        statisticService.updateMonthlyCardStatistic(member.getId());
-//        //카테고리별 월별 통계
-////            statisticService.updateCategoryMonthConsume(member.getId());
-//        statisticService.updateCategoryMonthConsume(member.getId());
-//        //update 필요한 테이블들 update
-//    }
-//
-//    @Transactional
-//    public void saveTable(int memberId){
-//        Member member = memberRepository.findById(memberId)
-//                .orElseThrow(() ->
-//                        new RuntimeException());
-//        //save
-//        //1. 누적 혜택 테이블 3개
-////            accumulateBenefitService.updateAccumulateBenefit(member.getId());
-//        accumulateBenefitService.saveAccumulateBenefit(member.getId());
-//        //2. 카드 월별 통계
-////            statisticService.updateMonthlyCardStatistic(member.getId());
-//        statisticService.saveMonthlyCardStatistic(member.getId());
-//        //카테고리별 월별 통계
-////            statisticService.updateCategoryMonthConsume(member.getId());
-//        statisticService.saveCategoryMonthConsume(member.getId());
-//        //save
-//    }
+    @Transactional
+    public void updateTable(int memberId){
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() ->
+                        new RuntimeException());
+        //update 필요한 테이블들 update
+        //1. 누적 혜택 테이블 3개
+//            accumulateBenefitService.updateAccumulateBenefit(member.getId());
+        accumulateBenefitService.updateAccumulateBenefit(member.getId());
+        //2. 카드 월별 통계
+//            statisticService.updateMonthlyCardStatistic(member.getId());
+        statisticService.updateMonthlyCardStatistic(member.getId());
+        //카테고리별 월별 통계
+//            statisticService.updateCategoryMonthConsume(member.getId());
+        statisticService.updateCategoryMonthConsume(member.getId());
+        //update 필요한 테이블들 update
+    }
+
+    @Transactional
+    public void saveTable(int memberId){
+        System.out.println("테이블 save ");
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() ->
+                        new RuntimeException());
+        //save
+        //1. 누적 혜택 테이블 3개
+//            accumulateBenefitService.updateAccumulateBenefit(member.getId());
+        accumulateBenefitService.saveAccumulateBenefit(member.getId());
+        //2. 카드 월별 통계
+//            statisticService.updateMonthlyCardStatistic(member.getId());
+        statisticService.saveMonthlyCardStatistic(member.getId());
+        //카테고리별 월별 통계
+//            statisticService.updateCategoryMonthConsume(member.getId());
+        statisticService.saveCategoryMonthConsume(member.getId());
+        //save
+    }
 
     @Transactional
     public Member loginMember(MemberRequestDto memberRequestDto) throws ParseException {

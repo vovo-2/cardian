@@ -45,15 +45,15 @@ public class memberController {
 
         // 로그인 성공
         if(member != null){
+            System.out.println("로그인 성공");
             // 로그인 정보
             // 세션 쿠키
             createCookie(request, response, "memberId", String.valueOf(member.getId()), "session");
-            
+            System.out.println("쿠키 생성");
             // 멤버가 있을 시, 멤버 아이디를 통해 카드사에서 거래 내역 가져와서 업데이트
-            updateService.updateTransactions(member.getId());
+//            updateService.updateTransactions(member.getId());
 
-//            memberService.saveTable(member.getId());
-
+            memberService.saveTable(member.getId());
 
             return ResponseEntity.ok("로그인 성공!");
         }
