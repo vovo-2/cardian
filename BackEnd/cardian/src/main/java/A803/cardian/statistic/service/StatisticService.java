@@ -78,20 +78,57 @@ public class StatisticService {
         return yearConsume;
     }
 
-    //올해 총 소비 금액 + 월별 소비금액
+    //올해 총 소비 금액 + 월별 소비금액 - 로직
+//    public YearConsumeWithMonthlyConsumeResponse getYearConsumeAmountWithMontlhlyConsume(int memberId) {
+//        int january = getMonthlyConsume(memberId, MonthDay.JANUARY.toLocalDate());
+//        int february = getMonthlyConsume(memberId, MonthDay.FEBRUARY.toLocalDate());
+//        int march = getMonthlyConsume(memberId, MonthDay.MARCH.toLocalDate());
+//        int april = getMonthlyConsume(memberId, MonthDay.APRIL.toLocalDate());
+//        int may = getMonthlyConsume(memberId, MonthDay.MAY.toLocalDate());
+//        int june = getMonthlyConsume(memberId, MonthDay.JUNE.toLocalDate());
+//        int july = getMonthlyConsume(memberId, MonthDay.JULY.toLocalDate());
+//        int august = getMonthlyConsume(memberId, MonthDay.AUGUST.toLocalDate());
+//        int september = getMonthlyConsume(memberId, MonthDay.SEPTEMBER.toLocalDate());
+//        int october = getMonthlyConsume(memberId, MonthDay.OCTOBER.toLocalDate());
+//        int november = getMonthlyConsume(memberId, MonthDay.NOVEMBER.toLocalDate());
+//        int december = getMonthlyConsume(memberId, MonthDay.DECEMBER.toLocalDate());
+//        //올해 총 소비 금액
+//        int yearConsume = january + february + march + april + may + june + july + august + september + october + november + december;
+//
+//        YearConsumeAmount yearConsumeAmount = YearConsumeAmount.from(yearConsume, MonthlyConsumeAmount.from(january, february, march, april, may, june, july, august, september, october, november, december));
+//
+//        return YearConsumeWithMonthlyConsumeResponse.toResponse(memberId, yearConsumeAmount);
+//    }
+    //올해 총 소비 금액 + 월별 소비금액 - 로직
+
+    //올해 총 소비 금액 + 월별 소비금액 - 테이블
     public YearConsumeWithMonthlyConsumeResponse getYearConsumeAmountWithMontlhlyConsume(int memberId) {
-        int january = getMonthlyConsume(memberId, MonthDay.JANUARY.toLocalDate());
-        int february = getMonthlyConsume(memberId, MonthDay.FEBRUARY.toLocalDate());
-        int march = getMonthlyConsume(memberId, MonthDay.MARCH.toLocalDate());
-        int april = getMonthlyConsume(memberId, MonthDay.APRIL.toLocalDate());
-        int may = getMonthlyConsume(memberId, MonthDay.MAY.toLocalDate());
-        int june = getMonthlyConsume(memberId, MonthDay.JUNE.toLocalDate());
-        int july = getMonthlyConsume(memberId, MonthDay.JULY.toLocalDate());
-        int august = getMonthlyConsume(memberId, MonthDay.AUGUST.toLocalDate());
-        int september = getMonthlyConsume(memberId, MonthDay.SEPTEMBER.toLocalDate());
-        int october = getMonthlyConsume(memberId, MonthDay.OCTOBER.toLocalDate());
-        int november = getMonthlyConsume(memberId, MonthDay.NOVEMBER.toLocalDate());
-        int december = getMonthlyConsume(memberId, MonthDay.DECEMBER.toLocalDate());
+        int[] consumePerMonth = new int[13];
+        //내 카드 전체 가져오기
+        List<MyCard> myCardList = mycardRepository.findMyCardsByMemberId(memberId);
+        //카드별
+        for(MyCard myCard : myCardList) {
+            //달별 소비금액을
+            for (int month = 1; month <= 12; month++) {
+                MonthlyCardStatistic monthlyCardStatistic = monthlyCardStatisticRepository.findByMyCardIdAndMonth(myCard.getId(), month);
+                //각 월끼리 더해주기
+                consumePerMonth[month] += monthlyCardStatistic.getTotalPrice();
+            }
+        }
+
+        int january = consumePerMonth[1];
+        int february = consumePerMonth[2];
+        int march = consumePerMonth[3];
+        int april = consumePerMonth[4];
+        int may = consumePerMonth[5];
+        int june = consumePerMonth[6];
+        int july = consumePerMonth[7];
+        int august = consumePerMonth[8];
+        int september = consumePerMonth[9];
+        int october = consumePerMonth[10];
+        int november = consumePerMonth[11];
+        int december = consumePerMonth[12];
+
         //올해 총 소비 금액
         int yearConsume = january + february + march + april + may + june + july + august + september + october + november + december;
 
@@ -99,6 +136,7 @@ public class StatisticService {
 
         return YearConsumeWithMonthlyConsumeResponse.toResponse(memberId, yearConsumeAmount);
     }
+    //올해 총 소비 금액 + 월별 소비금액 - 테이블
 
     //내 카드 전체 사용내역을 일자별로 가져오기
     public List<A803.cardian.statistic.data.dto.response.DailyTransactionDetails> getDailyTransactionDetails(int memberId, LocalDate localDate) {
@@ -165,7 +203,7 @@ public class StatisticService {
         return percentage.setScale(2, RoundingMode.HALF_UP);
     }
 
-    //카테고리별 월 총 소비 금액
+    //카테고리별 월 총 소비 금액 - 로직
     public int getMonthlyConsumePerCategory(int memberId, LocalDate localDate, String categoryCode) {
         //당월 카테고리 전체 소비 금액
         int MonthlyConsumePerCategory = 0;
@@ -199,13 +237,24 @@ public class StatisticService {
     //카테고리별 소비 소비 정보 + 카테고리명
     public List<CategoryMonthlyConsumeDetails> getCategoryMonthlyConsumeDetailsWithCategorycode(int memberId, LocalDate localDate, int monthlyConsume) {
         List<CategoryMonthlyConsumeDetails> categoryMonthlyConsumeDetailsList = new ArrayList<>();
-
+        //내 카드
+        List<MyCard> myCardList = mycardRepository.findMyCardsByMemberId(memberId);
+        int month = localDate.getMonthValue();
         //전체 카테고리 내역 가지고 오기
         List<SubCommonCode> subCommonCodeList = subCommonCodeRepository.findAll();
         for (SubCommonCode subCommonCode : subCommonCodeList) {
             String categoryCode = subCommonCode.getDetailCode();
             String categoryName = subCommonCode.getName();
-            categoryMonthlyConsumeDetailsList.add(CategoryMonthlyConsumeDetails.from(categoryName, getMonthlyConsumePerCategory(memberId, localDate, categoryCode)));
+            int monthlyConsumePerCategory = 0;
+            //카테고리별 월 총 소비 금액 - 테이블
+            for(MyCard myCard : myCardList){
+                Optional<CategoryMonthConsume> categoryMonthConsume = categoryMonthConsumeRepository.findByCategoryCodeAndMyCardIdAndMonth(categoryCode, myCard.getId(), month);
+                if(categoryMonthConsume.isPresent()) {
+                    monthlyConsumePerCategory += categoryMonthConsume.get().getConsume();
+                }
+            }
+//            categoryMonthlyConsumeDetailsList.add(CategoryMonthlyConsumeDetails.from(categoryName, getMonthlyConsumePerCategory(memberId, localDate, categoryCode)));//로직
+            categoryMonthlyConsumeDetailsList.add(CategoryMonthlyConsumeDetails.from(categoryName, monthlyConsumePerCategory));
         }
 
         //소비금액 내림차순 정렬
@@ -217,13 +266,22 @@ public class StatisticService {
     //월별 카테고리별 소비 정보 가져오기
     public List<CategoryMonthlyConsume> getCategoryMonthlyConsumeWithMonthlyEntireConsume(int memberId) {
         List<CategoryMonthlyConsume> categoryMonthlyConsumeList = new ArrayList<>();
+        //내 카드 가져오기
+        List<MyCard> myCardList = mycardRepository.findMyCardsByMemberId(memberId);
 
         LocalDate localDate = MonthDay.JANUARY.toLocalDate();//1월부터 시작
         LocalDate startDate = localDate.withDayOfMonth(1); //1/1부터 시작
         LocalDate endDate = startDate.plusYears(1); //1년동안
         while (startDate.isBefore(endDate)) {
             int month = startDate.getMonthValue();
-            int monthlyConsume = getMonthlyConsume(memberId, startDate); //해당월의 총 소비금액
+//            int monthlyConsume = getMonthlyConsume(memberId, startDate); //해당월의 총 소비금액 - 로직
+            // 해당월의 총 소비 금액 - 테이블
+            int monthlyConsume = 0;
+            for(MyCard myCard : myCardList) {
+                MonthlyCardStatistic monthlyCardStatistic = monthlyCardStatisticRepository.findByMyCardIdAndMonth(myCard.getId(), month);
+                monthlyConsume += monthlyCardStatistic.getTotalPrice();
+            }
+            // 해당월의 총 소비 금액 - 테이블
             categoryMonthlyConsumeList.add(CategoryMonthlyConsume.from(month, monthlyConsume, getCategoryMonthlyConsumeDetailsWithCategorycode(memberId, startDate, monthlyConsume)));
             startDate = startDate.plusMonths(1);
         }
@@ -369,6 +427,7 @@ public class StatisticService {
     //카테고리별 월 소비내역 가지고 오기
     public List<CategoryTransaction> getCategoryTransaction(int memberId, int month) {
         List<CategoryTransaction> categoryTransactionList = new ArrayList<>();
+        List<MyCard> myCardList = mycardRepository.findMyCardsByMemberId(memberId);
 
         //카테고리별
         List<SubCommonCode> subCommonCodeList = subCommonCodeRepository.findAll();
@@ -382,10 +441,17 @@ public class StatisticService {
             //월 소비 내역
             List<MonthDay> monthDayList = Arrays.stream(MonthDay.values()).toList();
             LocalDate localDate = monthDayList.get(month - 1).toLocalDate().withDayOfMonth(1);
-            System.out.println(localDate + "월입니다.");
-            //일자별 가져오기
-            //추후 테이블 사용으로 코드 변경
-            categoryTransactionList.add(CategoryTransaction.from(categoryName, getMonthlyConsumePerCategory(memberId, localDate, categoryCode), getCategoryDayTransaction(memberId, localDate, categoryName)));
+
+            //카테고리별 월 총 소비 금액 - 테이블
+            int categoryConsume = 0;
+            for(MyCard myCard : myCardList){
+                Optional<CategoryMonthConsume> categoryMonthConsume = categoryMonthConsumeRepository.findByCategoryCodeAndMyCardIdAndMonth(categoryCode, myCard.getId(), month);
+                if(categoryMonthConsume.isPresent()) {
+                    categoryConsume += categoryMonthConsume.get().getConsume();
+                }
+            }
+//            categoryTransactionList.add(CategoryTransaction.from(categoryName, getMonthlyConsumePerCategory(memberId, localDate, categoryCode), getCategoryDayTransaction(memberId, localDate, categoryName)));
+            categoryTransactionList.add(CategoryTransaction.from(categoryName, categoryConsume, getCategoryDayTransaction(memberId, localDate, categoryName)));
         }
 
         //내림차순으로 정렬
@@ -394,52 +460,16 @@ public class StatisticService {
         return categoryTransactionList;
     }
 
-    /*
-    //카테고리별 월 총 소비 금액
-    public int getMonthlyConsumePerCategory(int memberId, LocalDate localDate, String categoryCode)
-     */
-
-    //총 소비 금액 값 임시 저장 -> 추후 수정 필요
+    //월별 전체카테고리 총 소비 금액 - 테이블
     public CategoryMonthTransactionResponse getCategoryMonthTransactionResponse(int memberId, int month) {
         int entireConsume = 0;
-        switch (month){
-            case 1:
-                entireConsume = 9050600;
-                break;
-            case 2:
-                entireConsume = 6592900;
-                break;
-            case 3:
-                entireConsume = 11789000;
-                break;
-            case 4:
-                entireConsume = 10150600;
-                break;
-            case 5:
-                entireConsume = 9304800;
-                break;
-            case 6:
-                entireConsume = 8670500;
-                break;
-            case 7:
-                entireConsume = 6259500;
-                break;
-            case 8:
-                entireConsume = 8182500;
-                break;
-            case 9:
-                entireConsume = 11015000;
-                break;
-            case 10:
-                entireConsume = 7181300;
-                break;
-            case 11:
-                entireConsume = 11989000;
-                break;
-            case 12:
-                entireConsume = 10231300;
-                break;
+        //전체 카드 월 소비 금액 == 전체 카테고리 월 소비 금액
+        List<MyCard> myCardList = mycardRepository.findMyCardsByMemberId(memberId);
+        for(MyCard myCard : myCardList){
+            MonthlyCardStatistic monthlyCardStatistic = monthlyCardStatisticRepository.findByMyCardIdAndMonth(myCard.getId(), month);
+            entireConsume += monthlyCardStatistic.getTotalPrice();
         }
+
         return CategoryMonthTransactionResponse.toResponse(memberId, month, entireConsume, getCategoryTransaction(memberId, month));
     }
 
@@ -542,7 +572,9 @@ public class StatisticService {
                     int consumeAfterUpdate = categoryMonthConsumeDetails.getConsumeAfterUpdate();
 
                     //해당 객체 가져오기
-                    CategoryMonthConsume categoryMonthConsume = categoryMonthConsumeRepository.findByCategoryCodeAndMyCardIdAndMonth(categoryCode, myCard.getId(), month);
+                    CategoryMonthConsume categoryMonthConsume = categoryMonthConsumeRepository.findByCategoryCodeAndMyCardIdAndMonth(categoryCode, myCard.getId(), month)
+                            .orElseThrow(() ->
+                                    new RuntimeException());
                     //갱신 이전의 누적값 가져오기
                     int consumeBeforeUpdate = categoryMonthConsume.getConsume();
                     categoryMonthConsume.updateConsume(consumeBeforeUpdate + consumeAfterUpdate);

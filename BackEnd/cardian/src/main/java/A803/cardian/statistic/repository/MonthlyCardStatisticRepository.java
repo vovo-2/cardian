@@ -15,4 +15,6 @@ public interface MonthlyCardStatisticRepository extends JpaRepository<MonthlyCar
     Optional<MonthlyCardStatistic> findByMyCardIdAndAndMonth(int cardId, int month);
 
     List<MonthlyCardStatistic> findMonthlyCardStatisticsByMemberId(int memberId);
+
+    MonthlyCardStatistic findByMyCardIdAndMonth(int myCardId, int month);
 }

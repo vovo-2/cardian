@@ -4,7 +4,8 @@ import A803.cardian.statistic.domain.CategoryMonthConsume;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CategoryMonthConsumeRepository extends JpaRepository<CategoryMonthConsume, Integer> {
-    CategoryMonthConsume findByCategoryCodeAndMyCardIdAndMonth(String categoryCode, int myCardId, int month);
+    Optional<CategoryMonthConsume> findByCategoryCodeAndMyCardIdAndMonth(String categoryCode, int myCardId, int month);
 }

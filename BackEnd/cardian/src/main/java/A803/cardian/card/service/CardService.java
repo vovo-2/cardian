@@ -7,6 +7,7 @@ import A803.cardian.card.data.dto.response.MyCardInfoDetails;
 import A803.cardian.card.data.dto.response.MyCardInfoResponse;
 import A803.cardian.card.data.dto.response.MyCardListResponse;
 import A803.cardian.card.domain.Card;
+import A803.cardian.card.domain.MonthDay;
 import A803.cardian.card.domain.MyCard;
 import A803.cardian.card.repository.CardRepository;
 import A803.cardian.card.repository.MyCardBenefitRepository;
@@ -62,21 +63,32 @@ public class CardService {
                         new ErrorException(ErrorCode.NO_CARD));
 
         Card card = myCard.getCard();
-        LocalDate localDate = LocalDate.now();
-        localDate = localDate.withYear(2023);
+//        LocalDate localDate = LocalDate.now();
+        LocalDate now = MonthDay.DECEMBER.toLocalDate();
 
         /*
         public static MyCardInfoDetails from(MyCard myCard, int accumulateBenefitAmount, int accumulate)
          */
-        //누적 혜택 가져오기
-        Optional<AccumulateBenefit> accumulateBenefit = accumulateBenefitRepository.findAccumulateBenefitByMyCardIdAndCategoryCode(myCard.getId(), card.getBenefitCode().getValue());
-        //누적 혜택 금액 가져오기
+        //누적 혜택 가져오기 - 로직
+//        Optional<AccumulateBenefit> accumulateBenefit = accumulateBenefitRepository.findAccumulateBenefitByMyCardIdAndCategoryCode(myCard.getId(), card.getBenefitCode().getValue());
+//        int accumulateBenefitAmount = 0;
+//        if(accumulateBenefit.isPresent()){
+//            accumulateBenefitAmount = accumulateBenefit.get().getBenefitAmount();
+//        }
+        //누적 혜택 가져오기 - 로직
+
+        //누적 혜택 가져오기 - 테이블
+        //1. 카드별 당월 카테고리별 누적 혜택 금액 객체를 카드아이디로 리스트로 가져오기
         int accumulateBenefitAmount = 0;
-        if(accumulateBenefit.isPresent()){
-            accumulateBenefitAmount = accumulateBenefit.get().getBenefitAmount();
+        List<AccumulateBenefit> accumulateBenefitList = accumulateBenefitRepository.findAccumulateBenefitsByMyCardId(myCardId);
+        for (AccumulateBenefit accumulateBenefit : accumulateBenefitList) {
+            //모든 카테고리별 누적혜택 더해주기
+            accumulateBenefitAmount += accumulateBenefit.getBenefitAmount();
         }
-        //당월 사용금액 가져오기
-        int totalaccumulate = transactionService.getMonthlyAccumulate(myCard.getId(), localDate);
+        //누적 혜택 가져오기 - 테이블
+
+        //당월 사용금액 가져오기 - 로직
+        int totalaccumulate = transactionService.getMonthlyAccumulate(myCard.getId(), now);
 
         return MyCardInfoResponse.toResponse(myCard, MyCardInfoDetails.from(myCard, accumulateBenefitAmount, totalaccumulate));
     }
