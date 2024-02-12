@@ -2,6 +2,7 @@ package A803.cardian.member.controller;
 
 import A803.cardian.card.service.UpdateService;
 import A803.cardian.member.data.request.MemberRequestDto;
+import A803.cardian.member.data.response.MemberResponseDto;
 import A803.cardian.member.domain.Member;
 import A803.cardian.member.service.MemberService;
 import A803.cardian.statistic.service.AccumulateBenefitService;
@@ -36,7 +37,7 @@ public class memberController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(HttpServletRequest request, HttpServletResponse response, @RequestBody MemberRequestDto memberRequestDto) throws ParseException {
+    public ResponseEntity<MemberResponseDto> login(HttpServletRequest request, HttpServletResponse response, @RequestBody MemberRequestDto memberRequestDto) throws ParseException {
 
         System.out.println("memberRequestDto = " + memberRequestDto.getName());
 
@@ -55,9 +56,9 @@ public class memberController {
 
             memberService.saveTable(member.getId());
 
-            return ResponseEntity.ok("로그인 성공!");
+            return ResponseEntity.ok(MemberResponseDto.toResponse(member.getId(), "로그인 성공!!"));
         }
-        return ResponseEntity.ok("로그인 실패!");
+        return ResponseEntity.ok(MemberResponseDto.toResponse(0, "로그인 실패!!"));
 
     }
 
