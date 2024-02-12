@@ -1,18 +1,25 @@
 import { ChangeEvent, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { axios } from "../api";
+import useAuthStore from "../store/AuthStore";
 
 import TopBar from "../layouts/TopBar";
 import LoginStep1 from "../components/Login/LoginStep1";
 import LoginStep2 from "../components/Login/LoginStep2";
 import PrevButton from "../components/Login/PrevButton";
 import NextButton from "../components/Login/NextButton";
-import { axios } from "../api";
 
+// TODO: 데이터 받아오기 전까지 로딩 UI 추가
 export default function LoginPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [name, setName] = useState("");
   const [residentRegistrationNumber, setResidentRegistrationNumber] =
     useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+
+  const navigate = useNavigate();
+  const { login } = useAuthStore();
 
   const prevStep = () => {
     setCurrentStep((prevStep) => prevStep - 1);
@@ -27,11 +34,20 @@ export default function LoginPage() {
             residentRegistrationNumber,
             phoneNumber,
           },
-          { withCredentials: true, }
+          { withCredentials: true }
         )
-        .then((res) => {
-          console.log(res);
+        .then(({ data }) => {
+          const memberId = data.memberId;
+          if (memberId) {
+            login(memberId);
+            navigate("/");
+          }
+        })
+        .catch((error) => {
+          console.error("Login Failed:", error);
         });
+
+      return;
     }
 
     setCurrentStep((prevStep) => prevStep + 1);
