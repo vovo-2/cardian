@@ -12,15 +12,13 @@ interface NextButtonProps {
 
 export default function NextButton({ onNext }: NextButtonProps) {
   return (
-    <div className="w-full">
-      <Button
-        theme={LoginButtonTheme}
-        color="blue"
-        onClick={onNext}
-        className="w-full"
-      >
-        <span className="text-xl font-bold">다음</span>
-      </Button>
-    </div>
+    <Button
+      theme={LoginButtonTheme}
+      color="blue"
+      onClick={onNext}
+      className="w-full"
+    >
+      <span className="text-xl font-bold">다음</span>
+    </Button>
   );
 }
