@@ -88,7 +88,7 @@ export default function MenuPage() {
             {/* 버튼 하나 끝 */}
           </div>
         </div>
-        <div className="text-right row-span-1 h-full ">
+        <div className="text-right row-span-1">
           <button className="hover:text-blue font-bold ">로그아웃</button>
         </div>
       </div>
