@@ -49,12 +49,17 @@ export default function MyIncome({
 
   const handleSubmit = () => {
     const sendSalary = inputSalary * 10000;
-    axios
-      .put(`/settlement/${memberId}/${sendSalary}`, { withCredentials: true })
-      .then(() => {
-        setSalary(sendSalary);
-      });
-    setOpenModal(false);
+
+    if (sendSalary >= 0 && sendSalary < 1000000000) {
+      axios
+        .put(`/settlement/${memberId}/${sendSalary}`, { withCredentials: true })
+        .then(() => {
+          setSalary(sendSalary);
+        });
+      setOpenModal(false);
+    } else if (sendSalary >= 1000000000) {
+      alert("10억 이상은 입력할 수 없습니다.")
+    }
   };
 
   return (
