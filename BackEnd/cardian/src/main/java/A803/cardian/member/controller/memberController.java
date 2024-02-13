@@ -56,9 +56,9 @@ public class memberController {
 
 //            memberService.saveTable(member.getId());
 
-            return ResponseEntity.ok(MemberResponseDto.toResponse(member.getId(), "로그인 성공!!"));
+            return ResponseEntity.ok(MemberResponseDto.toResponse(member.getId(), member.getName(), "로그인 성공!!"));
         }
-        return ResponseEntity.ok(MemberResponseDto.toResponse(0, "로그인 실패!!"));
+        return ResponseEntity.ok(MemberResponseDto.toResponse(0, "", "로그인 실패!!"));
 
     }
 
