@@ -24,7 +24,12 @@ import A803.cardian.reocommendation.data.dto.response.CardRecommendationResponse
 import A803.cardian.reocommendation.data.dto.response.CardWithMaxBenefit;
 import A803.cardian.reocommendation.data.dto.response.CategoryBenefitAccumulate;
 import A803.cardian.statistic.domain.AccumulateBenefit;
+import A803.cardian.statistic.domain.AccumulateCategoryBenefit;
+import A803.cardian.statistic.domain.AccumulateExceptionBenefit;
 import A803.cardian.statistic.repository.AccumulateBenefitRepository;
+import A803.cardian.statistic.repository.AccumulateCategoryBenefitRepository;
+import A803.cardian.statistic.repository.AccumulateExceptionBenefitRepository;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,18 +51,21 @@ public class RecommendationService {
     private final AssociateRepository associateRepository;
     private final CardCategoryMappingRepository cardCategoryMappingRepository;
     private final AccumulateBenefitRepository accumulateBenefitRepository;
+    private final AccumulateExceptionBenefitRepository accumulateExceptionBenefitRepository;
+    private final AccumulateCategoryBenefitRepository accumulateCategoryBenefitRepository;
     private final TransactionService transactionService;
     private final ExceptionBenefitService exceptionBenefitService;
 
     //할인금액 계산
     //예외혜택
     public int calculateDiscountAmountWithExceptionBenefit(Transaction transaction, ExceptionBenefit exceptionBenefit, int benefitAmount) {
+
         Card card = transaction.getMyCard().getCard();
         int calAmount = 0; //계산될 혜택 값
         int discountLimit = exceptionBenefit.getDiscountLimit(); //혜택 한도
 
         //1. 해당 카테고리의 누적혜택금액이 한도를 채웠으면 혜택 0원
-        if(benefitAmount >= discountLimit){
+        if (benefitAmount >= discountLimit) {
             return 0;
         }
         //2. 넘지 않았으면 계산
@@ -66,13 +74,13 @@ public class RecommendationService {
             int discountLine = exceptionBenefit.getDiscountLine(); //혜택기준
             int discountAmount = exceptionBenefit.getDiscountAmount(); //혜택크기
             //할인형일 때
-            if(card.getBenefitCode().equals(BenefitCode.DISCOUNT)){
+            if (card.getBenefitCode().equals(BenefitCode.DISCOUNT)) {
                 calAmount = transactionService.getDiscountAmountUsingSignWithDiscount(price, discountLine, discountAmount, exceptionBenefit.getSign());//결과혜택을 누적혜택에 더했을 때 한도를 넘는지 확인
                 //넘거나 같으면
-                if(benefitAmount + calAmount >= discountLimit){
+                if (benefitAmount + calAmount >= discountLimit) {
                     // 남은 한도만큼만 리턴
                     return discountLimit - benefitAmount;
-                } else{ //넘지 않으면 계산된 혜택 리턴
+                } else { //넘지 않으면 계산된 혜택 리턴
                     return calAmount;
                 }
             }
@@ -81,12 +89,13 @@ public class RecommendationService {
                 //할인 기준 넘으면 계산
                 if (price >= discountLine) {
                     int result = transactionService.getDiscountAmountUsingSign(price, discountAmount, exceptionBenefit.getSign());
+
                     //결과혜택을 누적혜택에 더했을 때 한도를 넘는지 확인
                     //넘거나 같으면
-                    if(benefitAmount + result >= discountLimit){
+                    if (benefitAmount + result >= discountLimit) {
                         // 남은 한도만큼만 리턴
                         return discountLimit - benefitAmount;
-                    } else{ //넘지 않으면 계산된 혜택 리턴
+                    } else { //넘지 않으면 계산된 혜택 리턴
                         return result;
                     }
                 }
@@ -102,6 +111,7 @@ public class RecommendationService {
     //카테고리혜택 -> 잘못된 부분 있는 듯
     public int calculateDiscountAmountWithCategoryBenefit(Transaction transaction, CategoryBenefit categoryBenefit, int benefitAmount) {
         Card card = transaction.getMyCard().getCard();
+        System.out.println("카드 종류 " + card.getBenefitCode());
         int calAmount = 0; //계산될 혜택 값
         int discountLimit = categoryBenefit.getDiscountLimit(); //혜택 한도
 
@@ -117,6 +127,7 @@ public class RecommendationService {
             //할인형일 때
             if(card.getBenefitCode().equals(BenefitCode.DISCOUNT)){
                 calAmount = transactionService.getDiscountAmountUsingSignWithDiscount(price, discountLine, discountAmount, categoryBenefit.getSign());
+                System.out.println("계산된 할인값 : " + calAmount);
                 //결과혜택을 누적혜택에 더했을 때 한도를 넘는지 확인
                 //넘거나 같으면
                 if(benefitAmount + calAmount >= discountLimit){
@@ -131,6 +142,7 @@ public class RecommendationService {
                 //할인 기준 넘으면 계산
                 if (price >= discountLine) {
                     calAmount = transactionService.getDiscountAmountUsingSign(price, discountAmount, categoryBenefit.getSign());
+                    System.out.println("계산된 혜택값 : " + calAmount);
                     //결과혜택을 누적혜택에 더했을 때 한도를 넘는지 확인
                     //넘거나 같으면
                     if(benefitAmount + calAmount >= discountLimit){
@@ -172,13 +184,15 @@ public class RecommendationService {
 
     //당월 모든 사용내역 가져오기
     public List<Transaction> getEntireMonthTransactions(int memberId, LocalDate now){
+        //당월 1일로 바꿔주기
+        LocalDate startDate = now.withDayOfMonth(1);
+        //다음달 1일
+        LocalDate endDate = startDate.plusMonths(1);
         List<Transaction> mainTransactionList = new ArrayList<>();
         //사용내역 뽑아올 내 카드 리스트 가져오기
         List<MyCard> myCardList = mycardRepository.findMyCardsByMemberId(memberId);
         for(MyCard myCard : myCardList) {
-            //당월 1일 가져오기
-            LocalDate startDate = now.withDayOfMonth(1);
-            while (startDate.isBefore(now)) {
+            while (startDate.isBefore(endDate)) {
                 //해당일자 사용 내역들 가져오기
                 List<Transaction> subTransactionList = transactionRepository.findTransactionsByMyCardIdAndDay(myCard.getId(), startDate);
                 //없으면 넘기기
@@ -192,6 +206,10 @@ public class RecommendationService {
                 }
                 startDate = startDate.plusDays(1);
             }
+            //당월 1일로 바꿔주기
+            startDate = now.withDayOfMonth(1);
+            //다음달 1일
+            endDate = startDate.plusMonths(1);
         }
         return mainTransactionList;
     }
@@ -214,6 +232,10 @@ public class RecommendationService {
                 .orElseThrow(() ->
                         new ErrorException(ErrorCode.NO_SUBCOMMONCODE));
         String categoryCode = subCommonCode.getDetailCode();
+
+        //당월 전체 사용내역 가져와서
+        List<Transaction> transactionList = getEntireMonthTransactions(memberId, now);
+
         //내 카드 리스트 가져오기
         List<MyCard> myCardList = mycardRepository.findMyCardsByMemberId(memberId);
         for(MyCard myCard : myCardList){
@@ -223,18 +245,32 @@ public class RecommendationService {
             Optional<ExceptionBenefit> exceptionBenefit = exceptionBenefitRepository.findByCardIdAndCategoryCode(card.getId(), categoryCode);
             //예외 혜택 존재하면 예외혜택으로 계산하기
             if(exceptionBenefit.isPresent()){
+                //예외혜택이 적용되는 제휴사 아이디
+                int associateId = exceptionBenefit.get().getAssociateId();
+
                 int benefitAmount = 0;
-                //당월 사용내역 가져와서
-                List<Transaction> transactionList = getEntireMonthTransactions(memberId, now);
+
                 //혜택 적용해서 계산한 값을 가져오기 - 로직
-//                for(Transaction transaction : transactionList){
-//                    benefitAmount += calculateDiscountAmountWithExceptionBenefit(transaction, exceptionBenefit.get(), benefitAmount);
-//                }
-                //당월 해당 카테고리 혜택값 가져오기 - 테이블
-                AccumulateBenefit accumulateBenefit = accumulateBenefitRepository.findAccumulateBenefitByMyCardIdAndCategoryCode(myCard.getId(), categoryCode)
-                        .orElseThrow(() ->
-                                new RuntimeException());
-                benefitAmount = accumulateBenefit.getBenefitAmount();
+                for(Transaction transaction : transactionList){
+                    //해당 소비내역 제휴사가 예외혜택에 포함이면 계산해주기
+                    Associate associate = associateRepository.findByName(transaction.getStore())
+                            .orElseThrow(() ->
+                                    new RuntimeException());
+                    //예외혜택에 속하지 않으면 넘기기
+                    if(associate.getId() != associateId){
+                        continue;
+                    }
+                    System.out.println("현재 보는 예외 혜택 제휴처 " + associate.getName());
+
+                    benefitAmount += calculateDiscountAmountWithExceptionBenefit(transaction, exceptionBenefit.get(), benefitAmount);
+                    System.out.println("현재 누적 예외혜택금액 : " + benefitAmount);
+                }
+                //당월 해당 예외카테고리 혜택값 가져오기 - 테이블
+//                AccumulateExceptionBenefit accumulateExceptionBenefit = accumulateExceptionBenefitRepository.findByMyCardIdAndCategoryCode(myCard.getId(), categoryCode)
+//                        .orElseThrow(() ->
+//                                new RuntimeException());
+//                benefitAmount = accumulateExceptionBenefit.getBenefitAmount();
+
                 System.out.println("계산된 혜택 : " + benefitAmount + " 혜택 한도를 넘으면 안됨");
                 //계산된 혜택이 최대혜택값보다 크면 resultCardMaxBenefit 갱신
                 //여기서 무조건 mycard 객체가 들어감
@@ -258,55 +294,73 @@ public class RecommendationService {
                     }
                 }
             }
-            //없으면 카테고리 혜택 있는지 확인
-            else{
-                //카드아이디와 카테고리코드로 확인
-                Optional<CategoryBenefit> categoryBenefit = categoryBenefitRepository.findCategoryBenefitByCardIdAndCategoryCode(card.getId(), categoryCode);
+            //카테고리 혜택 있는지 확인
+            //카드아이디와 카테고리코드로 확인
+            Optional<CategoryBenefit> categoryBenefit = categoryBenefitRepository.findCategoryBenefitByCardIdAndCategoryCode(card.getId(), categoryCode);
+            //카테고리 혜택 존재하면 카테고리 혜택으로 계산하기
+            if(categoryBenefit.isPresent()){
+                //카테고리혜택이 적용되는 제휴사 아이디 리스트
+                List<CardCategoryMapping> cardCategoryMappingList = cardCategoryMappingRepository.findCardCategoryMappingsByCategoryBenefitId(categoryBenefit.get().getId());
+                List<Integer> associateIdList = new ArrayList<>();
+                for(CardCategoryMapping cardCategoryMapping : cardCategoryMappingList){
+                    associateIdList.add(cardCategoryMapping.getAssociate().getId());
+                }
 
                 int benefitAmount = 0;
-                //카테고리 혜택 존재하면 카테고리 혜택으로 계산하기
-                if(categoryBenefit.isPresent()){
-                    //당월 사용내역 가져와서
-                    List<Transaction> transactionList = getEntireMonthTransactions(memberId, now);
-                    //혜택 적용해서 계산한 값을 가져오기 - 로직
-//                    for(Transaction transaction : transactionList){
-//                        benefitAmount += calculateDiscountAmountWithCategoryBenefit(transaction, categoryBenefit.get(), benefitAmount);
-//                    }
-                    //당월 해당 카테고리 혜택값 가져오기 - 테이블
-                    AccumulateBenefit accumulateBenefit = accumulateBenefitRepository.findAccumulateBenefitByMyCardIdAndCategoryCode(myCard.getId(), categoryCode)
-                            .orElseThrow(() ->
-                                    new RuntimeException());
-                    benefitAmount = accumulateBenefit.getBenefitAmount();
-                    System.out.println("계산된 혜택 : " + benefitAmount + " 혜택 한도를 넘으면 안됨");
-                    //계산된 혜택이 최대혜택값보다 크면 resultCardMaxBenefit 갱신
-                    if(benefitAmount > resultCardMaxBenefit.getMaxBenefit()){
-                        resultCardMaxBenefit = CardWithMaxBenefit.from(myCard, benefitAmount);
-                    }
-                    //만약 혜택 값이 같으면
-                    else if(benefitAmount == resultCardMaxBenefit.getMaxBenefit()){
-                        //실적 비교
-                        //내 카드아이디로 당월누적사용금액 가져오기
-//                        int targetAccumulate = goalRepository.findByMyCardId(resultCardMaxBenefit.getMyCard().getId()).getAccumulate();
-//                        int resultAccumulate = goalRepository.findByMyCardId(myCard.getId()).getAccumulate();
-                        int targetAccumulate = getMonthAccumulate(resultCardMaxBenefit.getMyCard(), now);
-                        int resultAccumulate = getMonthAccumulate(myCard, now);
+//                //당월 사용내역 가져와서
+//                List<Transaction> transactionList = getEntireMonthTransactions(memberId, now);
+                //혜택 적용해서 계산한 값을 가져오기 - 로직
+                    for(Transaction transaction : transactionList){
+                        //해당 소비내역 제휴사가 예외혜택에 포함이면 계산해주기
+                        Associate associate = associateRepository.findByName(transaction.getStore())
+                                .orElseThrow(() ->
+                                        new RuntimeException());
+                        //카테고리 혜택에 속하면
+                        for(Integer associateId : associateIdList){
+                            if(associateId == associate.getId()){
+                                System.out.println("현재 보는 카테고리 혜택 제휴처 " + associate.getName());
 
+                                benefitAmount += calculateDiscountAmountWithCategoryBenefit(transaction, categoryBenefit.get(), benefitAmount);
 
-                        //둘 중 실적이 더 많이 남아있는 (값 비교했을 때 더 작은) 것 추천
-                        //여기서도 같으면 resultCardMaxBenefit 갱신해주지 않음
-                        //현재 보는 카드 실적 목표가 많이 남아있으면 값 갱신
-                        if(resultAccumulate < targetAccumulate){
-                            resultCardMaxBenefit = CardWithMaxBenefit.from(myCard, benefitAmount);
+                                System.out.println("현재 누적 카테고리혜택금액 : " + benefitAmount);
+                            }
                         }
                     }
+                //당월 해당 카테고리 혜택값 가져오기 - 테이블
+//                AccumulateCategoryBenefit accumulateCategoryBenefit = accumulateCategoryBenefitRepository.findByMyCardIdAndCategoryBenefitId(myCard.getId(), categoryBenefit.get().getId())
+//                        .orElseThrow(()->
+//                                new RuntimeException());
+//                benefitAmount = accumulateCategoryBenefit.getBenefitAmount();
+
+                System.out.println("계산된 혜택 : " + benefitAmount + " 혜택 한도를 넘으면 안됨");
+                //계산된 혜택이 최대혜택값보다 크면 resultCardMaxBenefit 갱신
+                if(benefitAmount > resultCardMaxBenefit.getMaxBenefit()){
+                    resultCardMaxBenefit = CardWithMaxBenefit.from(myCard, benefitAmount);
                 }
-                //카테고리 혜택도 없으면 0 리턴
-                else{
-                    continue;
+                //만약 혜택 값이 같으면
+                else if(benefitAmount == resultCardMaxBenefit.getMaxBenefit()){
+                    //실적 비교
+                    //내 카드아이디로 당월누적사용금액 가져오기
+//                        int targetAccumulate = goalRepository.findByMyCardId(resultCardMaxBenefit.getMyCard().getId()).getAccumulate();
+//                        int resultAccumulate = goalRepository.findByMyCardId(myCard.getId()).getAccumulate();
+                    int targetAccumulate = getMonthAccumulate(resultCardMaxBenefit.getMyCard(), now);
+                    int resultAccumulate = getMonthAccumulate(myCard, now);
+
+
+                    //둘 중 실적이 더 많이 남아있는 (값 비교했을 때 더 작은) 것 추천
+                    //여기서도 같으면 resultCardMaxBenefit 갱신해주지 않음
+                    //현재 보는 카드 실적 목표가 많이 남아있으면 값 갱신
+                    if(resultAccumulate < targetAccumulate){
+                        resultCardMaxBenefit = CardWithMaxBenefit.from(myCard, benefitAmount);
+                    }
                 }
             }
-            System.out.println("현재 가장 큰 혜택인 카드 : " + resultCardMaxBenefit.getMyCard().getCard().getName() + " 혜택값 : " + resultCardMaxBenefit.getMaxBenefit());
+            //카테고리 혜택도 없으면 0 리턴
+            else{
+                continue;
+            }
         }
+        System.out.println("현재 가장 큰 혜택인 카드 : " + resultCardMaxBenefit.getMyCard().getCard().getName() + " 혜택값 : " + resultCardMaxBenefit.getMaxBenefit());
 
         return resultCardMaxBenefit; //카테고리가 모든 카드에 혜택이 없으면 null 반환인데 우리 데이터는 그런 경우 없음. null 반환될 일 없다.
     }
