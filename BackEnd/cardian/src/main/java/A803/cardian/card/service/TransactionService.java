@@ -271,6 +271,10 @@ public class TransactionService {
 
                     dailyTransactionDetailsList.add(DailyTransactionDetails.from(transaction, associate, categoryBenefitAmount));
                 }
+                //카테고리 혜택도 없으면
+                else{
+                    dailyTransactionDetailsList.add(DailyTransactionDetails.from(transaction, associate, 0));
+                }
             }
         }
         return dailyTransactionDetailsList;
@@ -308,6 +312,7 @@ public class TransactionService {
     //카드별 전체 사용내역 가져오기
     public EntireTransactionsByMyCardResponse getMyCardYearTransactioins(int myCardId) {
         List<YearTransactionDetails> yearTransactionDetailsList = new ArrayList<>();
+//        LocalDate now = LocalDate.now();
         LocalDate start = MonthDay.DECEMBER.toLocalDate();//12월 31일
 
         LocalDate end = start.minusYears(1);

@@ -54,7 +54,7 @@ public class memberController {
             // 멤버가 있을 시, 멤버 아이디를 통해 카드사에서 거래 내역 가져와서 업데이트
 //            updateService.updateTransactions(member.getId());
 
-            memberService.saveTable(member.getId());
+//            memberService.saveTable(member.getId());
 
             return ResponseEntity.ok(MemberResponseDto.toResponse(member.getId(), "로그인 성공!!"));
         }
