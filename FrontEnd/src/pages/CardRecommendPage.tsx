@@ -4,6 +4,7 @@ import { axios } from "../api";
 import CategoryButtonList from "../components/CardRecommend/CategoryButtonList";
 import Badge from "../components/ui/Badge";
 import { formatBenefitType } from "../utils/formatUtils";
+import useAuthStore from "../store/AuthStore";
 
 type Category = {
   categoryCode: string;
@@ -37,6 +38,7 @@ export default function CardRecommendPage() {
   const moreReceivedBenefit =
     (recommendationCard?.maxBenefitAmount || 0) -
     (recommendationCard?.recievedBenefitAmount || 0);
+  const { memberId } = useAuthStore();
 
   useEffect(() => {
     axios.get("/search/category-image").then(({ data }) => {
@@ -47,7 +49,6 @@ export default function CardRecommendPage() {
   const handleCategorySelect = (category: Category) => {
     setSelectedCategory(category);
 
-    const memberId = 1;
     axios
       .get(`/recommendation/${memberId}/${category.categoryName}`)
       .then(({ data }) => {
@@ -115,7 +116,7 @@ export default function CardRecommendPage() {
                         <span className="col-span-5">{associateName}</span>
                         <span className="col-span-4 text-xl font-bold text-blue">
                           <span>{discountAmount}</span>
-                          <span>{sign === '+' ? '원' : sign}</span>
+                          <span>{sign === "+" ? "원" : sign}</span>
                         </span>
                         <span className="col-span-3">
                           {formatBenefitType(recommendationCard.benefitCode)}

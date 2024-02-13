@@ -6,11 +6,11 @@ const LoginButtonTheme: CustomFlowbiteTheme["button"] = {
   },
 };
 
-interface NextButtonProps {
+interface SubmitButtonProps {
   onNext: () => void;
 }
 
-export default function NextButton({ onNext }: NextButtonProps) {
+export default function SubmitButton({ onNext }: SubmitButtonProps) {
   return (
     <Button
       theme={LoginButtonTheme}
@@ -18,7 +18,7 @@ export default function NextButton({ onNext }: NextButtonProps) {
       onClick={onNext}
       className="w-full"
     >
-      <span className="text-xl font-bold">다음</span>
+      <span className="text-xl font-bold">완료</span>
     </Button>
   );
 }

@@ -1,12 +1,14 @@
-import { axios } from "../../../api";
 import { useEffect } from "react";
-import { formatPrice } from "../../../utils/formatUtils";
 import { Button } from "flowbite-react";
 import { IoMdArrowDropleft, IoMdArrowDropright } from "react-icons/io";
-
 import { CiCirclePlus, CiCircleMinus } from "react-icons/ci";
+
+import { axios } from "../../../api";
+import { formatPrice } from "../../../utils/formatUtils";
+
 import MonthlyCategoryInfoStore from "../../../store/MonthlyCategoryInfoStore";
 import EntireCategoryCardTransactionStore from "../../../store/EntireCategoryCardTransactionStore";
+import useAuthStore from "../../../store/AuthStore";
 
 export default function ACategoryInfo() {
   const {
@@ -26,16 +28,16 @@ export default function ACategoryInfo() {
     setEntireCategoryConsume,
     setCategoryTransactionList,
   } = EntireCategoryCardTransactionStore();
+  const { memberId } = useAuthStore();
 
   useEffect(() => {
-    const member_id = 1;
     const nowCategoryNameList: string[] = [];
     const nowConsumeList: number[] = [];
     const lastConsumeList: (number | undefined)[] = [];
 
     setIsLoading(true);
     // 이번달 이용내역 통신 로직
-    let url = `/statistic/${member_id}/${selectedMonth}/categoryTransaction`;
+    let url = `/statistic/${memberId}/${selectedMonth}/categoryTransaction`;
     axios
       .get(url)
       .then(({ data }) => {
@@ -58,7 +60,7 @@ export default function ACategoryInfo() {
         () => {
           // 저번달 카테고리별 총 이용내역 통신 로직
           if (selectedMonth - 1 > 0) {
-            url = `/statistic/${member_id}/${
+            url = `/statistic/${memberId}/${
               selectedMonth - 1
             }/categoryTransaction`;
             axios.get(url).then(({ data }) => {

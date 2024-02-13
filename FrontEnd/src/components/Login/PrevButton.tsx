@@ -12,15 +12,13 @@ interface PrevButtonProps {
 
 export default function PrevButton({ onPrev }: PrevButtonProps) {
   return (
-    <div className="w-full">
-      <Button
-        theme={LoginButtonTheme}
-        color="blue"
-        onClick={onPrev}
-        className="w-full"
-      >
-        <span className="text-xl font-bold">이전</span>
-      </Button>
-    </div>
+    <Button
+      theme={LoginButtonTheme}
+      color="blue"
+      onClick={onPrev}
+      className="w-full"
+    >
+      <span className="text-xl font-bold">이전</span>
+    </Button>
   );
 }
