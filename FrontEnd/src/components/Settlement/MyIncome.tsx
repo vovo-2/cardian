@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import { ButtonTheme } from "../../themes/ButtonTheme";
 
 import { axios } from "../../api";
+import useAuthStore from "../../store/AuthStore";
 
 interface IncomeProps {
   userName: string;
@@ -41,7 +42,7 @@ export default function MyIncome({ userName, salary, onSetSalary }: IncomeProps)
     }
   };
 
-  const memberId = 1;
+  const { memberId } = useAuthStore();
 
   const handleSubmit = () => {
     axios

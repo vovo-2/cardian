@@ -1,7 +1,8 @@
-import VerticalProgressBar from "../ui/VerticalProgressBar";
-
 import { useState, useEffect } from "react"
+
 import { axios } from "../../api"
+import VerticalProgressBar from "../ui/VerticalProgressBar";
+import useAuthStore from "../../store/AuthStore";
 
 interface AchievedProps {
   userName: string;
@@ -23,7 +24,7 @@ export default function Achieved({ userName, salary, onSetCheckCard, onSetCredit
     onSetCreditCard(consume);
   }
 
-  const memberId = 1;
+  const { memberId } = useAuthStore();
 
   useEffect(() => {
     axios.get(`/settlement/${memberId}/achievement`, {
