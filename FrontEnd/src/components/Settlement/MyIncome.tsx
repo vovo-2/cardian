@@ -10,7 +10,11 @@ interface IncomeProps {
   onSetSalary: (salary: number) => void;
 }
 
-export default function MyIncome({ userName, salary, onSetSalary }: IncomeProps) {
+export default function MyIncome({
+  userName,
+  salary,
+  onSetSalary,
+}: IncomeProps) {
   const [openModal, setOpenModal] = useState(false);
   const salaryInputBox = useRef<HTMLInputElement>(null);
 
@@ -24,7 +28,7 @@ export default function MyIncome({ userName, salary, onSetSalary }: IncomeProps)
   useEffect(() => {
     axios.get("/settlement/1").then(({ data }) => {
       setSalary(data.salary);
-      setInputSalary(data.salary);
+      setInputSalary(Math.floor(data.salary / 10000));
     });
   }, []);
 
@@ -36,7 +40,7 @@ export default function MyIncome({ userName, salary, onSetSalary }: IncomeProps)
   };
 
   const onKeyDownHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleSubmit();
     }
   };
@@ -44,24 +48,56 @@ export default function MyIncome({ userName, salary, onSetSalary }: IncomeProps)
   const memberId = 1;
 
   const handleSubmit = () => {
-    axios
-      .put(`/settlement/${memberId}/${inputSalary}`, { withCredentials: true })
-      .then(() => {
-        setSalary(inputSalary);
-      });
-    setOpenModal(false);
+    const sendSalary = inputSalary * 10000;
+
+    if (sendSalary >= 0 && sendSalary < 1000000000) {
+      axios
+        .put(`/settlement/${memberId}/${sendSalary}`, { withCredentials: true })
+        .then(() => {
+          setSalary(sendSalary);
+        });
+      setOpenModal(false);
+    } else if (sendSalary >= 1000000000) {
+      alert("10억 이상은 입력할 수 없습니다.")
+    }
   };
 
   return (
     <div>
       <span className="flex justify-center text-2xl">
         <span className="font-semibold">{userName}</span>님의 연봉&nbsp;
-        {
-          salary < 100000000
-          ? <span><span className="text-blue font-semibold">{Math.floor(salary / 10000)}만</span>원</span>
-          : ( (salary / 10000) - Math.floor(salary / 100000000)*10000 == 0 ) ? <span><span className="text-blue font-semibold">{Math.floor(salary / 100000000)}억</span>원</span>
-          : <span><span className="text-blue font-semibold">{Math.floor(salary / 100000000)}억{Math.floor(salary / 10000) - Math.floor(salary / 100000000)*10000}만</span>원</span>
-        }
+        {salary == 0 ? (
+          <span>
+            <span className="text-blue font-semibold">
+              0
+            </span>
+            원
+          </span>
+        ) : salary < 100000000 ? (
+          <span>
+            <span className="text-blue font-semibold">
+              {Math.floor(salary / 10000)}만
+            </span>
+            원
+          </span>
+        ) : salary / 10000 - Math.floor(salary / 100000000) * 10000 == 0 ? (
+          <span>
+            <span className="text-blue font-semibold">
+              {Math.floor(salary / 100000000)}억
+            </span>
+            원
+          </span>
+        ) : (
+          <span>
+            <span className="text-blue font-semibold">
+              {Math.floor(salary / 100000000)}억
+              {Math.floor(salary / 10000) -
+                Math.floor(salary / 100000000) * 10000}
+              만
+            </span>
+            원
+          </span>
+        )}
       </span>
       <div className="flex justify-end">
         <Button
@@ -92,7 +128,7 @@ export default function MyIncome({ userName, salary, onSetSalary }: IncomeProps)
                   onChange={onChangeHandler}
                   onKeyDown={onKeyDownHandler}
                 />
-                <span className="text-nowrap text-xl">원</span>
+                <span className="text-nowrap text-xl">만 원</span>
               </div>
               <div className="flex flex-row justify-end">
                 <Button
