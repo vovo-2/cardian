@@ -9,6 +9,7 @@ import LoginStep1 from "../components/Login/LoginStep1";
 import LoginStep2 from "../components/Login/LoginStep2";
 import PrevButton from "../components/Login/PrevButton";
 import NextButton from "../components/Login/NextButton";
+import SubmitButton from "../components/Login/SubmitButton";
 
 // TODO: 데이터 받아오기 전까지 로딩 UI 추가
 export default function LoginPage() {
@@ -16,6 +17,7 @@ export default function LoginPage() {
   const [name, setName] = useState("");
   const [residentRegistrationNumber, setResidentRegistrationNumber] =
     useState("");
+  const [isPhoneNumberValid, setIsPhoneNumberValid] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
 
   const navigate = useNavigate();
@@ -26,6 +28,10 @@ export default function LoginPage() {
   };
   const nextStep = () => {
     if (currentStep === 2) {
+      if (isPhoneNumberValid === false) {
+        alert("휴대전화번호를 확인해주세요!");
+        return;
+      }
       axios
         .post(
           "/user/login",
@@ -38,13 +44,16 @@ export default function LoginPage() {
         )
         .then(({ data }) => {
           const memberId = data.memberId;
+          const name = data.name;
           if (memberId) {
-            login(memberId);
+            login(memberId, name);
             navigate("/");
           }
         })
         .catch((error) => {
           console.error("Login Failed:", error);
+
+          alert("존재하지 않는 정보입니다!");
         });
 
       return;
@@ -61,6 +70,11 @@ export default function LoginPage() {
   };
   const handlePhoneNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPhoneNumber(e.target.value);
+    if (e.target.value.length === 11) {
+      setIsPhoneNumberValid(true);
+    } else {
+      setIsPhoneNumberValid(false);
+    }
   };
 
   const renderCurrentStepForm = (currentStep: number) => {
@@ -75,7 +89,12 @@ export default function LoginPage() {
           />
         );
       case 2:
-        return <LoginStep2 onPhoneNumberChange={handlePhoneNumberChange} />;
+        return (
+          <LoginStep2
+            onPhoneNumberChange={handlePhoneNumberChange}
+            isPhoneNumberValid={isPhoneNumberValid}
+          />
+        );
     }
   };
 
@@ -87,7 +106,8 @@ export default function LoginPage() {
 
       <div className="row-end-13 mb-[16px] flex gap-5">
         {currentStep !== 1 && <PrevButton onPrev={prevStep} />}
-        <NextButton onNext={nextStep} />
+        {currentStep === 1 && <NextButton onNext={nextStep} />}
+        {currentStep === 2 && <SubmitButton onNext={nextStep} />}
       </div>
     </div>
   );
