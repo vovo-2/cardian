@@ -19,7 +19,7 @@ RUN rm /etc/nginx/conf.d/default.conf
 # host pc의 nginx.conf를 아래 경로에 복사
 COPY nginx.conf /etc/nginx/conf.d
 
-RUN mv /app/build/assets /usr/share/nginx/html/assets
+# RUN mv /app/build/assets /usr/share/nginx/html/assets
 
 # 80 포트 개방
 EXPOSE 82
