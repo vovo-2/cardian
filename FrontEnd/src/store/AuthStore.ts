@@ -16,7 +16,7 @@ const useAuthStore = create<AuthState>()(
       name: "",
       isLoggedIn: false,
       login: (memberId: number, name: string) => set({ memberId, isLoggedIn: true, name }),
-      logout: () => set({ memberId: null, isLoggedIn: false }),
+      logout: () => set({ memberId: null, name: "", isLoggedIn: false }),
     }),
     {
       name: "auth",
