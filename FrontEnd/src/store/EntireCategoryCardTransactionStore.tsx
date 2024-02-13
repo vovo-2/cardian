@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { MonthlyTransactionDetails } from "../types/type.d";
 
 interface categoryConsume {
   categoryName: string;
