@@ -7,22 +7,39 @@ import {
   formatPriceToPercentage,
 } from "../../../utils/formatUtils";
 import MonthlyCategoryInfoStore from "../../../store/MonthlyCategoryInfoStore";
+import { axios } from "../../../api";
+import useAuthStore from "../../../store/AuthStore";
+import { useState } from "react";
 
 export default function ACategoryTransactionList() {
-  const { categoryTransactionList, entireCategoryConsume } =
+  const { categoryConsumeList, entireCategoryConsume } =
     EntireCategoryCardTransactionStore();
+  const { memberId } = useAuthStore();
 
   const { selectedMonth } = MonthlyCategoryInfoStore();
+
+  const [monthlyTransactionDetailsList, setMonthlyTransactionDetailsList] =
+    useState([]);
+
+  function handleClick(selectedCategoryName: string) {
+    const url = `/statistic/${memberId}/${selectedMonth}/${selectedCategoryName}/CategoryTransaction`;
+    axios.get(url).then(({ data }) => {
+      setMonthlyTransactionDetailsList(data.monthlyTransactionDetailsList);
+    });
+  }
 
   return (
     <div className="">
       <Flowbite theme={{ theme: AccordionTheme }}>
         <Accordion className="" collapseAll>
-          {categoryTransactionList &&
-            categoryTransactionList.map((item, idx) => (
+          {categoryConsumeList &&
+            categoryConsumeList.map((item, idx) => (
               <Accordion.Panel key={idx}>
                 <Accordion.Title className="">
-                  <div className="flex w-full mx-2">
+                  <div
+                    className="flex w-full mx-2"
+                    onClick={() => handleClick(item.categoryName)}
+                  >
                     {/* 카테고리 명, 총 이용내역 대비 해당 카테고리 비율 */}
                     <div className="w-1/5">
                       <div className="">{item.categoryName}</div>
@@ -44,12 +61,12 @@ export default function ACategoryTransactionList() {
                 </Accordion.Title>
                 <Accordion.Content className="">
                   {/* month, monthlyTransactionDetailsList */}
-                  {item.monthlyTransactionDetailsList && (
+                  {monthlyTransactionDetailsList && (
                     <CardTransactionMonthlyList
                       key={selectedMonth}
                       month={selectedMonth}
                       monthlyTransactionDetailsList={
-                        item.monthlyTransactionDetailsList
+                        monthlyTransactionDetailsList
                       }
                     />
                   )}

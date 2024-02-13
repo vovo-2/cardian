@@ -26,7 +26,7 @@ export default function ACategoryInfo() {
     entireCategoryConsume,
     setMonth,
     setEntireCategoryConsume,
-    setCategoryTransactionList,
+    setCategoryConsumeList,
   } = EntireCategoryCardTransactionStore();
   const { memberId } = useAuthStore();
 
@@ -37,15 +37,15 @@ export default function ACategoryInfo() {
 
     setIsLoading(true);
     // 이번달 이용내역 통신 로직
-    let url = `/statistic/${memberId}/${selectedMonth}/categoryTransaction`;
+    let url = `statistic/${memberId}/${selectedMonth}/CategoryConsume`;
     axios
       .get(url)
       .then(({ data }) => {
         setMonth(data.month);
         setEntireCategoryConsume(data.entireCategoryConsume);
-        setCategoryTransactionList(data.categoryTransactionList);
+        setCategoryConsumeList(data.categoryConsumeList);
 
-        data.categoryTransactionList.map(
+        data.categoryConsumeList.map(
           (item: { categoryName: string; categoryConsume: number }) => {
             nowCategoryNameList.push(item.categoryName);
             nowConsumeList.push(item.categoryConsume);
@@ -60,16 +60,14 @@ export default function ACategoryInfo() {
         () => {
           // 저번달 카테고리별 총 이용내역 통신 로직
           if (selectedMonth - 1 > 0) {
-            url = `/statistic/${memberId}/${
-              selectedMonth - 1
-            }/categoryTransaction`;
+            url = `statistic/${memberId}/${selectedMonth - 1}/CategoryConsume`;
             axios.get(url).then(({ data }) => {
               const lastMonthObj: Map<string, number> = new Map<
                 string,
                 number
               >();
 
-              data.categoryTransactionList.map(
+              data.categoryConsumeList.map(
                 (item: { categoryName: string; categoryConsume: number }) => {
                   lastMonthObj.set(item.categoryName, item.categoryConsume);
                 }
