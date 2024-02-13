@@ -1,4 +1,3 @@
-import { MdContactPage } from "react-icons/md";
 import { Link } from "react-router-dom";
 import TopBar from "../layouts/TopBar";
 import {
