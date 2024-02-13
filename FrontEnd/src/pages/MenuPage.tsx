@@ -1,4 +1,3 @@
-import { MdContactPage } from "react-icons/md";
 import { Link } from "react-router-dom";
 import TopBar from "../layouts/TopBar";
 import {
@@ -7,14 +6,17 @@ import {
   TbThumbUp,
 } from "react-icons/tb";
 import { FaMoneyBill1Wave } from "react-icons/fa6";
+import useAuthStore from "../store/AuthStore";
 
 export default function MenuPage() {
+  const { name, logout } = useAuthStore();
+
   return (
     <div className="bg-whiteblue grid grid-rows-12 h-full">
       <TopBar />
       <div className="row-span-2 text-center my-auto">
         <h1 className="font-bold text-3xl">
-          안녕하세요. <span className="text-blue ">김민준</span>님!
+          안녕하세요. <span className="text-blue ">{name}</span>님!
         </h1>
       </div>
       <div className="bg-white row-span-9 rounded-t-[70px]">
@@ -73,18 +75,6 @@ export default function MenuPage() {
               </div>
               <div className="text-center">연말정산</div>
             </Link>
-            {/* 버튼 하나 끝 */}
-
-            {/* 버튼 하나 시작 */}
-            <Link to={"/menu"} className="hover:font-bold hover:scale-110 ">
-              <div>
-                <MdContactPage size="80" className="mx-auto  hover:text-blue" />
-              </div>
-              <div className="text-center">마이페이지</div>
-            </Link>
-            {/* 버튼 하나 끝 */}
-            {/* 버튼 하나 시작 */}
-            <div className="w-[80px]"></div>
             {/* 버튼 하나 끝 */}
           </div>
         </div>
