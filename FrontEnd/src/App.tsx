@@ -9,22 +9,28 @@ import LoginPage from "./pages/LoginPage";
 import CardRecommendPage from "./pages/CardRecommendPage";
 import BrandRecommendationPage from "./pages/BrandRecommendationPage";
 import AnalysisPage from "./pages/AnalysisPage";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 function App() {
   return (
     <>
       <Routes>
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/" element={<MyCardPage />} />
-        <Route path="/mycard">
-          <Route index element={<MyCardPage />} />
-          <Route path=":card_id" element={<CardDetailPage />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<MyCardPage />} />
+          <Route path="/mycard">
+            <Route index element={<MyCardPage />} />
+            <Route path=":card_id" element={<CardDetailPage />} />
+          </Route>
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/recommendation" element={<CardRecommendPage />} />
+          <Route path="/analysis" element={<AnalysisPage />} />
+          <Route path="/menu" element={<div>menu</div>} />
+          <Route
+            path="/brand/:associationId"
+            element={<BrandRecommendationPage />}
+          />
         </Route>
-        <Route path="/search" element={<SearchPage />} />
-        <Route path="/recommendation" element={<CardRecommendPage />} />
-        <Route path="/analysis" element={<AnalysisPage />} />
-        <Route path="/menu" element={<div>menu</div>} />
-        <Route path="/brand/:associationId" element={<BrandRecommendationPage />} />
 
         {/* 404 처리 */}
         <Route path="/*" element={<div>404 Error</div>} />

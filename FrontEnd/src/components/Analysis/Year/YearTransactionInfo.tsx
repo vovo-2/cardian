@@ -1,20 +1,21 @@
 import { axios } from "../../../api";
 import { useState, useEffect } from "react";
 import YearTransactionStore from "../../../store/YearTransactionStore";
+import useAuthStore from "../../../store/AuthStore";
 
 export default function YearTransactionInfo() {
   const { yearConsumeAmount, setYearConsumeAmount, setMonthlyConsumeAmount } =
     YearTransactionStore();
 
   const [year, setYear] = useState<number>(0);
+  const { memberId } = useAuthStore();
 
   const priceFormatter = new Intl.NumberFormat("ko-KR");
 
   useEffect(() => {
     setYear(new Date().getFullYear());
 
-    const member_id = 1;
-    const url = `/statistic/${member_id}`;
+    const url = `/statistic/${memberId}`;
     axios.get(url).then((data) => {
       setYearConsumeAmount(data.data.yearConsumeAmount.yearConsumeAmount);
 

@@ -2,9 +2,13 @@ import { ChangeEvent } from "react";
 
 interface LoginStep2Props {
   onPhoneNumberChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  isPhoneNumberValid: boolean;
 }
 
-export default function LoginStep2({ onPhoneNumberChange }: LoginStep2Props) {
+export default function LoginStep2({
+  onPhoneNumberChange,
+  isPhoneNumberValid,
+}: LoginStep2Props) {
   return (
     <div className="row-start-3">
       <div className="tablet:text-4xl mobile:text-2xl row-span-2 flex flex-col justify-center tablet:mb-12 mobile:mb-10">
@@ -40,7 +44,14 @@ export default function LoginStep2({ onPhoneNumberChange }: LoginStep2Props) {
           type="tel"
           className="border border-t-0 border-l-0 border-r-0 border-gray w-full"
           onChange={onPhoneNumberChange}
+          maxLength={11}
+          placeholder="01012345678"
         />
+        {!isPhoneNumberValid && (
+          <div className="text-xs text-red-600">
+            휴대전화번호 숫자 11자리를 입력해주세요.
+          </div>
+        )}
       </div>
       <div className="mb-10">
         <div>

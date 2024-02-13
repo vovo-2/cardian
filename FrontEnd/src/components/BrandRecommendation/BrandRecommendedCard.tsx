@@ -7,6 +7,7 @@ import BrandFirstCard from "./BrandFirstCard";
 import { Label, Radio } from "flowbite-react";
 import { RadioButtonTheme } from "../../themes/RadioButtonTheme";
 import BrandBlank from "./BrandBlank";
+import useAuthStore from "../../store/AuthStore";
 
 type CardType = {
   myCardId: number;
@@ -27,7 +28,7 @@ type CardType = {
 };
 
 export default function BrandRecommendedCard() {
-  const memberId: number = 1;
+  const { memberId } = useAuthStore();
   const { associationId } = useParams();
 
   const [cardListPercent, setCardListPercent] = useState<CardType[]>();
@@ -40,7 +41,7 @@ export default function BrandRecommendedCard() {
         setCardListPercent(data[0]);
         setCardListPlus(data[1]);
       });
-  }, [associationId]);
+  }, [associationId, memberId]);
 
   const [isPercent, setPercent] = useState(true);
 

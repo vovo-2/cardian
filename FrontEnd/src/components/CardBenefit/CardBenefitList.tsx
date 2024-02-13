@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { axios } from "../../api";
-
 import { Accordion } from "flowbite-react";
+
+import { axios } from "../../api";
 
 import BenefitList from "./BenefitList.tsx";
 
@@ -27,7 +27,7 @@ export default function CardBenefitList() {
     axios.get(url).then(({ data }) => {
       setCategoryBenefitInfoList(data.benefitList);
     });
-  }, []);
+  }, [params.card_id]);
 
   return (
     <div className="overflow-y-auto scrollbar-hide  ">
