@@ -3,12 +3,7 @@ import { CardDetailTabsTheme } from "../themes/CardDetailTabsTheme";
 import Settlement from "../components/Settlement/Settlement";
 import ACategoryInfo from "../components/Analysis/Category/ACategoryInfo";
 import ACategory from "../components/Analysis/Category/ACategory";
-import {
-  useLoaderData,
-  useLocation,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 export default function AnalysisPage() {
   const { activeFunc } = useParams();
