@@ -27,7 +27,7 @@ export default function MyIncome({
   }
 
   useEffect(() => {
-    axios.get("/settlement/1").then(({ data }) => {
+    axios.get(`/settlement/${memberId}`).then(({ data }) => {
       setSalary(data.salary);
       setInputSalary(Math.floor(data.salary / 10000));
     });

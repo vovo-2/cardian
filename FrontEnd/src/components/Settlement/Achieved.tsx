@@ -27,11 +27,8 @@ export default function Achieved({ userName, salary, onSetCheckCard, onSetCredit
   const { memberId } = useAuthStore();
 
   useEffect(() => {
-    axios.get(`/settlement/${memberId}/achievement`, {
-      params: {
-        memberId: 1
-      }
-    }).then(({ data }) => {
+    axios.get(`/settlement/${memberId}/achievement`)
+    .then(({ data }) => {
       setMaxSettlement(data.maxSettlement);
       setMySettlement(data.mySettlement);
       setCheckCard(data.annualCheckConsume);
