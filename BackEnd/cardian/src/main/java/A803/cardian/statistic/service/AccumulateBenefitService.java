@@ -36,6 +36,7 @@ import A803.cardian.statistic.repository.AccumulateCategoryBenefitRepository;
 import A803.cardian.statistic.repository.AccumulateExceptionBenefitRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.aop.scope.ScopedProxyUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,6 +74,7 @@ public class AccumulateBenefitService {
 
         //카테고리 가져오기
         List<SubCommonCode> subCommonCodeList = subCommonCodeRepository.findAll();
+        System.out.println("카테고리 개수 " + subCommonCodeList.size());
         //내 카드 전체 가져오기
         List<MyCard> myCardList = mycardRepository.findMyCardsByMemberId(memberId);
         //값 가져올 객체 리스트 생성
@@ -85,6 +87,8 @@ public class AccumulateBenefitService {
 
             for (SubCommonCode subCommonCode : subCommonCodeList) {
                 String categoryCode = subCommonCode.getDetailCode();
+
+                System.out.println(myCard.getId() + "번 카드의 " + categoryCode + "카테고리 계산하기");
 
                 categoryBenefitPerCategoryList.add(getCategoryBenefitPerCategory(myCard, now, categoryCode));
             }
@@ -127,8 +131,11 @@ public class AccumulateBenefitService {
         //해당 카드의 해당 카테고리 관련 예외 혜택들을 누적액(0)과 함께 가져오기
         List<CategoryBenefitPerExceptionBenefit> categoryBenefitPerExceptionBenefitList = getCategoryBenefitPerExceptionBenefit(myCard, categoryCode);
 
+        //당월 1일로 바꿔주기
         LocalDate startDate = now.withDayOfMonth(1);
-        while (startDate.isBefore(now)) {
+        LocalDate endDate = startDate.plusMonths(1);
+        while (startDate.isBefore(endDate)) {
+            System.out.println("당월 " + startDate + " 소비내역 가져오기");
             List<Transaction> transactionList = transactionRepository.findTransactionsByMyCardIdAndDay(myCard.getId(), startDate);
             for (Transaction transaction : transactionList) {
                 //1. 제휴사 가져오기
@@ -137,15 +144,24 @@ public class AccumulateBenefitService {
                                 new ErrorException(ErrorCode.NO_ASSOCIATE));
                 //제휴사가 해당 카테고리가 아니면 넘기기
                 if (!associate.getCategoryCode().equals(categoryCode)) {
+                    System.out.println(associate.getName() + "은 카테고리 " + categoryCode + "에 속하지 않는다.");
                     continue;
                 }
 
+                System.out.println(categoryCode + "의 예외혜택 존재하는지 확인 ");
                 //예외 혜택인지 카테고리 혜택인지 확인
                 Optional<ExceptionBenefit> exceptionBenefit = exceptionBenefitService.getExceptionBenefit(transaction);
+                //존재하지 않으면
+                if(!exceptionBenefit.isPresent()){
+                    System.out.println(myCard.getId() + "카드의 " + categoryCode + "의 예외혜택 존재하지 않음");
+                }
                 //예외혜택이 있으면 예외 혜택으로 계산
                 if (exceptionBenefit.isPresent()) {
+
                     //해당 예외 혜택의 누적 혜택 값 가져와서 계산해주기
                     for (int i = 0; i < categoryBenefitPerExceptionBenefitList.size(); i++) {
+                        System.out.println(myCard.getId() + "번 카드의  " + categoryCode + "의 예외혜택 계산");
+                        System.out.println("해당 카드의 예외 혜택 개수는 " + categoryBenefitPerExceptionBenefitList.size());
                         //같은 예외 혜택 객체 가져오기
                         if (exceptionBenefit.equals(categoryBenefitPerExceptionBenefitList.get(i).getExceptionBenefit())) {
                             //누적 혜택 값 가져오기
@@ -157,10 +173,11 @@ public class AccumulateBenefitService {
                             if (exceptionBenefitAmount >= discountLimit) {
                                 continue;
                             }
+
                             //계산
-                            int calAmount = transactionService.calculateDiscountAmountWithExceptionBenefit(transaction, exceptionBenefit.get(), exceptionBenefitAmount);
-                            int newAccumulate = exceptionBenefitAmount + calAmount;
+                            int newAccumulate = transactionService.calculateDiscountAmountWithExceptionBenefit(transaction, exceptionBenefit.get(), exceptionBenefitAmount);
                             //새로 넣어줌
+                            System.out.println("예외혜택 : " + categoryCode + "계산 -> 누적액 : " + newAccumulate);
                             categoryBenefitPerExceptionBenefitList.remove(categoryBenefitPerExceptionBenefitList.get(i));
                             categoryBenefitPerExceptionBenefitList.add(i, CategoryBenefitPerExceptionBenefit.from(exceptionBenefit.get(), newAccumulate));
                             i++;
@@ -189,9 +206,7 @@ public class AccumulateBenefitService {
                                 }
 
                                 //계산된 혜택
-                                int calAmount = transactionService.calculateDiscountAmountWithCategoryBenefit(transaction, categoryBenefit, categoryBenefitAmount);
-                                //누적합 + 계산혜택
-                                int newAccumulate = categoryBenefitAmount + calAmount;
+                                int newAccumulate = transactionService.calculateDiscountAmountWithCategoryBenefit(transaction, categoryBenefit, categoryBenefitAmount);
 
                                 //newAccumulate가 한도를 넘으면 한도값을 넣어주기
                                 if (newAccumulate >= discountLimit) {
@@ -260,6 +275,7 @@ public class AccumulateBenefitService {
         List<CategoryBenefitPerExceptionBenefit> categoryBenefitPerExceptionBenefitList = new ArrayList<>();
         //카드의 해당 카테고리 혜택 가져오기
         List<ExceptionBenefit> exceptionBenefitList = exceptionBenefitRepository.findExceptionBenefitsByCardIdAndCategoryCode(myCard.getCard().getId(), categoryCode);
+        System.out.println(myCard.getId() + "번 카드의 " +  categoryCode + "카테고리의 예외 혜택 개수는 " + exceptionBenefitList.size() + "개 입니댜.");
         for (ExceptionBenefit exceptionBenefit : exceptionBenefitList) {
             //각 혜택과 혜택 누적값을 넣어주기
             categoryBenefitPerExceptionBenefitList.add(CategoryBenefitPerExceptionBenefit.from(exceptionBenefit, 0));

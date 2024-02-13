@@ -23,6 +23,7 @@ import A803.cardian.category.repository.SubCommonCodeRepository;
 import A803.cardian.member.domain.Member;
 import A803.cardian.member.repository.MemberRepository;
 import A803.cardian.reocommendation.service.RecommendationService;
+import A803.cardian.statistic.data.dto.response.monthlyCategory.CategoryConsume;
 import A803.cardian.statistic.domain.AccumulateBenefit;
 import A803.cardian.statistic.repository.AccumulateBenefitRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,9 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -277,6 +276,11 @@ public class TransactionService {
                 }
             }
         }
+
+        //내림차순으로 정렬
+//        Collections.sort(dailyTransactionDetailsList, ComparDailyTransactionDetails);
+
+
         return dailyTransactionDetailsList;
     }
 
