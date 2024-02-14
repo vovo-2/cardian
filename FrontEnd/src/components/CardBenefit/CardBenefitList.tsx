@@ -30,8 +30,8 @@ export default function CardBenefitList() {
   }, [params.card_id]);
 
   return (
-    <div className="overflow-y-auto scrollbar-hide  ">
-      <Accordion className="border-none " collapseAll>
+    <div className="overflow-y-auto scrollbar-hide mb-[100px]">
+      <Accordion className="border-none" collapseAll>
         {CategoryBenefitInfoList &&
           CategoryBenefitInfoList.map((b) => (
             <Accordion.Panel key={b.categorybenefitId}>
