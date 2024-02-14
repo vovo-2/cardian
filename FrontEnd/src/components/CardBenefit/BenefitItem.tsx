@@ -24,7 +24,8 @@ export default function BenefitItem({
         <div>{storeName}</div>
       </div>
       <div className={`${isException ? "text-red-600 font-bold" : ""}`}>
-        {discountAmount} {sign}
+        {discountAmount}
+        {sign === "+" ? "원" : sign} 할인
       </div>
     </div>
   );
