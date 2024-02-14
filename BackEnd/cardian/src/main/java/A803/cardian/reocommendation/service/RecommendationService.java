@@ -74,13 +74,30 @@ public class RecommendationService {
             int discountAmount = exceptionBenefit.getDiscountAmount(); //혜택크기
             //할인형일 때
             if (card.getBenefitCode().equals(BenefitCode.DISCOUNT)) {
-                calAmount = transactionService.getDiscountAmountUsingSignWithDiscount(price, discountLine, discountAmount, exceptionBenefit.getSign());//결과혜택을 누적혜택에 더했을 때 한도를 넘는지 확인
-                //넘거나 같으면
-                if (benefitAmount + calAmount >= discountLimit) {
-                    // 남은 한도만큼만 리턴
-                    return discountLimit - benefitAmount;
-                } else { //넘지 않으면 계산된 혜택 리턴
-                    return calAmount;
+                Card transactionCard = transaction.getMyCard().getCard();
+                //사용내역의 카드도 할인형이면 그대로
+                if(transactionCard.getBenefitCode().equals(BenefitCode.DISCOUNT)) {
+                    calAmount = transactionService.getDiscountAmountUsingSignWithDiscount(price, discountLine, discountAmount, exceptionBenefit.getSign());//결과혜택을 누적혜택에 더했을 때 한도를 넘는지 확인
+                    //넘거나 같으면
+                    if (benefitAmount + calAmount >= discountLimit) {
+                        // 남은 한도만큼만 리턴
+                        return discountLimit - benefitAmount;
+                    } else { //넘지 않으면 계산된 혜택 리턴
+                        return calAmount;
+                    }
+                }
+
+                //사용내역의 카드가 할인형이 아니면 단순 계산해주기
+                else{
+                    calAmount = transactionService.getDiscountAmountUsingSign(price, discountAmount, exceptionBenefit.getSign());
+
+                    //넘거나 같으면
+                    if (benefitAmount + calAmount >= discountLimit) {
+                        // 남은 한도만큼만 리턴
+                        return discountLimit - benefitAmount;
+                    } else { //넘지 않으면 계산된 혜택 리턴
+                        return calAmount;
+                    }
                 }
             }
             //적립, 캐시백일 때
@@ -123,17 +140,32 @@ public class RecommendationService {
             int price = transaction.getPrice(); //소비금액
             int discountLine = categoryBenefit.getDiscountLine(); //혜택기준
             int discountAmount = categoryBenefit.getDiscountAmount(); //혜택크기
-            //할인형일 때
-            if(card.getBenefitCode().equals(BenefitCode.DISCOUNT)){
-                calAmount = transactionService.getDiscountAmountUsingSignWithDiscount(price, discountLine, discountAmount, categoryBenefit.getSign());
-                System.out.println("계산된 할인값 : " + calAmount);
-                //결과혜택을 누적혜택에 더했을 때 한도를 넘는지 확인
-                //넘거나 같으면
-                if(benefitAmount + calAmount >= discountLimit){
-                    // 남은 한도만큼만 리턴
-                    return discountLimit - benefitAmount;
-                } else{ //넘지 않으면 계산된 혜택 리턴
-                    return calAmount;
+//할인형일 때
+            if (card.getBenefitCode().equals(BenefitCode.DISCOUNT)) {
+                Card transactionCard = transaction.getMyCard().getCard();
+                //사용내역의 카드도 할인형이면 그대로
+                if(transactionCard.getBenefitCode().equals(BenefitCode.DISCOUNT)) {
+                    calAmount = transactionService.getDiscountAmountUsingSignWithDiscount(price, discountLine, discountAmount, categoryBenefit.getSign());//결과혜택을 누적혜택에 더했을 때 한도를 넘는지 확인
+                    //넘거나 같으면
+                    if (benefitAmount + calAmount >= discountLimit) {
+                        // 남은 한도만큼만 리턴
+                        return discountLimit - benefitAmount;
+                    } else { //넘지 않으면 계산된 혜택 리턴
+                        return calAmount;
+                    }
+                }
+
+                //사용내역의 카드가 할인형이 아니면 단순 계산해주기
+                else{
+                    calAmount = transactionService.getDiscountAmountUsingSign(price, discountAmount, categoryBenefit.getSign());
+
+                    //넘거나 같으면
+                    if (benefitAmount + calAmount >= discountLimit) {
+                        // 남은 한도만큼만 리턴
+                        return discountLimit - benefitAmount;
+                    } else { //넘지 않으면 계산된 혜택 리턴
+                        return calAmount;
+                    }
                 }
             }
             //적립, 캐시백일 때
