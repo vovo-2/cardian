@@ -11,6 +11,7 @@ import A803.cardian.benefit.repository.CardCategoryMappingRepository;
 import A803.cardian.benefit.repository.CategoryBenefitRepository;
 import A803.cardian.benefit.repository.ExceptionBenefitRepository;
 import A803.cardian.benefit.serivce.ExceptionBenefitService;
+import A803.cardian.card.comparator.DailyTransactionDetailsComparator;
 import A803.cardian.card.data.dto.response.*;
 import A803.cardian.card.domain.*;
 
@@ -278,8 +279,7 @@ public class TransactionService {
         }
 
         //내림차순으로 정렬
-//        Collections.sort(dailyTransactionDetailsList, ComparDailyTransactionDetails);
-
+        Collections.sort(dailyTransactionDetailsList, new DailyTransactionDetailsComparator().reversed());
 
         return dailyTransactionDetailsList;
     }
