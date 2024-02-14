@@ -94,7 +94,7 @@ export default function CardRecommendPage() {
               ' 카테고리는 이 카드를 써보세요!
             </div>
 
-            <div className="flex mx-auto">
+            <div className="flex">
               <img
                 src={recommendationCard?.cardImage}
                 alt="추천 카드 이미지"
