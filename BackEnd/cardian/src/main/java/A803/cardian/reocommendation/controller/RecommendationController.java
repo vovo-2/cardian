@@ -21,7 +21,8 @@ public class RecommendationController {
 
     @Operation(summary = "카테고리별 카드 추천", description = "카테고리별로 카드를 추천해주는 API입니다.")
     @GetMapping("/{member_id}/{category_name}")
-    public ResponseEntity<CardRecommendationResponse> recommendCard(@PathVariable("member_id") int memberId, @PathVariable("category_name") String categoryName){
+    public ResponseEntity<CardRecommendationResponse> recommendCard(@PathVariable("member_id") int memberId, @PathVariable("category_name") String categoryName) {
+
         return ResponseEntity.ok(recommendationService.getCardRecommendationResponse(memberId, categoryName));
     }
 }
