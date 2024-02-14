@@ -40,7 +40,9 @@ export default function CardBenefitList() {
                   <img src={`${b.iconImage}`} className="w-8 h-8 "></img>
                   <div className=" ml-5 my-auto text-5">
                     {b.name}
-                    <span className="text-2xl font-semibold">{` ${b.discountAmount}${b.sign} `}</span>
+                    <span className="text-2xl font-semibold">{` ${
+                      b.discountAmount
+                    }${b.sign === "+" ? "원" : b.sign} `}</span>
                     할인
                   </div>
                 </div>
