@@ -135,10 +135,10 @@ public class MemberService {
         accumulateBenefitService.saveAccumulateBenefit(member.getId());
         //2. 카드 월별 통계
 //            statisticService.updateMonthlyCardStatistic(member.getId());
-//        statisticService.saveMonthlyCardStatistic(member.getId());
+        statisticService.saveMonthlyCardStatistic(member.getId());
         //카테고리별 월별 통계
 //            statisticService.updateCategoryMonthConsume(member.getId());
-//        statisticService.saveCategoryMonthConsume(member.getId());
+        statisticService.saveCategoryMonthConsume(member.getId());
         //save
 
         //멤버테이블 update 날짜 현재로 변경해주기
