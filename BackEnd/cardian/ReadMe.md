@@ -67,13 +67,55 @@
 
 ## 📌주요 기능 (API)
 ### 0. 내 카드 조회
-현재 소유중인 카드 목록을 조회하는 API
+사용자가 소유중인 카드 목록을 보여줌.
 
-### 1. 카드 사용 내역 조회
-해당 카드의 이용 내역과 받은 혜택(할인, 캐시백, 적립)을 보여줌.
+```JSON
+{
+  "memberId": 1,
+  "cardList": [
+    {
+      "mycardId": int,
+      "myCardName": "String",
+      "myCardImage": "String"
+    }
+  ]
+}
+```
 
+### 1. 카드 소비내역 조회
+해당 카드의 소비내역과 받은 혜택(할인, 캐시백, 적립)을 보여줌.
+#### 1-1. 소비내역을 월별, 일별로 묶어서 가져옴.
+#### 1-2. 월, 일, 시간 최신순으로 정렬해서 가져옴.
+#### 1-3. 소비내역의 사용처로 해당 사용처에 해당 카드에 혜택을 가지고 있는지 확인하기
+#### 1-4. 예외 혜택일 때와 카테고리 혜택일 때를 구분해서 혜택 금액 계산해주기
+#### 1-5. 카드 종류가 할인형인지 적립,캐시백형인지 구분해서 혜택 금액 계산해주기
 
-
+```JSON
+{
+  "myCardId": int,
+  "yearTransactionDetailsList": [
+    {
+      "month": int,
+      "monthlyTransactionDetailsList": [
+        {
+          "day": int,
+          "dailyTransactionDetailsList": [
+            {
+              "transactionId": int,
+              "store": "String",
+              "date": "String",
+              "price": int,
+              "associateImage": "String",
+              "discountAmount": int,
+              "benefitCode": "String"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
+```
 
 ### 2. 카드별 혜택 조회
 소유한 카드의 혜택을 카테고리별로 조회하고, 카테고리에 속한 제휴사 리스트를 조회하는 API.
@@ -140,16 +182,116 @@
 
 
 ### 4. 소비 패턴 분석 결과를 그래프로 조회
+#### 4-1. 사용자의 카드별 월별 카테고리별 소비 금액 계산
+사용내역의 카드아이디와 사용처이름으로 해당 사용처와 카드의 카테고리의 관계를 가져온 후 카테고리별로 누적하여 계산
+#### 4-2. 사용자의 카드별 월별 소비 금액 계산
+4-1에서 계산된 값을 이용하여 계산
+#### 4-3. 사용자의 총 월별 소비 금액 계산
+4-2에서 계산된 값을 이용하여 계산
+#### 4-4. 카테고리별 소비 금액을 내림차순으로 정렬하여 보내줌
+#### 4-5. 사용자의 월별 총 소비 내역을 카테고리별로 조회
+카드별로 특정 카테고리의 소비 내역을 가져와 합해준 후 보내줌
+#### 4-6. 소비 내역을 시간순으로 보내줌
 
+```JSON
+{
+  "memberId": int,
+  "month": int,
+  "entireCategoryConsume": int,
+  "categoryConsumeList": [
+    {
+      "categoryName": "String",
+      "categoryConsume": int
+    }
+  ]
+}
+```
+```JSON
+{
+  "categoryName": "String",
+  "month": int,
+  "monthlyTransactionDetailsList": [
+    {
+      "day": int,
+      "dailyTransactionDetailsList": [
+        {
+          "store": "String",
+          "price": int,
+          "date": "String",
+          "associateImage": "String"
+        }
+      ]
+    }
+  ]
+}
+```
 
 
 ### 5. 카드별 혜택받은 금액 조회
+#### 5-1. 당월 카드별 소비내역 가져오기
+#### 5-2. 소비내역의 사용처로 해당 사용처에 해당 카드에 혜택을 가지고 있는지 확인하기
+#### 5-3. 예외 혜택일 때와 카테고리 혜택일 때를 구분해서 혜택 금액 계산해주기
+#### 5-4. 카드 종류가 할인형인지 적립,캐시백형인지 구분해서 혜택 금액 계산해주기
+#### 5-5. 당월 카드별 예외혜택별 누적 혜택 금액을 저장
+5-4에서 계산된 값을 이용하여 계산
+#### 5-6. 당월 카드별 카테고리혜택별 누적 혜택 금액을 저장
+5-4에서 계산된 값을 이용하여 계산
+#### 5-7. 당월 카드별 누적 혜택 금액을 저장
+5-5, 5-6에서 저장된 값을 이용하여 저장
 
+```JSON
+{
+  "myCardId": int,
+  "myCardInfoDetails": {
+    "companyName": "String",
+    "cardName": "String",
+    "cardImage": "String",
+    "goal": int,
+    "accumulate": int,
+    "type": "String",
+    "benefitCode": "String",
+    "totalBenefit": int
+  }
+}
+```
 
 
 ### 6. 소비 패턴 분석을 통해 혜택을 더 볼 수 있는 카드 조회
+#### 6-1. 당월 카드별 소비내역 가져오기
+#### 6-2. 소비내역의 사용처로 해당 사용처에 해당 카드에 혜택을 가지고 있는지 확인하기
+#### 6-3. 예외 혜택일 때와 카테고리 혜택일 때를 구분해서 혜택 금액 계산해주기
+#### 6-4. 카드 종류가 할인형인지 적립,캐시백형인지 구분해서 혜택 금액 계산해주기
+#### 6-5. 당월 카드별 예외혜택별 누적 혜택 금액을 저장
+6-4에서 계산된 값을 이용하여 계산
+#### 6-6. 당월 카드별 카테고리혜택별 누적 혜택 금액을 저장
+6-4에서 계산된 값을 이용하여 계산
+#### 6-7. 사용자가 선택한 카테고리에서 이미 받은 혜택을 보여줌
+위의 계산 결과들을 이용하여 보여줌
+#### 6-8. 카드의 혜택을 적용하여 당월 전체 소비 내역을 계산하며, 최대 혜택값과 추천해줄 카드 정보를 갱신
+당월 전체 소비내역을 특정 카드를 이용했다고 가정한 후 계산
+#### 6-9. 사용자가 선택한 카테고리에서, 사용자가 사용했다면 이미 받은 혜택값보다 더 많은 혜택을 받을 수 있는 카드와 예상 혜택값을 보여줌
+6-8에서 계산된 값을 이용하여 보여줌
+#### 6-10. 예상혜택값이 더 작거나 같으면 이미 잘 사용 중인 카드를 보여줌
 
-
+```JSON
+{
+  "cardId": int,
+  "companyName": "String",
+  "cardName": "String",
+  "cardImage": "String",
+  "benefitCode": "String",
+  "type": "String",
+  "cardBenefitDetailsList": [
+    {
+      "associateName": "String",
+      "discountAmount": int,
+      "sign": "String"
+    }
+  ],
+  "recievedBenefitAmount": int,
+  "maxBenefitAmount": int
+}
+```
 
 ### 7. 사용자의 연봉에 따른연말정산 기준 달성여부 제공 및 달성여부에 따른 결과 제공
 #### 7-1. 사용자의 연봉 정보 제공 및 연봉정보 변경시 수정 기능 제공
