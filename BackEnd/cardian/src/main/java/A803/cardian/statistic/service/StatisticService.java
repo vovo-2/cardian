@@ -14,6 +14,7 @@ import A803.cardian.category.domain.SubCommonCode;
 import A803.cardian.category.repository.SubCommonCodeRepository;
 import A803.cardian.member.domain.Member;
 import A803.cardian.member.repository.MemberRepository;
+import A803.cardian.statistic.comparator.DailyTransactionDetailsComparator;
 import A803.cardian.statistic.data.dto.response.*;
 import A803.cardian.statistic.data.dto.response.DailyTransactionDetails;
 import A803.cardian.statistic.data.dto.response.MonthlyTransactionDetails;
@@ -395,7 +396,7 @@ public class StatisticService {
             }
         }
 
-        //내림차순으로 정렬
+        //소비금액 내림차순으로 정렬
         Collections.sort(categoryDayTransactionDetailList, Comparator.comparingInt(A803.cardian.statistic.data.dto.response.monthlyCategory.DailyTransactionDetails::getPrice).reversed());
 
         return categoryDayTransactionDetailList;
