@@ -91,7 +91,7 @@ export default function CardDetail() {
         {/* 총 받은 혜택 금액 */}
         <div className="flex flex-row-reverse">
           <span>
-            총{" "}
+            이번달엔 총{" "}
             <span className="text-blue text-sm">{formatPrice(totalBenefit)}</span>{" "}
             혜택 받으셨어요.
           </span>
