@@ -22,6 +22,11 @@ function LinkSetter({ goto, icon }: LinkSetterProps) {
 
   if (goto == "/mycard") {
     if (now_path == "/") isActive = true;
+    if (now_path.startsWith("/mycard")) isActive = true;
+  }
+
+  if (goto == "/search") {
+    if (now_path.startsWith("/brand")) isActive = true;
   }
 
   return (
