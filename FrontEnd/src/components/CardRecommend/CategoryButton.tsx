@@ -13,15 +13,14 @@ export default function CategoryButton({
   category,
   onClick,
 }: CategoryButtonProps) {
-  const { categoryImage, categoryName } = category;
+  const { categoryName } = category;
 
   return (
     <button
-      className="border rounded-xl flex p-1 items-center w-fit"
+      className="snap-center transition ease-in-out duration-200 p-2 border rounded-md flex items-center w-fit border-lightgray text-darkgray hover:bg-blue hover:text-white"
       onClick={() => onClick(category)}
     >
-      <img src={categoryImage} alt="카테고리 이미지" className="w-8" />
-      <div className="hidden mobile:block ml-1">{categoryName}</div>
+      <div>{categoryName}</div>
     </button>
   );
 }

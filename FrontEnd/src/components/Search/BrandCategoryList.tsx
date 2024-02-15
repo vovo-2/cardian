@@ -24,7 +24,7 @@ export default function BrandCategoryList({categoryCode, categoryName}: Category
   }, [categoryCode]);
 
   return (
-    <div className='h-96 overflow-auto scrollbar-hide'>
+    <div className='overflow-auto scrollbar-hide'>
       {associationList &&
         associationList.map((associate) => {
           return (

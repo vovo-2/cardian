@@ -63,9 +63,9 @@ export default function CardDetail() {
           </div>
 
           {/* 카드사 이름 */}
-          <div className="font-bold text-3xl">{companyName}</div>
+          <div className="font-bold text-2xl mb-1">{companyName}</div>
           {/* 카드 이름 */}
-          <div className="text-2xl">{cardName}</div>
+          <div className="text-xl">{cardName}</div>
         </div>
 
         <div className="mt-5">
@@ -89,9 +89,9 @@ export default function CardDetail() {
           </div>
         </div>
         {/* 총 받은 혜택 금액 */}
-        <div className="flex flex-row-reverse">
+        <div className="flex flex-row-reverse text-sm">
           <span>
-            총{" "}
+            이번달엔 총{" "}
             <span className="text-blue text-sm">{formatPrice(totalBenefit)}</span>{" "}
             혜택 받으셨어요.
           </span>

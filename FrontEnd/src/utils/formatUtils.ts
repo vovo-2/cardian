@@ -26,7 +26,7 @@ export const formatDate = (month: number, day: number) => {
 export const formatTime = (date: string) => {
   const timeFormatter = new Intl.DateTimeFormat("ko-KR", {
     hour: "2-digit",
-    hourCycle: "h24",
+    hourCycle: "h23",
     minute: "2-digit",
   });
 
@@ -42,7 +42,10 @@ export const formatTime = (date: string) => {
  * console.log(getPrice(1100000));
  * ```
  */
-export const formatPrice = (price: number) => {
+export const formatPrice = (price: number | undefined) => {
+  if (price === undefined) {
+    return
+  }
   const priceFormatter = new Intl.NumberFormat("ko-KR");
 
   const result = `${priceFormatter.format(price)}원`;
@@ -70,12 +73,12 @@ export const formatBenefitType = (benefitCode: string) => {
 /**
  * @example
  * ```ts
- * // 10%
+ * // 10
  * console.log(formatPriceToPercentage(10,100));
  * ```
  */
 export const formatPriceToPercentage = (price: number, total: number) => {
   const result = ((price / total) * 100).toFixed(2);
 
-  return `${result}%`;
+  return Number(result);
 };

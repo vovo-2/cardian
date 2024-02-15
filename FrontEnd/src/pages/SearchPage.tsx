@@ -2,7 +2,7 @@ import BrandSearch from "../components/Search/BrandSearch";
 
 export default function Search() {
   return (
-    <div>
+    <div className="pb-[100px]">
       <BrandSearch />
     </div>
   );

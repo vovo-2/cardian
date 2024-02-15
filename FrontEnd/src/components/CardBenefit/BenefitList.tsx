@@ -23,7 +23,12 @@ export default function BenefitList({ myCardId, categoryCode }: InputInfo) {
 
     axios.get(url).then(({ data }) => {
       setExceptionBenefit(data.exceptionBenefitStore);
-      setBenefitList(data.storeList);
+      const list: BenefitInfo[] = [];
+
+      data.storeList.map((item: BenefitInfo) => {
+        if (item.storeName != "") list.push(item);
+      });
+      setBenefitList(list);
     });
   }, []);
 

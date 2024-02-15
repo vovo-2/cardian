@@ -4,6 +4,10 @@ import { useParams } from "react-router-dom";
 import { axios } from "../../api";
 import BrandOtherCard from "./BrandOtherCard";
 import BrandFirstCard from "./BrandFirstCard";
+import { Label, Radio } from "flowbite-react";
+import { RadioButtonTheme } from "../../themes/RadioButtonTheme";
+import BrandBlank from "./BrandBlank";
+import useAuthStore from "../../store/AuthStore";
 
 type CardType = {
   myCardId: number;
@@ -24,7 +28,7 @@ type CardType = {
 };
 
 export default function BrandRecommendedCard() {
-  const memberId: number = 1;
+  const { memberId } = useAuthStore();
   const { associationId } = useParams();
 
   const [cardListPercent, setCardListPercent] = useState<CardType[]>();
@@ -37,24 +41,36 @@ export default function BrandRecommendedCard() {
         setCardListPercent(data[0]);
         setCardListPlus(data[1]);
       });
-  }, [associationId]);
+  }, [associationId, memberId]);
 
   const [isPercent, setPercent] = useState(true);
 
-  const handleButtonClick = () => {
-    setPercent((prevPercent) => !prevPercent);
-  };
+  const makePercent = () => {
+    setPercent(true);
+  }
+  const makePlus = () => {
+    setPercent(false);
+  }
 
   return (
     <div>
-      <button onClick={handleButtonClick}>버튼</button>
-      <div>
-        
+      <div className="bg-whiteblue rounded-lg mb-3 p-2">
+        <fieldset className="grid grid-cols-2">
+          <div>
+            <Radio theme={RadioButtonTheme} id="%" name="criteria" value="true" onChange={makePercent} defaultChecked />
+            <Label htmlFor="%"> 할인율</Label>
+          </div>
+          <div>
+            <Radio theme={RadioButtonTheme} id="+" name="criteria" value="false" onChange={makePlus} />
+            <Label htmlFor="+"> 할인금액</Label>
+          </div>
+        </fieldset>
       </div>
       {isPercent ? (
         <div>
-          {cardListPercent && cardListPercent.length > 0 && (
+          {cardListPercent && cardListPercent.length > 0 ? (
             <BrandFirstCard
+              myCardId={cardListPercent[0].myCardId}
               cardImage={cardListPercent[0].cardImage}
               cardCompany={cardListPercent[0].cardCompany}
               cardName={cardListPercent[0].cardName}
@@ -69,12 +85,13 @@ export default function BrandRecommendedCard() {
               benefitLimitation={cardListPercent[0].benefitLimitation}
               benefitRemain={cardListPercent[0].benefitRemain}
             />
-          )}
+          ) : (<BrandBlank />)}
           {cardListPercent &&
             cardListPercent.slice(1).map((card) => {
               return (
                 <BrandOtherCard
                   key={card.myCardId}
+                  myCardId={card.myCardId}
                   cardImage={card.cardImage}
                   cardName={card.cardName}
                   discountAmount={card.discountAmount}
@@ -88,8 +105,9 @@ export default function BrandRecommendedCard() {
         </div>
       ) : (
         <div>
-          {cardListPlus && cardListPlus.length > 0 && (
+          {cardListPlus && cardListPlus.length > 0 ? (
             <BrandFirstCard
+              myCardId={cardListPlus[0].myCardId}
               cardImage={cardListPlus[0].cardImage}
               cardCompany={cardListPlus[0].cardCompany}
               cardName={cardListPlus[0].cardName}
@@ -104,12 +122,13 @@ export default function BrandRecommendedCard() {
               benefitLimitation={cardListPlus[0].benefitLimitation}
               benefitRemain={cardListPlus[0].benefitRemain}
             />
-          )}
+          ) : (<BrandBlank />)}
           {cardListPlus &&
             cardListPlus.slice(1).map((card) => {
               return (
                 <BrandOtherCard
                   key={card.myCardId}
+                  myCardId={card.myCardId}
                   cardImage={card.cardImage}
                   cardName={card.cardName}
                   discountAmount={card.discountAmount}
