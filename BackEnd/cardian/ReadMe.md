@@ -65,7 +65,7 @@
 * 예외 혜택 : 혜택을 받을 수 있는 제휴사 목록 중 일반적인 혜택률 보다 더 큰 혜택을 받을 수 있는 경우.
 
 ## 📡 배포 가이드
-* `2. Card Company BE 참고`
+* `3. Card Company BE 참고`
 
      https://ruddy-gram-071.notion.site/c440d313b9aa46acbfff560aa7fd1a9d?pvs=4
 
