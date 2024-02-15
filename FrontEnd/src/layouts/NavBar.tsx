@@ -22,6 +22,11 @@ function LinkSetter({ goto, icon }: LinkSetterProps) {
 
   if (goto == "/mycard") {
     if (now_path == "/") isActive = true;
+    if (now_path.startsWith("/mycard")) isActive = true;
+  }
+
+  if (goto == "/search") {
+    if (now_path.startsWith("/brand")) isActive = true;
   }
 
   return (
@@ -38,6 +43,10 @@ function LinkSetter({ goto, icon }: LinkSetterProps) {
   );
 }
 export default function NavBar() {
+  if (useLocation().pathname === "/login") {
+    return null;
+  }
+
   return (
     <div className="text-4xl fixed bottom-0 left-0 right-0 mx-auto max-w-[600px] h-[100px] bg-white">
       <div className="relative max-w-[600px] justify-center flex h-full ">
@@ -50,7 +59,7 @@ export default function NavBar() {
           icon={<TbShoppingBagSearch size={50} className="my-auto" />}
         />
         <LinkSetter
-          goto="/analysis"
+          goto="/analysis/category"
           icon={<TbChartHistogram size={50} className="my-auto" />}
         />
         <LinkSetter

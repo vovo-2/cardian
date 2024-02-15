@@ -15,7 +15,7 @@ export default function CardTransaction() {
   }, [cardId]);
 
   return (
-    <div className="overflow-y-scroll  scrollbar-hide">
+    <div className="overflow-y-scroll scrollbar-hide pb-[100px]">
       {transactionList.map(({ month, monthlyTransactionDetailsList }) => {
         return (
           <CardTransactionMonthlyList

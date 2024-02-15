@@ -5,6 +5,7 @@ import { CarouselTheme } from "../../themes/CarouselTheme";
 import MyCard from "./MyCard";
 
 import { axios } from "../../api";
+import useAuthStore from "../../store/AuthStore";
 
 type MyCard = {
   mycardId: number;
@@ -14,16 +15,17 @@ type MyCard = {
 
 export default function CardList() {
   const [cardList, setCardList] = useState<MyCard[]>();
+  const { memberId } = useAuthStore();
 
   useEffect(() => {
-    axios.get("/card/1").then(({ data }) => {
+    axios.get(`/card/${memberId}`).then(({ data }) => {
       setCardList(data.cardList);
     });
-  }, []);
+  }, [memberId]);
 
   return (
     <div className="flex">
-      <Carousel theme={CarouselTheme} slide={false}>
+      <Carousel theme={CarouselTheme} slide={false} className="overflow-y-visible">
         {cardList &&
           cardList.map((card) => {
             return (

@@ -1,7 +1,7 @@
 import type { CustomFlowbiteTheme } from "flowbite-react";
 
 export const CategoryTheme: CustomFlowbiteTheme["dropdown"] = {
-    arrowIcon: "ml-2 h-4 w-4",
+    arrowIcon: "ml-2 h-6 w-6",
     content: "py-1 focus:outline-none",
     floating: {
       animation: "transition-opacity",
