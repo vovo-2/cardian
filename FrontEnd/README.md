@@ -38,6 +38,11 @@
     - chartjs-plugin-datalabels(2.2.0)
     - react-icons(5.0.1)
 
+
+## 📡 배포 가이드
+* `4. Cardian FE 참조`
+  https://ruddy-gram-071.notion.site/c440d313b9aa46acbfff560aa7fd1a9d#3c81f333b8d74b66be1a1dc150ad8c5b
+
 ## 📌주요 기능
 
 - 로그인
@@ -88,3 +93,88 @@
 <p align="center">
   <img src="/uploads/b6d04e50ce86198183f44c483a83baec/menu.png" width="300">
 </p>
+
+## 프로젝트 구조
+```
+📦FrontEnd
+ ┣ 📂dist
+ ┃ ┣ 📂assets
+ ┃ ┃ ┣ 📜index-2chmjevc.js
+ ┃ ┃ ┗ 📜index-vHHw50Ki.css
+ ┃ ┗ 📜index.html
+ ┣ 📂src
+ ┃ ┣ 📂api
+ ┃ ┃ ┗ 📜index.ts
+ ┃ ┣ 📂assets
+ ┃ ┃ ┗ 📜logo.png
+ ┃ ┣ 📂components
+ ┃ ┃ ┣ 📂CardBenefit
+ ┃ ┃ ┃ ┣ 📜BenefitItem.tsx
+ ┃ ┃ ┃ ┣ 📜BenefitList.tsx
+ ┃ ┃ ┃ ┣ 📜CardBenefitList.tsx
+ ┃ ┃ ┃ ┗ 📜CategoryBenefit.tsx
+ ┃ ┃ ┣ 📂CardDetail
+ ┃ ┃ ┃ ┣ 📜CardDetail.tsx
+ ┃ ┃ ┃ ┗ 📜CardDetailTabs.tsx
+ ┃ ┃ ┣ 📂CardTransaction
+ ┃ ┃ ┃ ┣ 📜CardTransaction.tsx
+ ┃ ┃ ┃ ┣ 📜CardTransactionDailyList.tsx
+ ┃ ┃ ┃ ┣ 📜CardTransactionDailyListItem.tsx
+ ┃ ┃ ┃ ┣ 📜CardTransactionListItemLogo.tsx
+ ┃ ┃ ┃ ┗ 📜CardTransactionMonthlyList.tsx
+ ┃ ┃ ┣ 📂Login
+ ┃ ┃ ┃ ┣ 📜LoginStep1.tsx
+ ┃ ┃ ┃ ┣ 📜LoginStep2.tsx
+ ┃ ┃ ┃ ┣ 📜NextButton.tsx
+ ┃ ┃ ┃ ┗ 📜PrevButton.tsx
+ ┃ ┃ ┣ 📂MyCard
+ ┃ ┃ ┃ ┣ 📜MyCard.tsx
+ ┃ ┃ ┃ ┗ 📜MyCardList.tsx
+ ┃ ┃ ┣ 📂Search
+ ┃ ┃ ┃ ┣ 📜Brand.tsx
+ ┃ ┃ ┃ ┣ 📜BrandCategoryBar.tsx
+ ┃ ┃ ┃ ┣ 📜BrandCategoryList.tsx
+ ┃ ┃ ┃ ┣ 📜BrandKeywordBar.tsx
+ ┃ ┃ ┃ ┣ 📜BrandKeywordList.tsx
+ ┃ ┃ ┃ ┗ 📜BrandSearch.tsx
+ ┃ ┃ ┗ 📂ui
+ ┃ ┃ ┃ ┣ 📜Badge.tsx
+ ┃ ┃ ┃ ┗ 📜ProgressBar.tsx
+ ┃ ┣ 📂constants
+ ┃ ┃ ┗ 📜cardInfo.ts
+ ┃ ┣ 📂layouts
+ ┃ ┃ ┣ 📜NavBar.tsx
+ ┃ ┃ ┗ 📜TopBar.tsx
+ ┃ ┣ 📂pages
+ ┃ ┃ ┣ 📜CardDetailPage.tsx
+ ┃ ┃ ┣ 📜LoginPage.tsx
+ ┃ ┃ ┣ 📜MyCardPage.tsx
+ ┃ ┃ ┗ 📜SearchPage.tsx
+ ┃ ┣ 📂themes
+ ┃ ┃ ┣ 📜CardDetailTabsTheme.ts
+ ┃ ┃ ┣ 📜CarouselTheme.ts
+ ┃ ┃ ┣ 📜CategoryDropdownTheme.ts
+ ┃ ┃ ┗ 📜ProgressBarTheme.ts
+ ┃ ┣ 📂utils
+ ┃ ┃ ┗ 📜formatUtils.ts
+ ┃ ┣ 📜App.css
+ ┃ ┣ 📜App.tsx
+ ┃ ┣ 📜index.css
+ ┃ ┣ 📜main.tsx
+ ┃ ┗ 📜vite-env.d.ts
+ ┣ 📜.env
+ ┣ 📜.eslintrc.cjs
+ ┣ 📜.gitignore
+ ┣ 📜Dockerfile
+ ┣ 📜index.html
+ ┣ 📜nginx.conf
+ ┣ 📜package-lock.json
+ ┣ 📜package.json
+ ┣ 📜postcss.config.js
+ ┣ 📜README.md
+ ┣ 📜tailwind.config.js
+ ┣ 📜tsconfig.json
+ ┣ 📜tsconfig.node.json
+ ┗ 📜vite.config.ts
+
+```
