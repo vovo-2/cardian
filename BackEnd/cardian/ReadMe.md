@@ -66,7 +66,8 @@
 
 
 ## 📌주요 기능 (API)
-### 0. 내 카드 조회
+### 0. 내 카드 조회 API
+* 주소 : 서버주소:8080/api/card/{member_id}
 사용자가 소유중인 카드 목록을 보여줌.
 
 ```JSON
@@ -82,7 +83,9 @@
 }
 ```
 
-### 1. 카드 소비내역 조회
+### 1. 카드 소비내역 조회 API
+* 주소 : 서버주소:8080/api/card/{member_id}/transaction
+* date 형식 : yyyy-mm-ddThh:mm:ss
 * 해당 카드의 월별, 일별 소비내역과 받은 혜택(discountAmount), 혜택종류(benefitCode)를 보여줌.
 
 ```JSON
@@ -244,7 +247,8 @@
 
 ### 4. 소비 패턴 분석 결과를 그래프로 조회
 
-#### 4-1. 사용자의 월 별 카테고리 별 총 소비 금액 조회
+#### 4-1. 사용자의 월 별 카테고리 별 총 소비 금액 조회 API
+* 주소 : 서버주소:8080/api/statistic/{member_id}/{month}/CategoryConsume
 ```JSON
 {
   "memberId": int,
@@ -259,7 +263,9 @@
 }
 ```
 
-#### 4-2. 월 별 카테고리 별 소비 내역 조회
+#### 4-2. 월 별 카테고리 별 소비 내역 조회 API
+* 주소 : 서버주소:8080/api/statistic/{member_id}/{month}/{category_name}/CategoryTransaction
+* date 형식 : yyyy-mm-ddThh:mm:ss
 ```JSON
 {
   "categoryName": "String",
@@ -281,7 +287,10 @@
 ```
 
 
-### 5. 당월 카드별 혜택받은 금액 조회
+### 5. 당월 카드별 혜택받은 금액 조회 API
+* 주소 : 서버주소:8080/api/card/{member_id}/detail
+* type 형식 : CREDIT / CHECK
+* benefitCode 형식 : ACCUMULATE / DISCOUNT / CASHBACK
 * 카드 상세 정보 조회에서 반환되는 값 중 totalBenefit에 사용
 
 ```JSON
@@ -301,7 +310,10 @@
 ```
 
 
-### 6. 소비 패턴 분석을 통해 특정 카테고리에서 혜택을 더 볼 수 있는 카드 조회
+### 6. 소비 패턴 분석을 통해 특정 카테고리에서 혜택을 더 볼 수 있는 카드 조회 API
+* 주소 : 서버주소:8080/api/recommendation/{member_id}/{category_name}
+* type 형식 : CREDIT / CHECK
+* benefitCode 형식 : ACCUMULATE / DISCOUNT / CASHBACK
 * 당월 해당 카테고리에서 이미 받은 혜택(recievedBenefitAmount)와 예상 최대 혜택값(maxBenefitAmount)을 이용하여 카드 조회
 ```JSON
 {
