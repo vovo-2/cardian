@@ -174,10 +174,67 @@
 
 ### 3. 카테고리 및 카테고리에 속해있는 제휴사 검색 및 조회 & 제휴사 별 카드추천
 #### 3-1. 카테고리 리스트 출력
+```JSON
+{
+  "categoryList": [
+    {
+      "categoryImage": "String",
+      "categoryCode": "String",
+      "categoryName": "String"
+    }
+  ]
+}
+```
 #### 3-2. 카테고리별 제휴사 리스트 출력
-#### 3-3. 검색어에 대해 해당하는 제휴사 리스트 출력 
+```JSON
+{
+  "associationList": [
+    {
+      "associationId": int,
+      "associationName": "String",
+      "associationImage": "String"
+    }
+  ]
+}
+```
+#### 3-3. 검색어에 대해 해당하는 제휴사 리스트 출력
+```JSON
+{
+  "asssociationSearchList": [
+    {
+      "associationId": int,
+      "associationName": "String",
+      "associationImage": "String",
+      "categoryCode": "String",
+      "categoryName": "String"
+    }
+  ]
+}
+```
 #### 3-4. 제휴사 선택 시 전 월 실적을 충족하고 혜택 상한이 남아있는 카드 중 해당 제휴사에 대해 가장 좋은 혜택을 받을 수 있는 카드 순으로 리스트 제공
-
+```JSON
+{
+  "cardList": [
+    "card": {
+      "myCardId":int,
+      "cardImage": "String",
+      "cardCompany": "String",
+      "cardName": "String",
+      "associateName":"String",
+      "goal":  int,
+      "consume":int,
+      "thisMonthAchieve":boolean,
+      "cardType": "String",
+      "benefitCode": "String", 
+      "benefitLimitation": int,
+      "currentBenefit": int,
+      "discountAmount": int,
+      "discountSign": "String"
+      "goalAchieve":boolean
+    }       
+  ]
+}
+```
 
 
 
@@ -299,6 +356,26 @@
 #### 7-3. 체크카드와 신용카드를 구분하여 각각의 소비 금액을 제공
 #### 7-4. 기준 달성, 미달성에 따라 정보 제공
 #### 7-4-1. 기준 달성 시 연말 정산 기준에 따른 최대 공제 금액과 사용자의 총소비를 기반으로 얼마만큼의 공제혜택을 받을 수 있는지 제공
+```JSON
+{
+"settlement":{
+    "annualCheckConsume": int,
+    "annualCreditConsume": int,
+    "maxSettlement": int,
+    "mySettlement": int
+  }
+}
+```
 #### 7-4-2. 기준 미달성 시 연봉의 25%와 총 소비량을 제공
+```JSON
+{
+"settlement":{
+     "annualConsume": int,
+     "settlementStandard": int,
+     "annualCheckConsume": int,
+     “annualCreditConsume": int,
+  }
+}
+```
 
 
