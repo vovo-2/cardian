@@ -123,6 +123,43 @@
 
 ```
 
+## 프로젝트 디렉터리 구조
+
+📦cardcompany
+ ┣ 📂gradle
+ ┃ ┗ 📂wrapper
+ ┃ ┃ ┣ 📜gradle-wrapper.jar
+ ┃ ┃ ┗ 📜gradle-wrapper.properties
+ ┣ 📂src
+ ┃ ┣ 📂main
+ ┃ ┃ ┣ 📂java
+ ┃ ┃ ┃ ┗ 📂A803
+ ┃ ┃ ┃ ┃ ┗ 📂cardian
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂card
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂controller
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜CardController.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂domain
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜Card.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜Company.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MyCard.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜Transaction.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂repository
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜CardRepository.java
+ ┃ ┃ ┃ ┃ ┃ ┗ 📜CardianApplication.java
+ ┃ ┃ ┗ 📂resources
+ ┃ ┃ ┃ ┗ 📜application.yml
+ ┃ ┗ 📂test
+ ┃ ┃ ┗ 📂java
+ ┃ ┃ ┃ ┗ 📂A803
+ ┃ ┃ ┃ ┃ ┗ 📂cardian
+ ┃ ┃ ┃ ┃ ┃ ┗ 📜CardianApplicationTests.java
+ ┣ 📜.gitignore
+ ┣ 📜.gitkeep
+ ┣ 📜build.gradle
+ ┣ 📜Dockerfile
+ ┣ 📜gradlew
+ ┣ 📜gradlew.bat
+ ┗ 📜settings.gradle
 
 
 
