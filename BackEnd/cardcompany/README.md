@@ -31,6 +31,11 @@
     * Spring Data JPA
     * JSON
 
+## 📡 배포 가이드
+* `2. Card Company BE 참고`
+
+     https://ruddy-gram-071.notion.site/c440d313b9aa46acbfff560aa7fd1a9d#44b64230338a4de7b9737e1bfc110b4e
+
 ## 📌주요 기능
 ### 유저 정보 조회 API
 * 주소 : 서버주소:8082/user/{member-id}
