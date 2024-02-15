@@ -124,7 +124,7 @@
 ```
 
 ## 프로젝트 디렉터리 구조
-
+```
 📦cardcompany
  ┣ 📂gradle
  ┃ ┗ 📂wrapper
@@ -160,6 +160,6 @@
  ┣ 📜gradlew
  ┣ 📜gradlew.bat
  ┗ 📜settings.gradle
-
+```
 
 
