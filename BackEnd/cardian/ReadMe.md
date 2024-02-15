@@ -168,7 +168,9 @@
 
 
 ### 3. 카테고리 및 카테고리에 속해있는 제휴사 검색 및 조회 & 제휴사 별 카드추천
-#### 3-1. 카테고리 리스트 출력
+#### 3-1. 카테고리 목록 조회
+- 전체 카테고리를 조회할 수 있으며 카테고리 이미지, 카테고리 코드, 카테고리 이름을 JSON 형식으로 반환한다.
+- API : http://i10a803.p.ssafy.io:8080/api/search/category-image
 ```JSON
 {
   "categoryList": [
@@ -180,7 +182,9 @@
   ]
 }
 ```
-#### 3-2. 카테고리별 제휴사 리스트 출력
+#### 3-2. 카테고리별 제휴사 목록 조회
+- 카테고리에 속해있는 제휴사들을 조회할 수 있으며 제휴사 아이디, 제휴사 이름, 제휴사 이미지를 JSON 형식으로 반환한다.
+- API : http://i10a803.p.ssafy.io:8080/api/search/{category_code}/association
 ```JSON
 {
   "associationList": [
@@ -192,7 +196,9 @@
   ]
 }
 ```
-#### 3-3. 검색어에 대해 해당하는 제휴사 리스트 출력
+#### 3-3. 제휴사 검색
+- 검색어에 대해 해당하는 제휴사 목록을 조회할 수 있으며 제휴사 아이디, 제휴사 이름, 제휴사 이미지, 카테고리 코드, 카테고리 이름을 JSON 형식으로 반환한다.
+- API : http://i10a803.p.ssafy.io:8080/api/search/association
 ```JSON
 {
   "asssociationSearchList": [
@@ -206,7 +212,10 @@
   ]
 }
 ```
-#### 3-4. 제휴사 선택 시 전 월 실적을 충족하고 혜택 상한이 남아있는 카드 중 해당 제휴사에 대해 가장 좋은 혜택을 받을 수 있는 카드 순으로 리스트 제공
+#### 3-4. 제휴사별 카드 추천
+- 제휴사 선택 시 전 월 실적을 충족하고 혜택 상한이 남아있는 카드 중 해당 제휴사에 대해 가장 좋은 혜택을 받을 수 있는 순으로 카드 목록을 제공한다.
+- 카드별로 내 카드 아이디,카드 이미지, 카드사, 카드 이름, 제휴사 이름, 목표 실적, 전월 실적 달성여부, 소비금액, 당월 실적 달성여부, 카드 종류(신용 or 체크), 혜택종류(적립,캐시백,할인), 혜택 상한선, 현재까지 받은 혜택, 할인률 or 할인금액을 JSON 형식으로 반환한다.
+- API : http://i10a803.p.ssafy.io:8080/api/search/{member_id}/{associate_id}/card-list
 ```JSON
 {
   "cardList": [
@@ -217,6 +226,7 @@
       "cardName": "String",
       "associateName":"String",
       "goal":  int,
+      "goalAchieve":boolean,
       "consume":int,
       "thisMonthAchieve":boolean,
       "cardType": "String",
@@ -225,7 +235,6 @@
       "currentBenefit": int,
       "discountAmount": int,
       "discountSign": "String"
-      "goalAchieve":boolean
     }       
   ]
 }
@@ -316,10 +325,20 @@
 
 ### 7. 사용자의 연봉에 따른연말정산 기준 달성여부 제공 및 달성여부에 따른 결과 제공
 #### 7-1. 사용자의 연봉 정보 제공 및 연봉정보 변경시 수정 기능 제공
-#### 7-2. 사용자의 연봉과 1년 총소비금액을 기준으로 연말정산 공제혜택 기준치인 연봉의 25%이상을 사용했는지에 따라 true,false 값 반환
-#### 7-3. 체크카드와 신용카드를 구분하여 각각의 소비 금액을 제공
-#### 7-4. 기준 달성, 미달성에 따라 정보 제공
-#### 7-4-1. 기준 달성 시 연말 정산 기준에 따른 최대 공제 금액과 사용자의 총소비를 기반으로 얼마만큼의 공제혜택을 받을 수 있는지 제공
+- 연봉 정보 API : http://i10a803.p.ssafy.io:8080/api/settlement/{member_id}
+- 연봉 수정 API : http://i10a803.p.ssafy.io:8080/api/settlement/{member_id}/{salary}
+#### 7-2. 사용자의 연말정산 기준 달성여부 제공
+- 사용자의 연봉과 1년 총소비금액을 기준으로 연말정산 공제혜택 기준치인 연봉의 25%이상을 사용했는지에 따라 달성여부를 JSON 형식으로 반환
+- API : http://i10a803.p.ssafy.io:8080/api/settlement/{member_id}/achievement-standard
+```JSON
+{
+   “achieve” : boolean    
+}
+```
+#### 7-3. 기준 달성여부에 따른 정보 제공
+#### 7-3-1. 기준 달성 시 
+- 연말 정산 기준에 따라 올 해 체크카드 총 소비 금액, 올 해 신용카드 총 소비 금액, 최대 공제 금액, 사용자의 공제 혜택 금액을 JSON 형식으로 반환
+- API : http://i10a803.p.ssafy.io:8080/api/settlement/{member_id}/achievement
 ```JSON
 {
 "settlement":{
@@ -330,7 +349,9 @@
   }
 }
 ```
-#### 7-4-2. 기준 미달성 시 연봉의 25%와 총 소비량을 제공
+#### 7-3-2. 기준 미달성 시 
+- 올 해 총 소비, 연말정산 기준 금액, 올 해 체크카드 총 소비 금액, 올 해 신용카드 총 소비 금액을 JSON형식으로 반환
+- API : http://i10a803.p.ssafy.io:8080/api/settlement/{member_id}/not-achievement
 ```JSON
 {
 "settlement":{
