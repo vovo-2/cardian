@@ -40,7 +40,8 @@
 * 정여민 : AWS Lightsail, Docker, Jenkins 를 사용한 CI/CD 구축
 
 ## 기술 스택 
-![기술_스택](/uploads/79b9617ada50a5b2ebf2709f47fe17c3/기술_스택.PNG)
+![기술_스택](https://github.com/vovo-2/cardian/assets/153492321/8c707096-d5b2-49ed-aaf2-8c3aa01d042a)
+
 
 ## README
 
